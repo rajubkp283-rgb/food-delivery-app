@@ -28,7 +28,7 @@ const UserSchema = new mongoose.Schema({
   referredBy: { type: String, default: null },
   balance: { type: Number, default: 0 }, // Every new user receives a 300 Birr bonus
   isBanned: { type: Boolean, default: false },
- upiAccount: { type: String, default: '' },
+ upiAccount: { type: String, default: undefined },
 upiName: { type: String, default: '' },
 upiMobile: { type: String, default: undefined },
 bankAccount: { type: String, default: undefined },

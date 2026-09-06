@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
  upiAccount: { type: String, default: '' },
 upiName: { type: String, default: '' },
 upiMobile: { type: String, default: undefined },
-bankAccount: { type: String, default: '' },
+bankAccount: { type: String, default: undefined },
   bankIFSC: { type: String, default: '' },
   bankName: { type: String, default: '' },
   lastCheckIn: { type: String, default: "" },

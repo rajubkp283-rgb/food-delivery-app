@@ -1492,16 +1492,7 @@ app.post("/api/admin/update-links", verifyAdmin, async (req, res) => {
   });
 });
 
-// ============================================================
-// WILDCARD ROUTER
-// ============================================================
 
-// Correctly route all other HTML requests
-// such as index.html, game.html, etc.
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
 
 // ============================================================
 // PASSIVE DYNAMIC VIP DAILY INCOME AUTOMATION

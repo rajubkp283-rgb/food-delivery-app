@@ -35,6 +35,7 @@ const UserSchema = new mongoose.Schema({
   bankIFSC: { type: String, default: "" },
   bankName: { type: String, default: "" },
   lastCheckIn: { type: String, default: "" },
+  checkInCount: { type: Number, default: 0 },
   products: [
     {
       vipLevel: Number,
@@ -537,37 +538,61 @@ app.post(
 );
 
 app.post("/api/checkin", authenticateToken, async (req, res) => {
-  const today = new Date().toISOString().split("T")[0];
+  try {
+    const today = new Date().toISOString().split("T")[0];
 
-  if (req.user.lastCheckIn === today) {
-    return res.status(400).json({
-      message:
-        "You have already claimed today's daily gift! Please try again tomorrow.",
+    // Already claimed today
+    if (req.user.lastCheckIn === today) {
+      return res.status(400).json({
+        message:
+          "You have already claimed today's daily gift! Please try again tomorrow.",
+      });
+    }
+
+    // First ever check-in = fixed ₹10
+    // Every next check-in = random ₹1 to ₹10
+    let checkInBonus;
+
+    if (Number(req.user.checkInCount || 0) === 0) {
+      checkInBonus = 10;
+    } else {
+      checkInBonus = Math.floor(Math.random() * 10) + 1;
+    }
+
+    // Add reward to wallet
+    req.user.balance += checkInBonus;
+
+    // Save check-in information
+    req.user.lastCheckIn = today;
+    req.user.checkInCount = Number(req.user.checkInCount || 0) + 1;
+
+    await req.user.save();
+
+    // Save transaction history
+    await Transaction.create({
+      phone: req.user.phone,
+      type: "checkin",
+      amount: checkInBonus,
+      fee: 0,
+      netAmount: checkInBonus,
+      status: "success",
+      txId: `CHECKIN-${Date.now()}`,
+      productName: "Daily Check-In",
+    });
+
+    res.json({
+      message: `Congratulations! You received ₹${checkInBonus} daily check-in gift.`,
+      reward: checkInBonus,
+      newBalance: req.user.balance,
+    });
+
+  } catch (err) {
+    console.error("Check-In Error:", err);
+
+    res.status(500).json({
+      message: "Check-in failed. Please try again.",
     });
   }
-
-  const checkInBonus = 10;
-
-  req.user.balance += checkInBonus;
-  req.user.lastCheckIn = today;
-
-  await req.user.save();
-
-  await Transaction.create({
-    phone: req.user.phone,
-    type: "checkin",
-    amount: checkInBonus,
-    fee: 0,
-    netAmount: checkInBonus,
-    status: "success",
-    txId: `CHECKIN-${Date.now()}`,
-    productName: "Daily Check-In",
-  });
-
-  res.json({
-    message: "You have received your daily 10 INR gift!",
-    newBalance: req.user.balance,
-  });
 });
 
 app.post("/api/promo-bonus", authenticateToken, async (req, res) => {

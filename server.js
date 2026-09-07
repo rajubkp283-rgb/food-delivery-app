@@ -28,12 +28,12 @@ const UserSchema = new mongoose.Schema({
   referredBy: { type: String, default: null },
   balance: { type: Number, default: 0 }, // Every new user receives a 300 Birr bonus
   isBanned: { type: Boolean, default: false },
- upiAccount: { type: String, default: undefined },
-upiName: { type: String, default: '' },
-upiMobile: { type: String, default: undefined },
-bankAccount: { type: String, default: undefined },
-  bankIFSC: { type: String, default: '' },
-  bankName: { type: String, default: '' },
+  upiAccount: { type: String, default: undefined },
+  upiName: { type: String, default: "" },
+  upiMobile: { type: String, default: undefined },
+  bankAccount: { type: String, default: undefined },
+  bankIFSC: { type: String, default: "" },
+  bankName: { type: String, default: "" },
   lastCheckIn: { type: String, default: "" },
   products: [
     {
@@ -49,103 +49,103 @@ bankAccount: { type: String, default: undefined },
 });
 
 UserSchema.index(
-    { bankAccount: 1 },
-    {
-        unique: true,
-        sparse: true
-    }
+  { bankAccount: 1 },
+  {
+    unique: true,
+    sparse: true,
+  },
 );
 
 const TransactionSchema = new mongoose.Schema({
-    phone: String,
+  phone: String,
 
-   type: {
+  type: {
     type: String,
     enum: [
-        'deposit',
-        'withdraw',
-        'investment',
-        'bonus',
-        'checkin',
-        'daily_profit'
-    ]
-},
+      "deposit",
+      "withdraw",
+      "investment",
+      "bonus",
+      "checkin",
+      "daily_profit",
+    ],
+  },
 
-    amount: Number,
+  amount: Number,
 
-    fee: {
-        type: Number,
-        default: 0
-    },
+  fee: {
+    type: Number,
+    default: 0,
+  },
 
-    netAmount: Number,
+  netAmount: Number,
 
-    // Withdrawal payment method
-    paymentMethod: {
-        type: String,
-        enum: ['', 'UPI', 'BANK'],
-        default: ''
-    },
-
-    // UPI details
-    upiAccount: {
-        type: String,
-        default: ''
-    },
-
-    upiName: {
-        type: String,
-        default: ''
-    },
-
-    // Bank details
-    bankName: {
-        type: String,
-        default: ''
-    },
-
-    bankAccount: {
-        type: String,
-        default: ''
-    },
-
-    bankIFSC: {
-        type: String,
-        default: ''
-    },
-
-    status: {
-        type: String,
-        enum: ['pending', 'success'],
-        default: 'pending'
-    },
-
-   txId: {
+  // Withdrawal payment method
+  paymentMethod: {
     type: String,
-    default: ''
-},
+    enum: ["", "UPI", "BANK"],
+    default: "",
+  },
 
-productName: {
+  // UPI details
+  upiAccount: {
     type: String,
-    default: ''
-},
+    default: "",
+  },
 
-// Deposit payment screenshot
-paymentScreenshot: {
+  upiName: {
     type: String,
-    default: ''
-},
+    default: "",
+  },
 
-// Deposit payment note
-paymentNote: {
+  // Bank details
+  bankName: {
     type: String,
-    default: ''
-},
+    default: "",
+  },
 
-createdAt: {
+  bankAccount: {
+    type: String,
+    default: "",
+  },
+
+  bankIFSC: {
+    type: String,
+    default: "",
+  },
+
+  status: {
+    type: String,
+    enum: ["pending", "success"],
+    default: "pending",
+  },
+
+  txId: {
+    type: String,
+    default: "",
+  },
+
+  productName: {
+    type: String,
+    default: "",
+  },
+
+  // Deposit payment screenshot
+  paymentScreenshot: {
+    type: String,
+    default: "",
+  },
+
+  // Deposit payment note
+  paymentNote: {
+    type: String,
+    default: "",
+  },
+
+  createdAt: {
     type: Date,
-    default: Date.now
-}
+    default: Date.now,
+  },
 });
 
 const AdminPromoSchema = new mongoose.Schema({
@@ -382,125 +382,124 @@ app.get("/api/profile", authenticateToken, async (req, res) => {
 // UPDATE BANK / TELEBIRR DETAILS
 // ============================================================
 
-app.post('/api/profile/update-bank', authenticateToken, async (req, res) => {
-    try {
-        const { bankAccount, bankIFSC, bankName } = req.body;
+app.post("/api/profile/update-bank", authenticateToken, async (req, res) => {
+  try {
+    const { bankAccount, bankIFSC, bankName } = req.body;
 
-        if (!bankAccount || !bankIFSC || !bankName) {
-            return res.status(400).json({
-                message: 'Bank account number, IFSC code and account name are required.'
-            });
-        }
-
-        const cleanBankAccount = bankAccount.trim();
-        const cleanBankIFSC = bankIFSC.trim().toUpperCase();
-        const cleanBankName = bankName.trim();
-
-        // Bank account can only be saved once
-        if (req.user.bankAccount) {
-            return res.status(400).json({
-                message: 'Your bank account is already saved and cannot be changed.'
-            });
-        }
-
-        // Prevent the same bank account from being used by another user
-        const existingBankAccount = await User.findOne({
-            bankAccount: cleanBankAccount,
-            _id: { $ne: req.user._id }
-        });
-
-        if (existingBankAccount) {
-            return res.status(400).json({
-                message: 'This bank account is already linked to another user.'
-            });
-        }
-
-        req.user.bankAccount = cleanBankAccount;
-        req.user.bankIFSC = cleanBankIFSC;
-        req.user.bankName = cleanBankName;
-
-        await req.user.save();
-
-        res.json({
-            message: 'Bank account information saved successfully!'
-        });
-
-    } catch (err) {
-        console.error('Bank Account Update Error:', err);
-
-        res.status(500).json({
-            message: 'Failed to save bank account information.'
-        });
+    if (!bankAccount || !bankIFSC || !bankName) {
+      return res.status(400).json({
+        message:
+          "Bank account number, IFSC code and account name are required.",
+      });
     }
+
+    const cleanBankAccount = bankAccount.trim();
+    const cleanBankIFSC = bankIFSC.trim().toUpperCase();
+    const cleanBankName = bankName.trim();
+
+    // Bank account can only be saved once
+    if (req.user.bankAccount) {
+      return res.status(400).json({
+        message: "Your bank account is already saved and cannot be changed.",
+      });
+    }
+
+    // Prevent the same bank account from being used by another user
+    const existingBankAccount = await User.findOne({
+      bankAccount: cleanBankAccount,
+      _id: { $ne: req.user._id },
+    });
+
+    if (existingBankAccount) {
+      return res.status(400).json({
+        message: "This bank account is already linked to another user.",
+      });
+    }
+
+    req.user.bankAccount = cleanBankAccount;
+    req.user.bankIFSC = cleanBankIFSC;
+    req.user.bankName = cleanBankName;
+
+    await req.user.save();
+
+    res.json({
+      message: "Bank account information saved successfully!",
+    });
+  } catch (err) {
+    console.error("Bank Account Update Error:", err);
+
+    res.status(500).json({
+      message: "Failed to save bank account information.",
+    });
+  }
 });
 
-app.post('/api/profile/update-upi', authenticateToken, async (req, res) => {
-    try {
-        const { upiAccount, upiName } = req.body;
+app.post("/api/profile/update-upi", authenticateToken, async (req, res) => {
+  try {
+    const { upiAccount, upiName } = req.body;
 
-        if (!upiAccount || !upiName) {
-            return res.status(400).json({
-                message: 'UPI account and UPI holder name are required.'
-            });
-        }
-
-        const cleanUPI = upiAccount.trim().toLowerCase();
-        const cleanUPIName = upiName.trim();
-
-        // UPI can only be saved once
-        if (req.user.upiAccount) {
-            return res.status(400).json({
-                message: 'Your UPI account is already saved and cannot be changed.'
-            });
-        }
-
-        // Extract the 10-digit mobile number before @
-        const upiParts = cleanUPI.split('@');
-
-        if (upiParts.length !== 2) {
-            return res.status(400).json({
-                message: 'Please enter a valid UPI ID.'
-            });
-        }
-
-        const upiMobile = upiParts[0].replace(/\D/g, '');
-
-        if (!/^\d{10}$/.test(upiMobile)) {
-            return res.status(400).json({
-                message: 'UPI ID must contain a valid 10-digit mobile number before @.'
-            });
-        }
-
-        // Prevent the same 10-digit UPI mobile number
-        // from being used by another user
-        const existingUPIMobile = await User.findOne({
-            upiMobile: upiMobile,
-            _id: { $ne: req.user._id }
-        });
-
-        if (existingUPIMobile) {
-            return res.status(400).json({
-                message: 'This UPI mobile number is already linked to another user.'
-            });
-        }
-
-        req.user.upiAccount = cleanUPI;
-        req.user.upiMobile = upiMobile;
-        req.user.upiName = cleanUPIName;
-
-        await req.user.save();
-
-        res.json({
-            message: 'UPI account information saved successfully!'
-        });
-
-    } catch (err) {
-        console.error('UPI Update Error:', err);
-
-        res.status(500).json({
-            message: 'Failed to save UPI account information.'
-        });
+    if (!upiAccount || !upiName) {
+      return res.status(400).json({
+        message: "UPI account and UPI holder name are required.",
+      });
     }
+
+    const cleanUPI = upiAccount.trim().toLowerCase();
+    const cleanUPIName = upiName.trim();
+
+    // UPI can only be saved once
+    if (req.user.upiAccount) {
+      return res.status(400).json({
+        message: "Your UPI account is already saved and cannot be changed.",
+      });
+    }
+
+    // Extract the 10-digit mobile number before @
+    const upiParts = cleanUPI.split("@");
+
+    if (upiParts.length !== 2) {
+      return res.status(400).json({
+        message: "Please enter a valid UPI ID.",
+      });
+    }
+
+    const upiMobile = upiParts[0].replace(/\D/g, "");
+
+    if (!/^\d{10}$/.test(upiMobile)) {
+      return res.status(400).json({
+        message: "UPI ID must contain a valid 10-digit mobile number before @.",
+      });
+    }
+
+    // Prevent the same 10-digit UPI mobile number
+    // from being used by another user
+    const existingUPIMobile = await User.findOne({
+      upiMobile: upiMobile,
+      _id: { $ne: req.user._id },
+    });
+
+    if (existingUPIMobile) {
+      return res.status(400).json({
+        message: "This UPI mobile number is already linked to another user.",
+      });
+    }
+
+    req.user.upiAccount = cleanUPI;
+    req.user.upiMobile = upiMobile;
+    req.user.upiName = cleanUPIName;
+
+    await req.user.save();
+
+    res.json({
+      message: "UPI account information saved successfully!",
+    });
+  } catch (err) {
+    console.error("UPI Update Error:", err);
+
+    res.status(500).json({
+      message: "Failed to save UPI account information.",
+    });
+  }
 });
 
 // ============================================================
@@ -604,28 +603,28 @@ app.post("/api/promo-bonus", authenticateToken, async (req, res) => {
 
   const bonus = Math.floor(Math.random() * 10) + 1;
 
-req.user.balance += bonus;
+  req.user.balance += bonus;
 
-activePromo.redeemedUsers.push(req.user.phone);
+  activePromo.redeemedUsers.push(req.user.phone);
 
-await activePromo.save();
-await req.user.save();
+  await activePromo.save();
+  await req.user.save();
 
-await Transaction.create({
-  phone: req.user.phone,
-  type: "bonus",
-  amount: bonus,
-  fee: 0,
-  netAmount: bonus,
-  status: "success",
-  txId: `BONUS-${Date.now()}`,
-  productName: `Promo Bonus - ${code.trim().toUpperCase()}`,
-});
+  await Transaction.create({
+    phone: req.user.phone,
+    type: "bonus",
+    amount: bonus,
+    fee: 0,
+    netAmount: bonus,
+    status: "success",
+    txId: `BONUS-${Date.now()}`,
+    productName: `Promo Bonus - ${code.trim().toUpperCase()}`,
+  });
 
-res.json({
-  message: `Congratulations! You received a ${bonus} INR bonus gift.`,
-  newBalance: req.user.balance,
-});
+  res.json({
+    message: `Congratulations! You received a ${bonus} INR bonus gift.`,
+    newBalance: req.user.balance,
+  });
 });
 
 // ============================================================
@@ -637,21 +636,75 @@ const VIP_PRODUCTS = {
     price: 100,
     dailyIncome: 5,
   },
+
   2: {
     price: 200,
     dailyIncome: 10,
   },
+
   3: {
     price: 400,
     dailyIncome: 20,
   },
+
   4: {
     price: 600,
     dailyIncome: 30,
   },
+
   5: {
     price: 1000,
     dailyIncome: 50,
+  },
+
+  6: {
+    price: 1500,
+    dailyIncome: 0,
+  },
+
+  7: {
+    price: 2000,
+    dailyIncome: 0,
+  },
+
+  8: {
+    price: 3000,
+    dailyIncome: 0,
+  },
+
+  9: {
+    price: 4000,
+    dailyIncome: 0,
+  },
+
+  10: {
+    price: 5000,
+    dailyIncome: 0,
+  },
+
+  11: {
+    price: 7500,
+    dailyIncome: 0,
+  },
+
+  12: {
+    price: 10000,
+    dailyIncome: 0,
+  },
+
+  13: {
+    price: 15000,
+    dailyIncome: 0,
+  },
+
+  14: {
+    price: 20000,
+    dailyIncome: 0,
+  },
+
+  15: {
+    price: 25000,
+    dailyIncome: 0,
   },
 };
 
@@ -713,23 +766,23 @@ app.post("/api/buy-product", authenticateToken, async (req, res) => {
     }
 
     // Save the investment transaction
-await Transaction.create({
-  phone: updatedUser.phone,
+    await Transaction.create({
+      phone: updatedUser.phone,
 
-  type: "investment",
+      type: "investment",
 
-  amount: product.price,
+      amount: product.price,
 
-  fee: 0,
+      fee: 0,
 
-  netAmount: product.price,
+      netAmount: product.price,
 
-  status: "success",
+      status: "success",
 
-  txId: `VIP${vipLevel}-${Date.now()}`,
+      txId: `VIP${vipLevel}-${Date.now()}`,
 
-  productName: `VIP ${vipLevel} Product`,
-});
+      productName: `VIP ${vipLevel} Product`,
+    });
 
     console.log(
       `VIP ${vipLevel} PURCHASED:`,
@@ -773,14 +826,12 @@ app.post("/api/deposit", authenticateToken, async (req, res) => {
 
     const parsedAmount = Number(amount);
 
-    // Validate amount
-    const allowedAmounts = [100, 200, 400, 600, 1000];
-
-    if (!allowedAmounts.includes(parsedAmount)) {
-      return res.status(400).json({
-        message: "Invalid deposit amount.",
-      });
-    }
+   // Validate manual deposit amount
+if (!Number.isFinite(parsedAmount) || parsedAmount < 100) {
+    return res.status(400).json({
+        message: "Minimum deposit amount is ₹100.",
+    });
+}
 
     // Transaction ID required
     if (!txId || !txId.trim()) {
@@ -859,51 +910,47 @@ app.post("/api/deposit", authenticateToken, async (req, res) => {
 
 app.post("/api/withdraw", authenticateToken, async (req, res) => {
   try {
-    const {
-      amount,
-      paymentMethod,
-      paymentDetails
-    } = req.body;
+    const { amount, paymentMethod, paymentDetails } = req.body;
 
     const withdrawAmount = parseFloat(amount);
 
     // Basic amount validation
     if (!Number.isFinite(withdrawAmount)) {
       return res.status(400).json({
-        message: "Please enter a valid withdrawal amount."
+        message: "Please enter a valid withdrawal amount.",
       });
     }
 
     if (req.user.products.length === 0) {
       return res.status(400).json({
         message:
-          "You must purchase at least one VIP product before submitting a withdrawal request."
+          "You must purchase at least one VIP product before submitting a withdrawal request.",
       });
     }
 
     if (withdrawAmount < 5) {
       return res.status(400).json({
-        message: "The minimum withdrawal amount is 5 INR."
+        message: "The minimum withdrawal amount is 5 INR.",
       });
     }
 
     if (req.user.balance < withdrawAmount) {
       return res.status(400).json({
-        message: "Insufficient balance in your account."
+        message: "Insufficient balance in your account.",
       });
     }
 
     // Only allow the two methods used by the frontend
     if (!["UPI", "BANK"].includes(paymentMethod)) {
       return res.status(400).json({
-        message: "Please select UPI or Bank Account."
+        message: "Please select UPI or Bank Account.",
       });
     }
 
     // Validate selected payment details
     if (!paymentDetails || typeof paymentDetails !== "object") {
       return res.status(400).json({
-        message: "Payment details are required."
+        message: "Payment details are required.",
       });
     }
 
@@ -914,15 +961,14 @@ app.post("/api/withdraw", authenticateToken, async (req, res) => {
       fee: 0,
       netAmount: withdrawAmount,
       paymentMethod: paymentMethod,
-      status: "pending"
+      status: "pending",
     };
 
     // UPI request
     if (paymentMethod === "UPI") {
-
       if (!req.user.upiAccount || !req.user.upiName) {
         return res.status(400).json({
-          message: "Please connect your UPI account from your profile first."
+          message: "Please connect your UPI account from your profile first.",
         });
       }
 
@@ -932,14 +978,9 @@ app.post("/api/withdraw", authenticateToken, async (req, res) => {
 
     // Bank request
     if (paymentMethod === "BANK") {
-
-      if (
-        !req.user.bankAccount ||
-        !req.user.bankIFSC ||
-        !req.user.bankName
-      ) {
+      if (!req.user.bankAccount || !req.user.bankIFSC || !req.user.bankName) {
         return res.status(400).json({
-          message: "Please add your complete bank account details first."
+          message: "Please add your complete bank account details first.",
         });
       }
 
@@ -962,7 +1003,7 @@ app.post("/api/withdraw", authenticateToken, async (req, res) => {
       withdrawalRequest._id,
       req.user.phone,
       paymentMethod,
-      withdrawAmount
+      withdrawAmount,
     );
 
     res.status(201).json({
@@ -971,14 +1012,13 @@ app.post("/api/withdraw", authenticateToken, async (req, res) => {
       status: "pending",
       requestId: withdrawalRequest._id,
       amount: withdrawAmount,
-      paymentMethod: paymentMethod
+      paymentMethod: paymentMethod,
     });
-
   } catch (err) {
     console.error("Withdrawal Request Error:", err);
 
     res.status(500).json({
-      message: "Failed to submit withdrawal request."
+      message: "Failed to submit withdrawal request.",
     });
   }
 });
@@ -1148,7 +1188,9 @@ app.get("/api/admin/dashboard", verifyAdmin, async (req, res) => {
     type: "withdraw",
     status: "pending",
   })
-    .select('phone amount fee netAmount paymentMethod upiAccount upiName bankName bankAccount bankIFSC createdAt')
+    .select(
+      "phone amount fee netAmount paymentMethod upiAccount upiName bankName bankAccount bankIFSC createdAt",
+    )
     .sort({
       createdAt: -1,
     });
@@ -1423,7 +1465,7 @@ app.post("/api/admin/approve-withdraw", verifyAdmin, async (req, res) => {
 
     if (!id) {
       return res.status(400).json({
-        message: "Withdrawal request ID is required."
+        message: "Withdrawal request ID is required.",
       });
     }
 
@@ -1431,17 +1473,17 @@ app.post("/api/admin/approve-withdraw", verifyAdmin, async (req, res) => {
     const withdrawal = await Transaction.findOne({
       _id: id,
       type: "withdraw",
-      status: "pending"
+      status: "pending",
     });
 
     if (!withdrawal) {
       return res.status(404).json({
-        message: "Pending withdrawal request not found."
+        message: "Pending withdrawal request not found.",
       });
     }
 
     // Approval status update only.
-// No payout transfer is performed here.
+    // No payout transfer is performed here.
     withdrawal.status = "success";
 
     await withdrawal.save();
@@ -1450,24 +1492,19 @@ app.post("/api/admin/approve-withdraw", verifyAdmin, async (req, res) => {
       "WITHDRAWAL APPROVED:",
       withdrawal.phone,
       withdrawal.amount,
-      withdrawal.paymentMethod
+      withdrawal.paymentMethod,
     );
 
     res.json({
       message: "Withdrawal request approved successfully.",
       status: "success",
-      requestId: withdrawal._id
+      requestId: withdrawal._id,
     });
-
   } catch (err) {
-
-    console.error(
-      "Withdrawal Approval Error:",
-      err
-    );
+    console.error("Withdrawal Approval Error:", err);
 
     res.status(500).json({
-      message: "Failed to approve withdrawal request."
+      message: "Failed to approve withdrawal request.",
     });
   }
 });
@@ -1492,8 +1529,6 @@ app.post("/api/admin/update-links", verifyAdmin, async (req, res) => {
   });
 });
 
-
-
 // ============================================================
 // PASSIVE DYNAMIC VIP DAILY INCOME AUTOMATION
 // ============================================================
@@ -1513,39 +1548,39 @@ setInterval(
         let updated = false;
 
         for (const p of u.products) {
-  const totalAgeDays =
-    (now.getTime() - new Date(p.purchasedAt).getTime()) /
-    1000 /
-    60 /
-    60 /
-    24;
+          const totalAgeDays =
+            (now.getTime() - new Date(p.purchasedAt).getTime()) /
+            1000 /
+            60 /
+            60 /
+            24;
 
-  if (totalAgeDays <= 150) {
-    const hoursSinceLastPayout =
-      (now.getTime() - new Date(p.lastPayoutAt).getTime()) /
-      1000 /
-      60 /
-      60;
+          if (totalAgeDays <= 150) {
+            const hoursSinceLastPayout =
+              (now.getTime() - new Date(p.lastPayoutAt).getTime()) /
+              1000 /
+              60 /
+              60;
 
-    if (hoursSinceLastPayout >= 24) {
-      u.balance += p.dailyIncome;
+            if (hoursSinceLastPayout >= 24) {
+              u.balance += p.dailyIncome;
 
-      await Transaction.create({
-        phone: u.phone,
-        type: "daily_profit",
-        amount: p.dailyIncome,
-        fee: 0,
-        netAmount: p.dailyIncome,
-        status: "success",
-        txId: `PROFIT-VIP${p.vipLevel}-${Date.now()}`,
-        productName: `VIP ${p.vipLevel} Daily Profit`,
-      });
+              await Transaction.create({
+                phone: u.phone,
+                type: "daily_profit",
+                amount: p.dailyIncome,
+                fee: 0,
+                netAmount: p.dailyIncome,
+                status: "success",
+                txId: `PROFIT-VIP${p.vipLevel}-${Date.now()}`,
+                productName: `VIP ${p.vipLevel} Daily Profit`,
+              });
 
-      p.lastPayoutAt = now;
-      updated = true;
-    }
-  }
-}
+              p.lastPayoutAt = now;
+              updated = true;
+            }
+          }
+        }
 
         if (updated) {
           await u.save();

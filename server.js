@@ -684,52 +684,52 @@ const VIP_PRODUCTS = {
 
   6: {
     price: 1500,
-    dailyIncome: 0,
+    dailyIncome: 75,
   },
 
   7: {
     price: 2000,
-    dailyIncome: 0,
+    dailyIncome: 100,
   },
 
   8: {
     price: 3000,
-    dailyIncome: 0,
+    dailyIncome: 150,
   },
 
   9: {
     price: 4000,
-    dailyIncome: 0,
+    dailyIncome: 200,
   },
 
   10: {
     price: 5000,
-    dailyIncome: 0,
+    dailyIncome: 250,
   },
 
   11: {
     price: 7500,
-    dailyIncome: 0,
+    dailyIncome: 375,
   },
 
   12: {
     price: 10000,
-    dailyIncome: 0,
+    dailyIncome: 500,
   },
 
   13: {
     price: 15000,
-    dailyIncome: 0,
+    dailyIncome: 750,
   },
 
   14: {
     price: 20000,
-    dailyIncome: 0,
+    dailyIncome: 1000,
   },
 
   15: {
     price: 25000,
-    dailyIncome: 0,
+    dailyIncome: 1250,
   },
 };
 

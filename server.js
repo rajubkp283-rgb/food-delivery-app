@@ -171,6 +171,23 @@ const AdminPromoSchema = new mongoose.Schema({
 const SystemConfigSchema = new mongoose.Schema({
   supportLink: { type: String, default: "https://t.me/your_support" },
   channelLink: { type: String, default: "https://t.me/your_channel" },
+
+  // Deposit Payment Settings
+  depositUpiId: {
+    type: String,
+    default: "6202875038@ptyes",
+  },
+
+  depositReceiverName: {
+    type: String,
+    default: "Sona devi",
+  },
+
+  depositQrCode: {
+    type: String,
+    default: "",
+  },
+
   usedTxIds: [String],
 });
 
@@ -1103,6 +1120,29 @@ app.get("/api/system-links", async (req, res) => {
   res.json(config);
 });
 
+
+// ============================================================
+// PUBLIC - GET DEPOSIT PAYMENT SETTINGS
+// ============================================================
+
+app.get("/api/deposit-settings", async (req, res) => {
+  try {
+    const config = await SystemConfig.findOne();
+
+    res.json({
+      upiId: config?.depositUpiId || "",
+      receiverName: config?.depositReceiverName || "",
+      qrCode: config?.depositQrCode || "",
+    });
+  } catch (err) {
+    console.error("Deposit Settings Load Error:", err);
+
+    res.status(500).json({
+      message: "Failed to load deposit payment settings.",
+    });
+  }
+});
+
 // ============================================================
 // ADMIN SYSTEM ENDPOINTS
 // ============================================================
@@ -1564,6 +1604,69 @@ app.post("/api/admin/update-links", verifyAdmin, async (req, res) => {
   res.json({
     message: "Official Telegram links have been updated!",
   });
+});
+
+// ============================================================
+// ADMIN - UPDATE DEPOSIT PAYMENT SETTINGS
+// ============================================================
+
+app.post("/api/admin/update-deposit-settings", verifyAdmin, async (req, res) => {
+  try {
+    const { upiId, receiverName, qrCode } = req.body;
+
+    if (!upiId || !upiId.trim()) {
+      return res.status(400).json({
+        message: "UPI ID is required.",
+      });
+    }
+
+    if (!receiverName || !receiverName.trim()) {
+      return res.status(400).json({
+        message: "Receiver name is required.",
+      });
+    }
+
+    if (qrCode && !qrCode.startsWith("data:image/")) {
+      return res.status(400).json({
+        message: "Invalid QR image.",
+      });
+    }
+
+    const updateData = {
+      depositUpiId: upiId.trim(),
+      depositReceiverName: receiverName.trim(),
+    };
+
+    // QR code is optional.
+    // If admin does not select a new QR, old QR remains unchanged.
+    if (qrCode) {
+      updateData.depositQrCode = qrCode;
+    }
+
+    const config = await SystemConfig.findOneAndUpdate(
+      {},
+      updateData,
+      {
+        new: true,
+        upsert: true,
+      }
+    );
+
+    res.json({
+      message: "Deposit payment settings updated successfully!",
+      depositSettings: {
+        upiId: config.depositUpiId,
+        receiverName: config.depositReceiverName,
+        qrCode: config.depositQrCode || "",
+      },
+    });
+  } catch (err) {
+    console.error("Deposit Settings Update Error:", err);
+
+    res.status(500).json({
+      message: "Failed to update deposit payment settings.",
+    });
+  }
 });
 
 // ============================================================

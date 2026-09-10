@@ -36,15 +36,27 @@ const UserSchema = new mongoose.Schema({
   bankName: { type: String, default: "" },
   lastCheckIn: { type: String, default: "" },
   checkInCount: { type: Number, default: 0 },
-  products: [
-    {
-      vipLevel: Number,
-      purchasePrice: Number,
-      dailyIncome: Number,
-      purchasedAt: { type: Date, default: Date.now },
-      lastPayoutAt: { type: Date, default: Date.now }, // Controls income payments every 24 hours
+ 
+ products: [{
+    vipLevel: Number,
+    purchasePrice: Number,
+    dailyIncome: Number,
+
+    purchasedAt: {
+        type: Date,
+        default: Date.now
     },
-  ],
+
+    lastPayoutAt: {
+        type: Date,
+        default: Date.now
+    },
+
+    totalCollected: {
+        type: Number,
+        default: 0
+    }
+}],
   referralsCount: { type: Number, default: 0 },
   validReferrals: { type: Number, default: 0 }, // Number of referred users who made a deposit
 });
@@ -1587,23 +1599,26 @@ setInterval(
               60 /
               60;
 
-            if (hoursSinceLastPayout >= 24) {
-              u.balance += p.dailyIncome;
+            if (hoursSinceLastPayout >= 24) { 
+    u.balance += p.dailyIncome;
 
-              await Transaction.create({
-                phone: u.phone,
-                type: "daily_profit",
-                amount: p.dailyIncome,
-                fee: 0,
-                netAmount: p.dailyIncome,
-                status: "success",
-                txId: `PROFIT-VIP${p.vipLevel}-${Date.now()}`,
-                productName: `VIP ${p.vipLevel} Daily Profit`,
-              });
-
-              p.lastPayoutAt = now;
-              updated = true;
-            }
+    // Add daily income to this holding's total collected
+    p.totalCollected = (p.totalCollected || 0) + p.dailyIncome;
+ 
+    await Transaction.create({ 
+        phone: u.phone, 
+        type: "daily_profit", 
+        amount: p.dailyIncome, 
+        fee: 0, 
+        netAmount: p.dailyIncome, 
+        status: "success", 
+        txId: `PROFIT-VIP${p.vipLevel}-${Date.now()}`, 
+        productName: `VIP ${p.vipLevel} Daily Profit`, 
+    }); 
+ 
+    p.lastPayoutAt = now; 
+    updated = true; 
+}
           }
         }
 

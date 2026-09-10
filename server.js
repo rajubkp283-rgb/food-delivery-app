@@ -1592,7 +1592,7 @@ setInterval(
             60 /
             24;
 
-          if (totalAgeDays <= 150) {
+          if (totalAgeDays <= 30) {
             const hoursSinceLastPayout =
               (now.getTime() - new Date(p.lastPayoutAt).getTime()) /
               1000 /
@@ -1630,7 +1630,7 @@ setInterval(
       console.error("Error in Daily Income Scheduler:", err);
     }
   },
-  1000 * 60 * 30,
+  1000 * 60 * 1,
 );
 
 // ============================================================

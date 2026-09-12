@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   promoCode: { type: String, unique: true },
   referredBy: { type: String, default: null },
-  balance: { type: Number, default: 0 }, // Every new user receives a 300 Birr bonus
+  balance: { type: Number, default: 0 }, // Referral users receive ₹50 welcome bonus
   isBanned: { type: Boolean, default: false },
   upiAccount: { type: String, default: undefined },
   upiName: { type: String, default: "" },
@@ -336,10 +336,18 @@ app.post("/api/register", async (req, res) => {
     console.log("USER SAVED:", newUser.phone);
 
    if (referredByUser) {
+  // ============================================================
+  // REFERRAL REWARDS
+  // Referrer = ₹100 LOCKED
+  // New referred user = ₹50 DIRECT WALLET BONUS
+  // ============================================================
+
   await User.updateOne(
     { phone: referredByUser.phone },
     {
-      $inc: { referralsCount: 1 },
+      $inc: {
+        referralsCount: 1,
+      },
       $push: {
         referralBonuses: {
           referredUserPhone: newUser.phone,
@@ -350,6 +358,22 @@ app.post("/api/register", async (req, res) => {
       },
     },
   );
+
+  // ₹50 welcome referral bonus for the new user
+  newUser.balance += 50;
+  await newUser.save();
+
+  // Add transaction history for the ₹50 bonus
+  await Transaction.create({
+    phone: newUser.phone,
+    type: "bonus",
+    amount: 50,
+    fee: 0,
+    netAmount: 50,
+    status: "success",
+    txId: `REFERRAL-WELCOME-${newUser.phone}-${Date.now()}`,
+    productName: "Referral Welcome Bonus",
+  });
 }
 
     res.status(201).json({
@@ -1067,6 +1091,24 @@ app.post("/api/withdraw", authenticateToken, async (req, res) => {
     const { amount, paymentMethod, paymentDetails } = req.body;
 
     const withdrawAmount = parseFloat(amount);
+
+    // ============================================================
+// DEPOSIT REQUIRED BEFORE WITHDRAWAL
+// Referral ₹50 bonus ko bina successful deposit ke withdraw
+// nahi kiya ja sakta.
+// ============================================================
+
+const hasSuccessfulDeposit = await Transaction.exists({
+  phone: req.user.phone,
+  type: "deposit",
+  status: "success",
+});
+
+if (!hasSuccessfulDeposit) {
+  return res.status(400).json({
+    message: "Withdrawal ke liye pehle kam se kam ek successful deposit karna hoga.",
+  });
+}
 
     // Basic amount validation
     if (!Number.isFinite(withdrawAmount)) {

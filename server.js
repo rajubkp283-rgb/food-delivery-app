@@ -57,8 +57,40 @@ const UserSchema = new mongoose.Schema({
         default: 0
     }
 }],
-  referralsCount: { type: Number, default: 0 },
-  validReferrals: { type: Number, default: 0 }, // Number of referred users who made a deposit
+
+  
+   referralsCount: { type: Number, default: 0 },
+  validReferrals: { type: Number, default: 0 },
+
+  // Each referral has its own separate ₹100 locked bonus.
+  // It unlocks only when that specific referred user purchases a Holding.
+  referralBonuses: [{
+    referredUserPhone: {
+      type: String,
+      required: true
+    },
+
+    amount: {
+      type: Number,
+      default: 100
+    },
+
+    unlocked: {
+      type: Boolean,
+      default: false
+    },
+
+    createdAt: {
+      type: Date,
+      default: Date.now
+    },
+
+    unlockedAt: {
+      type: Date,
+      default: null
+    }
+  }],
+
 });
 
 UserSchema.index(
@@ -303,12 +335,22 @@ app.post("/api/register", async (req, res) => {
 
     console.log("USER SAVED:", newUser.phone);
 
-    if (referredByUser) {
-      await User.updateOne(
-        { phone: referredByUser.phone },
-        { $inc: { referralsCount: 1 } },
-      );
-    }
+   if (referredByUser) {
+  await User.updateOne(
+    { phone: referredByUser.phone },
+    {
+      $inc: { referralsCount: 1 },
+      $push: {
+        referralBonuses: {
+          referredUserPhone: newUser.phone,
+          amount: 100,
+          unlocked: false,
+          createdAt: new Date(),
+        },
+      },
+    },
+  );
+}
 
     res.status(201).json({
       message: "Registration Successful",
@@ -838,6 +880,64 @@ app.post("/api/buy-product", authenticateToken, async (req, res) => {
       productName: `VIP ${vipLevel} Product`,
     });
 
+    // ============================================================
+    // REFERRAL BONUS UNLOCK
+    // The referral bonus unlocks only when this referred user
+    // purchases a Holding/VIP product.
+    // ============================================================
+
+    if (updatedUser.referredBy) {
+      const referrer = await User.findOne({
+        phone: updatedUser.referredBy,
+      });
+
+      if (referrer) {
+        const referralBonus = referrer.referralBonuses?.find(
+          (ref) =>
+            ref.referredUserPhone === updatedUser.phone &&
+            ref.unlocked === false,
+        );
+
+        if (referralBonus) {
+          const bonusAmount = Number(referralBonus.amount || 100);
+
+          referralBonus.unlocked = true;
+          referralBonus.unlockedAt = new Date();
+
+          referrer.balance = Number(referrer.balance || 0) + bonusAmount;
+          referrer.validReferrals = Number(referrer.validReferrals || 0) + 1;
+
+          await referrer.save();
+
+          // Save referral bonus transaction
+          await Transaction.create({
+            phone: referrer.phone,
+
+            type: "bonus",
+
+            amount: bonusAmount,
+
+            fee: 0,
+
+            netAmount: bonusAmount,
+
+            status: "success",
+
+            txId: `REFERRAL-${updatedUser.phone}-${Date.now()}`,
+
+            productName: `Referral Bonus - ${updatedUser.phone}`,
+          });
+
+          console.log(
+            `REFERRAL BONUS UNLOCKED:`,
+            `Referrer: ${referrer.phone}`,
+            `Referred User: ${updatedUser.phone}`,
+            `Bonus: ${bonusAmount}`,
+          );
+        }
+      }
+    }
+
     console.log(
       `VIP ${vipLevel} PURCHASED:`,
       updatedUser.phone,
@@ -1181,7 +1281,7 @@ app.get("/api/referral-stats", authenticateToken, async (req, res) => {
     }
 
     const user = await User.findById(req.user._id).select(
-      "referralsCount validReferrals",
+      "referralsCount validReferrals referralBonuses",
     );
 
     if (!user) {
@@ -1190,9 +1290,30 @@ app.get("/api/referral-stats", authenticateToken, async (req, res) => {
       });
     }
 
+    const referralBonuses = user.referralBonuses || [];
+
+    const lockedBonus = referralBonuses
+      .filter((ref) => !ref.unlocked)
+      .reduce((total, ref) => total + Number(ref.amount || 100), 0);
+
+    const withdrawableBonus = referralBonuses
+      .filter((ref) => ref.unlocked)
+      .reduce((total, ref) => total + Number(ref.amount || 100), 0);
+
     res.json({
       referralsCount: Number(user.referralsCount || 0),
       validReferrals: Number(user.validReferrals || 0),
+
+      lockedBonus,
+      withdrawableBonus,
+
+      referralBonuses: referralBonuses.map((ref) => ({
+        referredUserPhone: ref.referredUserPhone,
+        amount: Number(ref.amount || 100),
+        unlocked: Boolean(ref.unlocked),
+        createdAt: ref.createdAt,
+        unlockedAt: ref.unlockedAt,
+      })),
     });
   } catch (err) {
     console.error("Referral Stats Error:", err);
@@ -1354,58 +1475,7 @@ app.post("/api/admin/approve-deposit", verifyAdmin, async (req, res) => {
     user.balance += depositAmount;
     await user.save();
 
-    // ============================================================
-    // REFERRAL BONUS
-    // Level 1 = 20%
-    // Level 2 = 2%
-    // Level 3 = 1%
-    // ============================================================
-
-    if (user.referredBy) {
-      // LEVEL 1 REFERRER
-      const level1 = await User.findOne({
-        phone: user.referredBy,
-      });
-
-      if (level1) {
-        const level1Bonus = depositAmount * 0.2;
-
-        level1.balance += level1Bonus;
-        level1.validReferrals += 1;
-
-        await level1.save();
-
-        // LEVEL 2 REFERRER
-        if (level1.referredBy) {
-          const level2 = await User.findOne({
-            phone: level1.referredBy,
-          });
-
-          if (level2) {
-            const level2Bonus = depositAmount * 0.02;
-
-            level2.balance += level2Bonus;
-
-            await level2.save();
-
-            // LEVEL 3 REFERRER
-            if (level2.referredBy) {
-              const level3 = await User.findOne({
-                phone: level2.referredBy,
-              });
-
-              if (level3) {
-                const level3Bonus = depositAmount * 0.01;
-
-                level3.balance += level3Bonus;
-
-                await level3.save();
-              }
-            }
-          }
-        }
-      }
-    }
+    
 
     // Mark transaction successful
     deposit.status = "success";

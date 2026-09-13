@@ -754,77 +754,77 @@ app.post("/api/promo-bonus", authenticateToken, async (req, res) => {
 const VIP_PRODUCTS = {
   1: {
     price: 100,
-    dailyIncome: 5,
+    dailyIncome: 10,
   },
 
   2: {
     price: 200,
-    dailyIncome: 10,
+    dailyIncome: 20,
   },
 
   3: {
     price: 400,
-    dailyIncome: 20,
+    dailyIncome: 40,
   },
 
   4: {
     price: 600,
-    dailyIncome: 30,
+    dailyIncome: 60,
   },
 
   5: {
     price: 1000,
-    dailyIncome: 50,
+    dailyIncome: 100,
   },
 
   6: {
     price: 1500,
-    dailyIncome: 75,
+    dailyIncome: 150,
   },
 
   7: {
     price: 2000,
-    dailyIncome: 100,
+    dailyIncome: 200,
   },
 
   8: {
     price: 3000,
-    dailyIncome: 150,
+    dailyIncome: 300,
   },
 
   9: {
     price: 4000,
-    dailyIncome: 200,
+    dailyIncome: 400,
   },
 
   10: {
     price: 5000,
-    dailyIncome: 250,
+    dailyIncome: 500,
   },
 
   11: {
     price: 7500,
-    dailyIncome: 375,
+    dailyIncome: 750,
   },
 
   12: {
     price: 10000,
-    dailyIncome: 500,
+    dailyIncome: 1000,
   },
 
   13: {
     price: 15000,
-    dailyIncome: 750,
+    dailyIncome: 1500,
   },
 
   14: {
     price: 20000,
-    dailyIncome: 1000,
+    dailyIncome: 2000,
   },
 
   15: {
     price: 25000,
-    dailyIncome: 1250,
+    dailyIncome: 2500,
   },
 };
 
@@ -1124,9 +1124,9 @@ if (!hasSuccessfulDeposit) {
       });
     }
 
-    if (withdrawAmount < 5) {
+    if (withdrawAmount < 50) {
       return res.status(400).json({
-        message: "The minimum withdrawal amount is 5 INR.",
+        message: "The minimum withdrawal amount is 50 INR.",
       });
     }
 

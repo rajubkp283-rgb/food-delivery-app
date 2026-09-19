@@ -550,39 +550,34 @@ app.post("/api/profile/update-upi", authenticateToken, async (req, res) => {
       });
     }
 
-    // Extract the 10-digit mobile number before @
-    const upiParts = cleanUPI.split("@");
+    // Validate UPI ID - text and numbers both allowed
+const upiParts = cleanUPI.split("@");
 
-    if (upiParts.length !== 2) {
-      return res.status(400).json({
-        message: "Please enter a valid UPI ID.",
-      });
-    }
+if (
+  upiParts.length !== 2 ||
+  !upiParts[0] ||
+  !upiParts[1]
+) {
+  return res.status(400).json({
+    message: "Please enter a valid UPI ID.",
+  });
+}
 
-    const upiMobile = upiParts[0].replace(/\D/g, "");
+    // Prevent the same UPI ID from being used by another user
+const existingUPI = await User.findOne({
+  upiAccount: cleanUPI,
+  _id: { $ne: req.user._id },
+});
 
-    if (!/^\d{10}$/.test(upiMobile)) {
-      return res.status(400).json({
-        message: "UPI ID must contain a valid 10-digit mobile number before @.",
-      });
-    }
+if (existingUPI) {
+  return res.status(400).json({
+    message: "This UPI ID is already linked to another user.",
+  });
+}
 
-    // Prevent the same 10-digit UPI mobile number
-    // from being used by another user
-    const existingUPIMobile = await User.findOne({
-      upiMobile: upiMobile,
-      _id: { $ne: req.user._id },
-    });
-
-    if (existingUPIMobile) {
-      return res.status(400).json({
-        message: "This UPI mobile number is already linked to another user.",
-      });
-    }
-
-    req.user.upiAccount = cleanUPI;
-    req.user.upiMobile = upiMobile;
-    req.user.upiName = cleanUPIName;
+   req.user.upiAccount = cleanUPI;
+req.user.upiMobile = "";
+req.user.upiName = cleanUPIName;
 
     await req.user.save();
 
@@ -644,15 +639,15 @@ app.post("/api/checkin", authenticateToken, async (req, res) => {
       });
     }
 
-    // First ever check-in = fixed ₹10
-    // Every next check-in = random ₹1 to ₹10
-    let checkInBonus;
+    // First ever check-in = fixed ₹5
+// Every next check-in = random ₹1 to ₹5
+let checkInBonus;
 
-    if (Number(req.user.checkInCount || 0) === 0) {
-      checkInBonus = 10;
-    } else {
-      checkInBonus = Math.floor(Math.random() * 10) + 1;
-    }
+if (Number(req.user.checkInCount || 0) === 0) {
+    checkInBonus = 5;
+} else {
+    checkInBonus = Math.floor(Math.random() * 5) + 1;
+}
 
     // Add reward to wallet
     req.user.balance += checkInBonus;
@@ -1124,9 +1119,9 @@ if (!hasSuccessfulDeposit) {
       });
     }
 
-    if (withdrawAmount < 50) {
+    if (withdrawAmount < 106) {
       return res.status(400).json({
-        message: "The minimum withdrawal amount is 50 INR.",
+        message: "The minimum withdrawal amount is 106 INR.",
       });
     }
 

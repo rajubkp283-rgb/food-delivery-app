@@ -62,6 +62,28 @@ const UserSchema = new mongoose.Schema({
    referralsCount: { type: Number, default: 0 },
   validReferrals: { type: Number, default: 0 },
 
+  referralDetails: {
+  referredByPhone: {
+    type: String,
+    default: null
+  },
+
+  referredByPromoCode: {
+    type: String,
+    default: null
+  },
+
+  referredAt: {
+    type: Date,
+    default: null
+  },
+
+  welcomeBonus: {
+    type: Number,
+    default: 0
+  }
+},
+
   // Each referral has its own separate ₹100 locked bonus.
   // It unlocks only when that specific referred user purchases a Holding.
   referralBonuses: [{
@@ -323,13 +345,26 @@ app.post("/api/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({
-      phone,
-      password: hashedPassword,
-      promoCode: uniquePromo,
-      referredBy: referredByUser ? referredByUser.phone : null,
-      balance: 0,
-    });
+   const newUser = new User({
+  phone,
+  password: hashedPassword,
+  promoCode: uniquePromo,
+
+  // Existing referral system — isko same rakha gaya hai
+  referredBy: referredByUser ? referredByUser.phone : null,
+
+  // New detailed referral information
+  referralDetails: referredByUser
+    ? {
+        referredByPhone: referredByUser.phone,
+        referredByPromoCode: referredByUser.promoCode,
+        referredAt: new Date(),
+        welcomeBonus: 50
+      }
+    : null,
+
+  balance: 0,
+});
 
     await newUser.save();
 
@@ -1145,15 +1180,29 @@ if (!hasSuccessfulDeposit) {
       });
     }
 
-    let transactionData = {
-      phone: req.user.phone,
-      type: "withdraw",
-      amount: withdrawAmount,
-      fee: 0,
-      netAmount: withdrawAmount,
-      paymentMethod: paymentMethod,
-      status: "pending",
-    };
+    // ============================================================
+// WITHDRAWAL FEE — 5% SYSTEM MAINTENANCE HANDLING FEE
+// ============================================================
+
+const fee = Number((withdrawAmount * 0.05).toFixed(2));
+const netAmount = Number((withdrawAmount - fee).toFixed(2));
+
+let transactionData = {
+  phone: req.user.phone,
+  type: "withdraw",
+
+  // User ne jitna withdrawal request kiya
+  amount: withdrawAmount,
+
+  // 5% maintenance fee
+  fee: fee,
+
+  // Fee minus karne ke baad user ko milne wala amount
+  netAmount: netAmount,
+
+  paymentMethod: paymentMethod,
+  status: "pending"
+};
 
     // UPI request
     if (paymentMethod === "UPI") {
@@ -1198,13 +1247,17 @@ if (!hasSuccessfulDeposit) {
     );
 
     res.status(201).json({
-      message:
-        "withdrawal request submitted successfully. It is pending for review.",
-      status: "pending",
-      requestId: withdrawalRequest._id,
-      amount: withdrawAmount,
-      paymentMethod: paymentMethod,
-    });
+  message:
+    "withdrawal request submitted successfully. It is pending for review.",
+  status: "pending",
+  requestId: withdrawalRequest._id,
+
+  amount: withdrawAmount,
+  fee: fee,
+  netAmount: netAmount,
+
+  paymentMethod: paymentMethod
+});
   } catch (err) {
     console.error("Withdrawal Request Error:", err);
 

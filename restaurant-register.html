@@ -1,0 +1,1030 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Restaurant Registration</title>
+
+<style>
+
+html,
+body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+}    
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+    background:#090d20;
+}
+
+body{
+
+    min-height:100vh;
+    min-height:100dvh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-start;
+
+    padding:18px;
+
+    color:#fff;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(54,87,143,.22),
+            transparent 38%
+        ),
+        #090d20;
+}
+
+
+/* =========================
+   MAIN CARD
+========================= */
+
+.register-box{
+
+    width:100%;
+
+    max-width:430px;
+
+    background:#0b1224;
+
+    border:1px solid #2d4167;
+
+    border-radius:22px;
+
+    padding:28px 20px 24px;
+
+    margin:auto 0;
+
+    box-shadow:
+        0 20px 55px rgba(0,0,0,.45),
+        0 0 30px rgba(54,87,143,.10);
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo-wrap{
+
+    width:72px;
+    height:72px;
+
+    margin:0 auto 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #182947,
+            #101a30
+        );
+
+    border:1px solid #2d4167;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.30);
+
+    font-size:35px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
+    text-align:center;
+
+    margin-bottom:25px;
+}
+
+.header h1{
+
+    font-size:25px;
+
+    color:#fff;
+
+    font-weight:800;
+
+    margin-bottom:8px;
+}
+
+.header p{
+
+    color:#8fa2c2;
+
+    font-size:13px;
+
+    line-height:1.5;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-group{
+
+    margin-bottom:15px;
+}
+
+label{
+
+    display:block;
+
+    color:#dbe4f5;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    margin-bottom:7px;
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    background:#142039;
+
+    border:1px solid #2d4167;
+
+    border-radius:11px;
+
+    outline:none;
+
+    color:#fff;
+
+    font-size:14px;
+
+    transition:.2s;
+}
+
+input,
+select{
+
+    height:48px;
+
+    padding:0 13px;
+}
+
+textarea{
+
+    min-height:72px;
+
+    padding:11px 13px;
+
+    resize:vertical;
+
+    line-height:1.5;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#71819d;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+
+    border-color:#557bb8;
+
+    background:#172744;
+
+    box-shadow:
+        0 0 0 3px rgba(70,120,255,.10);
+}
+
+select{
+    cursor:pointer;
+}
+
+select option{
+
+    background:#142039;
+
+    color:#fff;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+button{
+
+    width:100%;
+
+    height:52px;
+
+    margin-top:4px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff3f4a,
+            #e92f3c
+        );
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 8px 20px rgba(255,63,74,.18);
+
+    transition:.2s;
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+button:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message{
+
+    min-height:20px;
+
+    margin-top:14px;
+
+    text-align:center;
+
+    font-size:13px;
+}
+
+
+/* =========================
+   LOGIN LINK
+========================= */
+
+.login-link{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    color:#7f91af;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+.login-link a{
+
+    color:#ff3f4a;
+
+    text-decoration:none;
+
+    font-weight:700;
+}
+
+.login-link a:hover{
+    text-decoration:underline;
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media(max-width:360px){
+
+    body{
+        padding:10px;
+    }
+
+    .register-box{
+
+        padding:24px 16px 20px;
+
+        border-radius:18px;
+    }
+
+    .logo-wrap{
+
+        width:64px;
+        height:64px;
+
+        font-size:31px;
+    }
+
+    .header h1{
+        font-size:22px;
+    }
+
+    input,
+    select{
+        height:46px;
+    }
+
+    textarea{
+        min-height:68px;
+    }
+
+    button{
+        height:50px;
+    }
+}
+
+
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="register-box">
+
+
+    <div class="logo-wrap">
+        🍽️
+    </div>
+
+
+    <div class="header">
+
+        <h1>
+            Create Restaurant Account
+        </h1>
+
+        <p>
+            Register your restaurant to get started
+        </p>
+
+    </div>
+
+
+    <form id="registerForm">
+
+
+        <div class="form-group">
+
+            <label>
+                Restaurant Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter restaurant name"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Owner Name
+            </label>
+
+            <input
+                type="text"
+                id="ownerName"
+                placeholder="Enter owner name"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Phone Number
+            </label>
+
+            <input
+                type="text"
+                id="phone"
+                placeholder="Enter phone number"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Create password"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter email"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Address
+            </label>
+
+            <textarea
+                id="address"
+                placeholder="Enter restaurant address"
+                required
+            ></textarea>
+
+        </div>
+
+        <!-- =====================================
+     SHOP LOCATION
+===================================== -->
+
+<div class="form-group">
+
+    <label>
+        Shop Location
+    </label>
+
+    <button
+        type="button"
+        id="getShopLocationBtn"
+        style="
+            width:100%;
+            padding:13px 16px;
+            border:none;
+            border-radius:10px;
+            background:#36578F;
+            color:#fff;
+            font-size:15px;
+            font-weight:600;
+            cursor:pointer;
+        "
+    >
+        <i class="fa-solid fa-location-dot"></i>
+        Use Current Location
+    </button>
+
+    <div
+        id="shopLocationStatus"
+        style="
+            margin-top:8px;
+            font-size:13px;
+            color:#777;
+        "
+    >
+        Location not selected
+    </div>
+
+    <!-- Hidden location values -->
+
+    <input
+        type="hidden"
+        id="latitude"
+        value=""
+    >
+
+    <input
+        type="hidden"
+        id="longitude"
+        value=""
+    >
+
+</div>
+
+
+        <div class="form-group">
+
+            <label>
+                City
+            </label>
+
+            <input
+                type="text"
+                id="city"
+                placeholder="Enter city"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Store Category
+            </label>
+
+            <select
+                id="category"
+                required
+            >
+
+                <option value="Restaurant">
+                    Restaurant
+                </option>
+
+                <option value="Groceries">
+                    Groceries
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                placeholder="Tell customers about your restaurant"
+            ></textarea>
+
+        </div>
+
+
+        <button
+            type="submit"
+            id="registerButton"
+        >
+            Create Restaurant Account
+        </button>
+
+
+    </form>
+
+
+    <div
+        class="message"
+        id="message"
+    ></div>
+
+
+    <div class="login-link">
+
+        Already have an account?
+
+        <a href="restaurant-login.html">
+            Login
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+// ==========================================
+// SHOP CURRENT LOCATION
+// ==========================================
+
+const getShopLocationBtn =
+    document.getElementById("getShopLocationBtn");
+
+const shopLocationStatus =
+    document.getElementById("shopLocationStatus");
+
+const latitudeInput =
+    document.getElementById("latitude");
+
+const longitudeInput =
+    document.getElementById("longitude");
+
+
+getShopLocationBtn.addEventListener(
+    "click",
+    function () {
+
+        if (!navigator.geolocation) {
+
+            shopLocationStatus.textContent =
+                "Location is not supported by this browser.";
+
+            shopLocationStatus.style.color =
+                "#d32f2f";
+
+            return;
+        }
+
+
+        getShopLocationBtn.disabled = true;
+
+        getShopLocationBtn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Getting Location...';
+
+        shopLocationStatus.textContent =
+            "Please allow location permission...";
+
+        shopLocationStatus.style.color =
+            "#666";
+
+
+        navigator.geolocation.getCurrentPosition(
+
+            function (position) {
+
+                const latitude =
+                    position.coords.latitude;
+
+                const longitude =
+                    position.coords.longitude;
+
+
+                // Save coordinates
+
+                latitudeInput.value =
+                    latitude;
+
+                longitudeInput.value =
+                    longitude;
+
+
+                // Success message
+
+                shopLocationStatus.innerHTML =
+                    '<i class="fa-solid fa-circle-check"></i> Location detected successfully';
+
+                shopLocationStatus.style.color =
+                    "#168a45";
+
+
+                getShopLocationBtn.innerHTML =
+                    '<i class="fa-solid fa-location-dot"></i> Location Selected';
+
+                getShopLocationBtn.disabled =
+                    false;
+
+
+                console.log(
+                    "Shop Latitude:",
+                    latitude
+                );
+
+                console.log(
+                    "Shop Longitude:",
+                    longitude
+                );
+
+            },
+
+            function (error) {
+
+                console.error(
+                    "SHOP LOCATION ERROR:",
+                    error
+                );
+
+
+                latitudeInput.value =
+                    "";
+
+                longitudeInput.value =
+                    "";
+
+
+                getShopLocationBtn.disabled =
+                    false;
+
+                getShopLocationBtn.innerHTML =
+                    '<i class="fa-solid fa-location-dot"></i> Use Current Location';
+
+
+                if (error.code === 1) {
+
+                    shopLocationStatus.textContent =
+                        "Location permission denied. Please allow location access.";
+
+                } else if (error.code === 2) {
+
+                    shopLocationStatus.textContent =
+                        "Unable to get your location. Please try again.";
+
+                } else if (error.code === 3) {
+
+                    shopLocationStatus.textContent =
+                        "Location request timed out. Please try again.";
+
+                } else {
+
+                    shopLocationStatus.textContent =
+                        "Unable to get location.";
+
+                }
+
+
+                shopLocationStatus.style.color =
+                    "#d32f2f";
+
+            },
+
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
+            }
+
+        );
+
+    }
+);
+
+document
+.getElementById("registerForm")
+.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        const button =
+            document.getElementById(
+                "registerButton"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        button.disabled=true;
+
+        button.textContent=
+            "Creating account...";
+
+
+        message.textContent="";
+
+        message.style.color=
+            "#aebbd3";
+
+
+        const data={
+
+            name:
+                document
+                .getElementById("name")
+                .value
+                .trim(),
+
+            ownerName:
+                document
+                .getElementById("ownerName")
+                .value
+                .trim(),
+
+            phone:
+                document
+                .getElementById("phone")
+                .value
+                .trim(),
+
+            password:
+                document
+                .getElementById("password")
+                .value,
+
+            email:
+                document
+                .getElementById("email")
+                .value
+                .trim(),
+
+            address:
+                document
+                .getElementById("address")
+                .value
+                .trim(),
+
+            city:
+                document
+                .getElementById("city")
+                .value
+                .trim(),
+
+            category:
+                document
+                .getElementById("category")
+                .value,
+            
+            description:
+                document
+                .getElementById("description")
+                .value
+                .trim(),
+            
+            latitude:
+                document
+                .getElementById("latitude")
+                .value,
+            
+            longitude:
+                document
+                .getElementById("longitude")
+            .value
+        };
+
+
+        try{
+
+            const response =
+                await fetch(
+                    "/api/restaurants/register",
+                    {
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                            "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(data)
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if(
+                !response.ok ||
+                !result.success
+            ){
+
+                throw new Error(
+                    result.message ||
+                    "Registration failed"
+                );
+            }
+
+
+            message.style.color=
+                "#4ade80";
+
+
+            message.textContent=
+                result.message ||
+                "Restaurant registered successfully";
+
+
+            document
+            .getElementById("registerForm")
+            .reset();
+
+
+            setTimeout(function(){
+
+                window.location.href=
+                    "restaurant-login.html";
+
+            },1500);
+
+
+        }
+        catch(error){
+
+            console.error(
+                "Restaurant Registration Error:",
+                error
+            );
+
+
+            message.style.color=
+                "#ff6b73";
+
+
+            message.textContent=
+                error.message ||
+                "Something went wrong";
+
+        }
+        finally{
+
+            button.disabled=false;
+
+            button.textContent=
+                "Create Restaurant Account";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

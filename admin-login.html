@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - Food Delivery</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f6fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.10);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            color: #ef3340;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #222;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            margin-bottom: 18px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #ef3340;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: #ef3340;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #d92835;
+        }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #d22;
+        }
+
+        
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <div class="logo">
+            FoodExpress
+        </div>
+
+        <h2>Admin Login</h2>
+
+        <form id="adminLoginForm">
+
+            <label>Username</label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter admin username"
+                required
+            >
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter admin password"
+                required
+            >
+
+            <button type="submit">
+                🔐 Login
+            </button>
+
+        </form>
+
+        <div id="message"></div>
+
+    </div>
+
+
+    <script>
+
+        document
+            .getElementById("adminLoginForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const username =
+                    document.getElementById("username").value.trim();
+
+                const password =
+                    document.getElementById("password").value;
+
+                const message =
+                    document.getElementById("message");
+
+                message.textContent = "Logging in...";
+                message.style.color = "#555";
+
+                try {
+
+                    const response =
+                        await fetch("/api/admin/login", {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                username,
+                                password
+                            })
+                        });
+
+                    const data =
+                        await response.json();
+
+                    if (!response.ok || !data.success) {
+                        throw new Error(
+                            data.message ||
+                            "Admin login failed"
+                        );
+                    }
+
+                    localStorage.setItem(
+                        "adminToken",
+                        data.token
+                    );
+
+                    message.textContent =
+                        "Login successful!";
+
+                    message.style.color = "green";
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            "/admin-restaurant.html";
+
+                    }, 500);
+
+                } catch (error) {
+
+                    console.error(
+                        "Admin Login Error:",
+                        error
+                    );
+
+                    message.textContent =
+                        error.message;
+
+                    message.style.color = "#d22";
+                }
+
+            });
+
+    </script>
+
+</body>
+</html>

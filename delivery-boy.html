@@ -1,0 +1,3944 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
+
+    <title>Delivery Boy Dashboard</title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+        }
+
+
+        html,
+        body{
+
+            width:100%;
+            min-height:100%;
+
+            scrollbar-width:none;
+            -ms-overflow-style:none;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar{
+
+            display:none;
+            width:0;
+        }
+
+
+        /* =====================================================
+           BODY
+        ===================================================== */
+
+        body{
+
+            font-family:Arial,sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(54,87,143,.32),
+                    transparent 34%
+                ),
+                linear-gradient(
+                    180deg,
+                    #080c1b 0%,
+                    #0b1122 100%
+                );
+
+            color:#fff;
+
+            min-height:100vh;
+
+            padding-bottom:25px;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header{
+
+            position:sticky;
+
+            top:0;
+
+            z-index:100;
+
+            width:100%;
+
+            padding:
+                17px
+                15px
+                15px;
+
+            text-align:center;
+
+            background:
+                rgba(10,17,35,.94);
+
+            border-bottom:
+                1px solid
+                rgba(54,87,143,.55);
+
+            backdrop-filter:blur(12px);
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,.25);
+        }
+
+
+        .header h2{
+
+            font-size:20px;
+
+            font-weight:800;
+
+            color:#fff;
+
+            margin-bottom:5px;
+        }
+
+
+        .header p{
+
+            font-size:11px;
+
+            color:#8192ae;
+
+            letter-spacing:.2px;
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .container{
+
+            width:100%;
+
+            max-width:500px;
+
+            margin:auto;
+
+            padding:
+                14px
+                13px
+                0;
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        .message{
+
+            display:none;
+
+            padding:
+                11px
+                12px;
+
+            margin-bottom:13px;
+
+            border-radius:11px;
+
+            background:
+                rgba(54,87,143,.14);
+
+            border:
+                1px solid
+                rgba(83,121,180,.30);
+
+            color:#a9c5ef;
+
+            font-size:12px;
+
+            line-height:1.45;
+
+            text-align:center;
+        }
+
+
+        /* =====================================================
+           COMMON CARD
+        ===================================================== */
+
+        .card{
+
+            position:relative;
+
+            width:100%;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #101a30 0%,
+                    #0c1427 100%
+                );
+
+            border:
+                1px solid
+                rgba(54,87,143,.50);
+
+            border-radius:18px;
+
+            padding:17px;
+
+            margin-bottom:13px;
+
+            box-shadow:
+                0 12px 30px rgba(0,0,0,.28);
+        }
+
+
+        .card::before{
+
+            content:"";
+
+            position:absolute;
+
+            top:0;
+            left:12%;
+
+            width:76%;
+
+            height:1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(120,160,220,.45),
+                    transparent
+                );
+        }
+
+
+        /* =====================================================
+           PROFILE
+        ===================================================== */
+
+        .profile-top{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:13px;
+
+            margin-bottom:15px;
+        }
+
+
+        .profile-icon{
+
+            flex:0 0 52px;
+
+            width:52px;
+            height:52px;
+
+            display:flex;
+
+            align-items:center;
+            justify-content:center;
+
+            border-radius:16px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #1b3156,
+                    #101a30
+                );
+
+            border:
+                1px solid
+                #36578f;
+
+            font-size:25px;
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,.28);
+        }
+
+
+        .profile-name{
+
+            color:#fff;
+
+            font-size:18px;
+
+            font-weight:800;
+
+            line-height:1.25;
+
+            margin-bottom:4px;
+        }
+
+
+        .profile-role{
+
+            color:#7f91ae;
+
+            font-size:11px;
+        }
+
+
+        .profile-info{
+
+            padding-top:13px;
+
+            border-top:
+                1px solid
+                rgba(61,82,118,.42);
+
+            color:#91a2bc;
+
+            font-size:12px;
+
+            line-height:2;
+        }
+
+
+        .profile-info span{
+
+            color:#e2e8f0;
+
+            font-weight:600;
+        }
+
+
+        /* =====================================================
+           SECTION TITLE
+        ===================================================== */
+
+        .section-title{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:9px;
+
+            color:#fff;
+
+            font-size:14px;
+
+            font-weight:800;
+
+            margin-bottom:14px;
+        }
+
+
+        .section-icon{
+
+            width:31px;
+            height:31px;
+
+            display:flex;
+
+            align-items:center;
+            justify-content:center;
+
+            border-radius:10px;
+
+            background:
+                rgba(54,87,143,.22);
+
+            border:
+                1px solid
+                rgba(83,121,180,.35);
+
+            font-size:15px;
+        }
+
+
+        /* =====================================================
+           ONLINE STATUS
+        ===================================================== */
+
+        .status-row{
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:space-between;
+
+            gap:10px;
+        }
+
+
+        .status-text{
+
+            color:#e7edf7;
+
+            font-size:13px;
+
+            font-weight:700;
+        }
+
+
+        .status-small{
+
+            color:#71829f;
+
+            font-size:10px;
+
+            margin-top:4px;
+        }
+
+
+        .status-badge{
+
+            display:inline-flex;
+
+            align-items:center;
+
+            gap:5px;
+
+            padding:
+                6px
+                10px;
+
+            border-radius:20px;
+
+            font-size:10px;
+
+            font-weight:800;
+
+            background:
+                rgba(100,116,139,.15);
+
+            border:
+                1px solid
+                rgba(100,116,139,.30);
+
+            color:#a5b2c5;
+        }
+
+
+        .status-badge::before{
+
+            content:"";
+
+            width:6px;
+            height:6px;
+
+            border-radius:50%;
+
+            background:#64748b;
+        }
+
+
+        .status-badge.online{
+
+            background:
+                rgba(34,197,94,.11);
+
+            border-color:
+                rgba(74,222,128,.25);
+
+            color:#4ade80;
+        }
+
+
+        .status-badge.online::before{
+
+            background:#4ade80;
+
+            box-shadow:
+                0 0 8px rgba(74,222,128,.65);
+        }
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        button{
+
+            width:100%;
+
+            border:none;
+
+            border-radius:11px;
+
+            min-height:47px;
+
+            padding:
+                12px
+                14px;
+
+            margin-top:12px;
+
+            font-size:13px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+            transition:
+                transform .15s ease,
+                opacity .15s ease;
+        }
+
+
+        button:active{
+
+            transform:scale(.985);
+        }
+
+
+        .online-btn{
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #16a34a,
+                    #15803d
+                );
+
+            color:#fff;
+
+            box-shadow:
+                0 8px 20px rgba(22,163,74,.18);
+        }
+
+
+        .offline-btn{
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #475569,
+                    #334155
+                );
+
+            color:#fff;
+        }
+
+
+        /* =====================================================
+           LOCATION
+        ===================================================== */
+
+        .location-box{
+
+            padding:
+                13px;
+
+            border-radius:12px;
+
+            background:
+                rgba(20,32,57,.75);
+
+            border:
+                1px solid
+                rgba(45,65,103,.65);
+        }
+
+
+        .location-value{
+
+            color:#9baac0;
+
+            font-size:12px;
+
+            margin-top:7px;
+
+            line-height:1.8;
+
+            word-break:break-word;
+        }
+
+
+        /* =====================================================
+           ORDERS
+        ===================================================== */
+
+        #assignedOrders{
+
+            margin-top:0 !important;
+        }
+
+
+        .order-card{
+
+            padding:13px;
+
+            margin-bottom:10px;
+
+            border:
+                1px solid
+                rgba(45,65,103,.65);
+
+            border-radius:13px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #142039,
+                    #101a2f
+                );
+
+            color:#9baac0;
+
+            font-size:12px;
+
+            line-height:1.7;
+        }
+
+
+        .order-card:last-child{
+
+            margin-bottom:0;
+        }
+
+
+        .order-card strong{
+
+            color:#fff;
+
+            font-size:13px;
+        }
+
+
+        .order-card button{
+
+            min-height:43px;
+
+            margin-top:9px;
+
+            font-size:12px;
+        }
+
+
+        .order-status{
+
+            display:inline-block;
+
+            padding:
+                3px
+                7px;
+
+            margin-left:3px;
+
+            border-radius:7px;
+
+            background:
+                rgba(54,87,143,.20);
+
+            color:#9fc0ee;
+
+            font-size:10px;
+
+            font-weight:700;
+        }
+
+
+        /* =====================================================
+           ORDER BUTTON OVERRIDES
+        ===================================================== */
+
+        .customer-location-btn{
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #16a34a,
+                    #15803d
+                ) !important;
+
+            color:#fff !important;
+        }
+
+
+        .pickup-btn{
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #36578f,
+                    #294674
+                ) !important;
+
+            color:#fff !important;
+        }
+
+
+        .delivery-btn{
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #36578f,
+                    #294674
+                ) !important;
+
+            color:#fff !important;
+        }
+
+
+        .delivered-btn{
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #16a34a,
+                    #15803d
+                ) !important;
+
+            color:#fff !important;
+        }
+
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        .logout-card{
+
+            padding:12px;
+
+            margin-bottom:0;
+        }
+
+
+        .logout-btn{
+
+            margin-top:0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ef4444,
+                    #dc2626
+                );
+
+            color:#fff;
+
+            box-shadow:
+                0 8px 20px rgba(220,38,38,.16);
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media(max-width:600px){
+
+            .header{
+
+                padding:
+                    15px
+                    13px;
+            }
+
+            .header h2{
+
+                font-size:19px;
+            }
+
+            .container{
+
+                padding:
+                    12px
+                    10px
+                    0;
+            }
+
+            .card{
+
+                padding:15px;
+
+                border-radius:17px;
+            }
+
+            .profile-name{
+
+                font-size:17px;
+            }
+
+            .profile-icon{
+
+                width:49px;
+                height:49px;
+
+                flex-basis:49px;
+            }
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media(max-width:360px){
+
+            .container{
+
+                padding-left:8px;
+                padding-right:8px;
+            }
+
+            .card{
+
+                padding:14px;
+
+                margin-bottom:11px;
+
+                border-radius:16px;
+            }
+
+            .profile-icon{
+
+                width:46px;
+                height:46px;
+
+                flex-basis:46px;
+
+                font-size:22px;
+            }
+
+            .profile-name{
+
+                font-size:16px;
+            }
+
+            .section-title{
+
+                font-size:13px;
+            }
+
+            button{
+
+                min-height:45px;
+
+                font-size:12px;
+            }
+        }
+
+
+       /* =========================================
+   HEADER PROFILE + HISTORY BUTTONS
+========================================= */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+
+    padding: 17px 15px 15px;
+
+    text-align: center;
+
+    background:
+        rgba(10,17,35,.94);
+
+    border-bottom:
+        1px solid
+        rgba(54,87,143,.55);
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.25);
+
+    /* IMPORTANT */
+    position: sticky;
+}
+
+/* Profile + History ko right side me rakhega */
+.header-actions {
+    position: absolute;
+
+    right: 15px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    z-index: 5;
+}
+
+.header-icon-btn {
+    width: 48px;
+    height: 48px;
+
+    padding: 0;
+
+    margin: 0 !important;
+
+    border:
+        1px solid
+        rgba(54,87,143,.65);
+
+    border-radius: 12px;
+
+    background:
+        rgba(54,87,143,.16);
+
+    color: #fff;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 2px;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+
+    transition: .2s ease;
+}
+
+.header-icon {
+    font-size: 18px;
+    line-height: 18px;
+}
+
+.header-icon-text {
+    font-size: 8px;
+    font-weight: 700;
+    line-height: 10px;
+}
+
+.header-icon-btn:active {
+    transform: scale(.94);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:600px){
+
+    .header {
+        padding:
+            15px
+            110px
+            15px
+            13px;
+    }
+
+    .header-actions {
+        right: 10px;
+        gap: 5px;
+    }
+
+    .header-icon-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+    }
+
+    .header-icon {
+        font-size: 17px;
+        line-height: 17px;
+    }
+
+    .header-icon-text {
+        font-size: 7px;
+        line-height: 9px;
+    }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media(max-width:360px){
+
+    .header {
+        padding-right: 100px;
+    }
+
+    .header-actions {
+        right: 8px;
+        gap: 4px;
+    }
+
+    .header-icon-btn {
+        width: 41px;
+        height: 41px;
+        border-radius: 10px;
+    }
+
+    .header-icon {
+        font-size: 16px;
+    }
+
+    .header-icon-text {
+        font-size: 7px;
+    }
+}
+
+
+/* =========================================
+   DESKTOP HEADER
+   LEFT TITLE + RIGHT PROFILE/HISTORY
+========================================= */
+
+@media (min-width: 601px) {
+
+    .header {
+        display: grid;
+
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+
+        align-items: center;
+
+        text-align: left;
+
+        padding:
+            17px
+            15px
+            15px;
+    }
+
+    .header h2 {
+        grid-column: 1;
+        grid-row: 1;
+
+        margin: 0 0 5px 8px;
+
+        font-size: 20px;
+
+        white-space: nowrap;
+    }
+
+    .header p {
+        grid-column: 1;
+        grid-row: 2;
+
+        margin-left: 65px;
+
+        white-space: nowrap;
+    }
+
+    .header-actions {
+        position: static;
+
+        grid-column: 2;
+        grid-row: 1 / span 2;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: flex-end;
+
+        gap: 7px;
+
+        margin: 0;
+        padding-left: 12px;
+
+        transform: none;
+    }
+
+    .header-icon-btn {
+        width: 48px;
+        height: 48px;
+
+        margin: 0 !important;
+        flex-shrink: 0;
+    }
+}
+
+
+/* =====================================================
+   DELIVERY BOY PROFILE PAGE
+===================================================== */
+
+.profile-section {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 18px 0 30px;
+    box-sizing: border-box;
+}
+
+
+/* PROFILE HEADER */
+
+.profile-page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+
+.profile-back-btn {
+    width: 42px !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    min-width: 42px;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(83,121,180,.45) !important;
+    border-radius: 12px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #36578f,
+            #294674
+        ) !important;
+
+    color: #fff;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 18px rgba(0,0,0,.25);
+}
+
+
+.profile-back-btn:active {
+    transform: scale(.94);
+}
+
+
+.profile-page-title {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+
+.profile-page-subtitle {
+    margin-top: 4px;
+    color: #8192ae;
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   PROFILE CARD
+===================================================== */
+
+.profile-page-card {
+    width: 100%;
+
+    padding: 22px 17px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #101a30 0%,
+            #0c1427 100%
+        );
+
+    border: 1px solid rgba(54,87,143,.50);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.28);
+
+    box-sizing: border-box;
+}
+
+
+/* PROFILE AVATAR */
+
+.profile-page-avatar {
+    width: 82px;
+    height: 82px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #36578f,
+            #1b3156
+        );
+
+    border: 1px solid rgba(120,160,220,.55);
+
+    font-size: 34px;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.30);
+}
+
+
+/* NAME */
+
+.profile-page-name {
+    text-align: center;
+
+    color: #fff;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    line-height: 1.3;
+
+    word-break: break-word;
+}
+
+
+.profile-page-role {
+    margin-top: 5px;
+
+    text-align: center;
+
+    color: #8192ae;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   PROFILE DETAILS
+===================================================== */
+
+.profile-details {
+    width: 100%;
+    margin-top: 22px;
+}
+
+
+.profile-detail-row {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 14px 0;
+
+    border-bottom:
+        1px solid
+        rgba(61,82,118,.35);
+}
+
+
+.profile-detail-row:last-child {
+    border-bottom: none;
+}
+
+
+/* DETAIL ICON */
+
+.profile-detail-icon {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(54,87,143,.20);
+
+    border:
+        1px solid
+        rgba(83,121,180,.35);
+
+    font-size: 18px;
+}
+
+
+/* DETAIL CONTENT */
+
+.profile-detail-content {
+    min-width: 0;
+    flex: 1;
+}
+
+
+.profile-detail-label {
+    margin-bottom: 4px;
+
+    color: #71829f;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+.profile-detail-value {
+    color: #e7edf7;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+    .profile-section {
+        padding:
+            14px
+            0
+            25px;
+    }
+
+
+    .profile-page-title {
+        font-size: 19px;
+    }
+
+
+    .profile-page-card {
+        padding: 20px 15px;
+        border-radius: 18px;
+    }
+
+
+    .profile-page-avatar {
+        width: 76px;
+        height: 76px;
+
+        font-size: 31px;
+    }
+
+
+    .profile-page-name {
+        font-size: 18px;
+    }
+
+
+    .profile-detail-row {
+        padding: 13px 0;
+    }
+
+
+    .profile-detail-icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+
+        font-size: 17px;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media(max-width:360px){
+
+    .profile-section {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+
+    .profile-page-card {
+        padding: 18px 13px;
+    }
+
+
+    .profile-page-title {
+        font-size: 18px;
+    }
+
+
+    .profile-page-subtitle {
+        font-size: 10px;
+    }
+
+
+    .profile-page-avatar {
+        width: 70px;
+        height: 70px;
+
+        font-size: 28px;
+    }
+
+
+    .profile-detail-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+    }
+
+}
+
+/* =====================================================
+   DELIVERY ORDER HISTORY PAGE
+===================================================== */
+
+.history-section {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 18px 0 30px;
+    box-sizing: border-box;
+}
+
+
+/* HISTORY HEADER */
+
+.history-page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+
+.history-back-btn {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px;
+    min-height: 42px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(83,121,180,.45) !important;
+    border-radius: 12px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #36578f,
+            #294674
+        ) !important;
+
+    color: #fff;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 18px rgba(0,0,0,.25);
+}
+
+
+.history-back-btn:active {
+    transform: scale(.94);
+}
+
+
+.history-page-title {
+    color: #fff;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    line-height: 1.2;
+}
+
+
+.history-page-subtitle {
+    margin-top: 4px;
+
+    color: #8192ae;
+
+    font-size: 11px;
+}
+
+
+/* HISTORY CARD */
+
+.history-page-card {
+    width: 100%;
+
+    padding: 18px 15px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #101a30 0%,
+            #0c1427 100%
+        );
+
+    border:
+        1px solid
+        rgba(54,87,143,.50);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.28);
+
+    box-sizing: border-box;
+}
+
+
+
+
+
+/* HISTORY ORDER */
+
+
+/* COMPACT PREMIUM ORDER HISTORY CARD */
+
+.history-order-card {
+    padding: 11px 12px;
+    margin-bottom: 9px;
+    border: 1px solid rgba(83, 121, 180, 0.32);
+    border-radius: 13px;
+    background: linear-gradient(145deg, #16243d, #0e1729);
+    color: #aab8ce;
+    font-size: 11px;
+    line-height: 1.4;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.16);
+}
+
+.history-order-card:last-child {
+    margin-bottom: 2px;
+}
+
+.history-order-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(120, 150, 195, 0.17);
+}
+
+.history-order-head strong {
+    color: #f8fafc;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.history-order-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+}
+
+.history-order-item {
+    min-width: 0;
+}
+
+.history-order-label {
+    display: block;
+    margin-bottom: 3px;
+    color: #8296b5;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.35px;
+}
+
+.history-order-value {
+    display: block;
+    color: #e2e8f0;
+    font-size: 11px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.history-order-address {
+    grid-column: 1 / -1;
+    padding-top: 7px;
+    margin-top: 1px;
+    border-top: 1px solid rgba(120, 150, 195, 0.14);
+}
+
+.history-delivered-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(74, 222, 128, 0.25);
+    color: #4ade80;
+    font-size: 9px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+@media (max-width: 360px) {
+    .history-order-card {
+        padding: 9px;
+    }
+
+    .history-order-grid {
+        gap: 7px 8px;
+    }
+
+    .history-order-value {
+        font-size: 10px;
+    }
+}
+
+
+
+.history-empty {
+    padding: 25px 10px;
+
+    text-align: center;
+
+    color: #71829f;
+
+    font-size: 12px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .history-section {
+        padding:
+            14px
+            0
+            25px;
+    }
+
+
+    .history-page-title {
+        font-size: 19px;
+    }
+
+
+    .history-page-card {
+        padding: 16px 13px;
+
+        border-radius: 17px;
+    }
+
+}
+
+
+/* SMALL MOBILE */
+
+@media(max-width:360px){
+
+    .history-section {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+
+    .history-page-title {
+        font-size: 18px;
+    }
+
+
+    .history-page-subtitle {
+        font-size: 10px;
+    }
+
+}
+
+/* =====================================================
+   DELIVERED ORDERS SCROLL AREA
+===================================================== */
+
+#orderHistoryList{
+    max-height:570px !important;
+
+    overflow-y:scroll !important;
+    overflow-x:hidden !important;
+
+    padding-right:8px;
+
+    scrollbar-width:none !important;
+    scrollbar-color:#36578f #0c1427 !important;
+}
+
+/* Chrome / Edge */
+#orderHistoryList::-webkit-scrollbar{
+    width:10px !important;
+}
+
+#orderHistoryList::-webkit-scrollbar-track{
+    background:#0c1427 !important;
+    border-radius:10px;
+}
+
+#orderHistoryList::-webkit-scrollbar-thumb{
+    background:#36578f !important;
+    border-radius:10px;
+
+    border:2px solid #0c1427;
+}
+
+#orderHistoryList::-webkit-scrollbar-thumb:hover{
+    background:#5b82c4 !important;
+}
+
+
+
+
+/* DELIVERY STATUS - ONLINE / OFFLINE SELECTOR */
+
+.delivery-status-card {
+    padding: 15px !important;
+}
+
+.delivery-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    width: 100%;
+}
+
+.status-selector {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 0 0 auto;
+    padding: 4px;
+    border-radius: 10px;
+    background: #0c1427;
+    border: 1px solid rgba(54, 87, 143, .35);
+}
+
+.status-selector .nearest-category-btn {
+    width: auto !important;
+    min-width: 0;
+    min-height: 38px;
+    margin: 0 !important;
+    padding: 8px 12px;
+    border: none !important;
+    border-radius: 7px;
+    background: transparent;
+    color: #a5b2c5;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: none !important;
+    filter: none !important;
+    outline: none !important;
+    transform: none;
+    transition: background-color .15s ease, color .15s ease;
+}
+
+.status-selector #onlineButton.active {
+    background: #16a34a !important;
+    color: #fff !important;
+}
+
+.status-selector #offlineButton.active {
+    background: #dc2626 !important;
+    color: #fff !important;
+}
+
+.status-selector .nearest-category-btn:focus,
+.status-selector .nearest-category-btn:focus-visible,
+.status-selector .nearest-category-btn:active {
+    outline: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+.delivery-status-message {
+    flex: 1;
+    min-width: 0;
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 360px) {
+    .delivery-status-row {
+        gap: 8px;
+    }
+
+    .status-selector .nearest-category-btn {
+        padding: 8px 9px;
+        font-size: 11px;
+    }
+
+    .delivery-status-message {
+        font-size: 10px;
+    }
+}
+
+/* Dashboard header aur Online/Offline card ke beech gap */
+#dashboardSection > .header {
+    margin-bottom: 16px;
+}
+
+
+/* Hide Current Location UI, keep GPS functions working */
+#currentLocationCard {
+    display: none !important;
+}
+
+
+.assigned-orders-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.assigned-orders-header .section-title {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+
+.refresh-assigned-orders-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50% !important;
+
+    background: linear-gradient(145deg, #426bb0, #294879) !important;
+    color: #ffffff !important;
+
+    box-shadow:
+        0 4px 12px rgba(54, 87, 143, 0.28),
+        inset 0 1px 1px rgba(255, 255, 255, 0.18);
+
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.refresh-assigned-orders-btn:hover {
+    background: linear-gradient(145deg, #507dc6, #34578f) !important;
+    box-shadow: 0 5px 16px rgba(54, 87, 143, 0.4);
+    transform: translateY(-1px);
+}
+
+.refresh-assigned-orders-btn:active {
+    transform: scale(0.94);
+}
+
+.refresh-assigned-orders-btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.refresh-icon-svg {
+    display: block;
+    width: 23px;
+    height: 23px;
+    flex: 0 0 23px;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+}
+
+.refresh-icon-svg.is-refreshing {
+    animation: assignedOrdersRefreshSpin 0.75s linear infinite;
+}
+
+@keyframes assignedOrdersRefreshSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Delivery Boy Profile Photo */
+.profile-photo-upload {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+    isolation: isolate;
+}
+
+#deliveryBoyPhotoPreview {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+#deliveryBoyPhotoPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-photo-camera {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #36578f;
+    border: 2px solid #101a30;
+    font-size: 12px;
+}
+
+.profile-photo-upload:focus-visible {
+    outline: 2px solid #9fc0ee;
+    outline-offset: 4px;
+}
+
+
+
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+
+
+/* PREMIUM ORDER HISTORY DATE FILTER */
+.history-filter-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    min-width: 0;
+    padding: 10px 14px 14px;
+    margin: 0 0 15px;
+    border: 1px solid rgba(83,121,180,.45);
+    border-radius: 15px;
+    background: linear-gradient(
+        145deg,
+        rgba(54,87,143,.19),
+        rgba(12,20,39,.88)
+    );
+    box-shadow: 0 8px 22px rgba(0,0,0,.18);
+}
+
+.history-filter-label {
+    display: table;
+    padding: 0 8px;
+    margin-left: 5px;
+    color: #dbeafe;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.history-filter-label i {
+    color: #8fb8f5;
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+.history-filter-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.history-date-input {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 11px;
+    border: 1px solid rgba(120,160,220,.35);
+    border-radius: 10px;
+    background: rgba(5,11,25,.78);
+    color: #f8fafc;
+    color-scheme: dark;
+    font: 600 12px Arial, sans-serif;
+    outline: none;
+}
+
+.history-date-input:focus {
+    border-color: #7aa7ed;
+    box-shadow: 0 0 0 3px rgba(83,121,180,.18);
+}
+
+.history-filter-today {
+    width: auto;
+    min-width: 78px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 13px;
+    border: 1px solid rgba(120,160,220,.35);
+    border-radius: 10px;
+    background: linear-gradient(135deg,#36578f,#294674);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.history-filter-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: #8192ae;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.history-filter-count {
+    color: #a9c5ef;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+@media (max-width: 360px) {
+    .history-filter-panel {
+        padding: 12px;
+    }
+
+    .history-filter-today {
+        min-width: 68px;
+        padding: 0 9px;
+    }
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <!-- =================================================
+         DASHBOARD SECTION
+    ================================================== -->
+
+    <div id="dashboardSection">
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <h2>
+                🚴 Delivery Dashboard
+            </h2>
+
+            <p>
+                Delivery Partner Panel
+            </p>
+
+            <div class="header-actions">
+
+                <!-- Profile -->
+
+                <button
+                    class="header-icon-btn"
+                    onclick="openProfile()"
+                    title="Profile"
+                >
+                    <span class="header-icon">👤</span>
+                    <span class="header-icon-text">Profile</span>
+                </button>
+
+
+                <!-- History -->
+
+                <button
+                    class="header-icon-btn"
+                    onclick="openHistory()"
+                    title="History"
+                >
+                    <span class="header-icon">📋</span>
+                    <span class="header-icon-text">History</span>
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MESSAGE
+        ================================================== -->
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        
+<!-- DELIVERY STATUS -->
+<div class="card delivery-status-card">
+
+    
+<div class="delivery-status-row">
+
+    <div class="status-selector">
+
+        <button
+            type="button"
+            id="onlineButton"
+            class="nearest-category-btn"
+            onclick="setDeliveryStatus(true)"
+        >
+            Online
+        </button>
+
+        <button
+            type="button"
+            id="offlineButton"
+            class="nearest-category-btn"
+            onclick="setDeliveryStatus(false)"
+        >
+            Offline
+        </button>
+
+    </div>
+
+    <div
+        id="statusMessage"
+        class="delivery-status-message"
+    >
+        Go online to receive deliveries
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+        <!-- =================================================
+             LOCATION
+        ================================================== -->
+
+       <div class="card" id="currentLocationCard">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    📍
+                </div>
+
+                <div>
+                    Current Location
+                </div>
+
+            </div>
+
+
+            <div class="location-box">
+
+                <div
+                    id="locationStatus"
+                    class="location-value"
+                >
+                    Location not available
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ASSIGNED ORDERS
+        ================================================== -->
+
+        <div class="card">
+
+            
+<div class="assigned-orders-header">
+    <div class="section-title">
+        <div class="section-icon">📦</div>
+        <div>My Assigned Orders</div>
+    </div>
+
+    <button
+        type="button"
+        id="refreshAssignedOrdersBtn"
+        class="refresh-assigned-orders-btn"
+        onclick="refreshAssignedOrders()"
+        title="Refresh orders"
+        aria-label="Refresh orders"
+    >
+       
+<svg
+    id="refreshAssignedOrdersIcon"
+    class="refresh-icon-svg"
+    xmlns="http://www.w3.org/2000/svg"
+    width="23"
+    height="23"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+>
+    <path
+        d="M20 7V3L16.8 6.2A8 8 0 1 0 20 12"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+    <path
+        d="M20 3V8H15"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+</svg>
+
+    </button>
+</div>
+
+
+
+            <div
+                id="assignedOrders"
+                class="location-value"
+            >
+                Loading orders...
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOGOUT
+        ================================================== -->
+
+        <div class="card logout-card">
+
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+        </div>
+
+
+    </div>
+    <!-- ================= DASHBOARD SECTION END ================= -->
+
+
+    <!-- =================================================
+         DELIVERY BOY PROFILE SECTION
+    ================================================== -->
+
+    <section
+        id="profileSection"
+        class="profile-section"
+        style="display:none;"
+    >
+
+        <!-- Profile Header -->
+
+        <div class="profile-page-header">
+
+            <button
+                class="profile-back-btn"
+                onclick="closeProfile()"
+                title="Back"
+            >
+                ←
+            </button>
+
+
+            <div>
+
+                <div class="profile-page-title">
+                    Delivery Boy Profile
+                </div>
+
+                <div class="profile-page-subtitle">
+                    Your account information
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PROFILE CARD
+        ================================================== -->
+
+        <div class="profile-page-card">
+
+            <!-- Profile Icon -->
+
+            <div
+    class="profile-page-avatar profile-photo-upload"
+    id="deliveryBoyPhotoCircle"
+    role="button"
+    tabindex="0"
+    title="Upload profile photo"
+    onclick="document.getElementById('deliveryBoyPhotoInput').click()"
+    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('deliveryBoyPhotoInput').click();}"
+>
+    <img
+        id="deliveryBoyPhotoPreview"
+        alt="Delivery Boy Profile Photo"
+        style="display:none;"
+    >
+    <span id="deliveryBoyPhotoPlaceholder">🚴</span>
+    <span class="profile-photo-camera"><i class="fa-solid fa-camera"></i></span>
+</div>
+
+<input
+    type="file"
+    id="deliveryBoyPhotoInput"
+    accept="image/jpeg,image/png,image/webp"
+    hidden
+    onchange="uploadDeliveryBoyPhoto(event)"
+>
+
+
+            <!-- Name -->
+
+            <div
+                class="profile-page-name"
+                id="boyName"
+            >
+                Loading...
+            </div>
+
+
+            <!-- Role -->
+
+            <div class="profile-page-role">
+                Delivery Partner
+            </div>
+
+
+            <!-- =================================================
+                 PROFILE DETAILS
+            ================================================== -->
+
+            <div class="profile-details">
+
+
+                <!-- PHONE -->
+
+                <div class="profile-detail-row">
+
+                    <div class="profile-detail-icon">
+                        📱
+                    </div>
+
+
+                    <div class="profile-detail-content">
+
+                        <div class="profile-detail-label">
+                            Phone Number
+                        </div>
+
+
+                        <div
+                            class="profile-detail-value"
+                            id="boyPhone"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CITY -->
+
+                <div class="profile-detail-row">
+
+                    <div class="profile-detail-icon">
+                        📍
+                    </div>
+
+
+                    <div class="profile-detail-content">
+
+                        <div class="profile-detail-label">
+                            City
+                        </div>
+
+
+                        <div
+                            class="profile-detail-value"
+                            id="boyCity"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VEHICLE -->
+
+                <div class="profile-detail-row">
+
+                    <div class="profile-detail-icon">
+                        🛵
+                    </div>
+
+
+                    <div class="profile-detail-content">
+
+                        <div class="profile-detail-label">
+                            Vehicle
+                        </div>
+
+
+                        <div
+                            class="profile-detail-value"
+                            id="boyVehicle"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        
+
+    </section>
+
+    
+
+</div>
+
+<!-- =================================================
+     DELIVERY ORDER HISTORY SECTION
+================================================== -->
+
+<section
+    id="historySection"
+    class="history-section"
+    style="display:none;"
+>
+
+    <!-- History Header -->
+
+    <div class="history-page-header">
+
+        <button
+            class="history-back-btn"
+            onclick="closeHistory()"
+            title="Back"
+        >
+            ←
+        </button>
+
+        <div>
+
+            <div class="history-page-title">
+                Order History
+            </div>
+
+            <div class="history-page-subtitle">
+                Your delivered orders
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- History Card -->
+<fieldset class="history-filter-panel">
+    <legend class="history-filter-label">
+        <i class="fa-solid fa-calendar-days"></i>
+        Filter orders by date
+    </legend>
+
+
+    <div class="history-filter-controls">
+        <input
+            type="date"
+            id="historyDateFilter"
+            class="history-date-input"
+            aria-label="Choose order history date"
+        >
+
+        <button
+            type="button"
+            class="history-filter-today"
+            onclick="resetHistoryDateFilter()"
+        >
+            Today
+        </button>
+    </div>
+
+    <div class="history-filter-meta">
+        <span id="historyFilterHint">
+            Showing orders placed today
+        </span>
+
+        <span
+            id="historyFilterCount"
+            class="history-filter-count"
+        >
+            0 orders
+        </span>
+    </div>
+</fildset>
+
+<div id="orderHistoryList">
+    Loading history...
+</div>
+
+</section>
+
+
+    <script>
+
+
+        const API_BASE = "";
+
+
+        let deliveryToken =
+            localStorage.getItem(
+                "deliveryBoyToken"
+            );
+
+
+        let isOnline = false;
+
+
+        let locationWatcher = null;
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        function showMessage(message){
+
+            const box =
+                document.getElementById(
+                    "message"
+                );
+
+
+            box.textContent =
+                message;
+
+
+            box.style.display =
+                "block";
+
+
+            setTimeout(()=>{
+
+                box.style.display =
+                    "none";
+
+            },3000);
+
+        }
+
+
+        /* =====================================================
+           API REQUEST
+        ===================================================== */
+
+        async function apiRequest(
+            url,
+            options = {}
+        ){
+
+            const headers = {
+
+                "Content-Type":
+                    "application/json",
+
+                ...(options.headers || {})
+
+            };
+
+
+            if(deliveryToken){
+
+                headers.Authorization =
+                    "Bearer " +
+                    deliveryToken;
+
+            }
+
+
+            const response =
+                await fetch(
+                    API_BASE + url,
+                    {
+                        ...options,
+                        headers
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if(!response.ok){
+
+                throw new Error(
+                    data.message ||
+                    "Request failed"
+                );
+
+            }
+
+
+            return data;
+
+        }
+
+
+        function compressDeliveryBoyPhoto(file) {
+    return new Promise((resolve, reject) => {
+        if (!file || !file.type.startsWith("image/")) {
+            reject(new Error("Please select a valid image."));
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            reject(new Error("Photo must be smaller than 10 MB."));
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onerror = () => reject(
+            new Error("Unable to read selected photo.")
+        );
+
+        reader.onload = () => {
+            const image = new Image();
+
+            image.onerror = () => reject(
+                new Error("Unable to open selected photo.")
+            );
+
+            image.onload = () => {
+                const canvas = document.createElement("canvas");
+                const maxSize = 350;
+
+                const scale = Math.min(
+                    1,
+                    maxSize / Math.max(image.width, image.height)
+                );
+
+                canvas.width = Math.max(
+                    1,
+                    Math.round(image.width * scale)
+                );
+
+                canvas.height = Math.max(
+                    1,
+                    Math.round(image.height * scale)
+                );
+
+                const context = canvas.getContext("2d");
+
+                context.drawImage(
+                    image,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                resolve(
+                    canvas.toDataURL("image/jpeg", 0.55)
+                );
+            };
+
+            image.src = reader.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
+
+function displayDeliveryBoyPhoto(photo) {
+    const preview = document.getElementById(
+        "deliveryBoyPhotoPreview"
+    );
+
+    const placeholder = document.getElementById(
+        "deliveryBoyPhotoPlaceholder"
+    );
+
+    if (!preview || !placeholder) return;
+
+    if (photo) {
+        preview.src = photo;
+        preview.style.display = "block";
+        placeholder.style.display = "none";
+    } else {
+        preview.removeAttribute("src");
+        preview.style.display = "none";
+        placeholder.style.display = "flex";
+    }
+}
+
+
+async function uploadDeliveryBoyPhoto(event) {
+    const input = event.target;
+    const file = input.files && input.files[0];
+
+    if (!file) return;
+
+    if (!deliveryToken) {
+        showMessage("Please login first.");
+        input.value = "";
+        return;
+    }
+
+    try {
+        showMessage("Preparing your photo...");
+
+        const image = await compressDeliveryBoyPhoto(file);
+
+        const result = await apiRequest(
+            "/api/delivery-boys/profile-image",
+            {
+                method: "PUT",
+                body: JSON.stringify({ image })
+            }
+        );
+
+        displayDeliveryBoyPhoto(
+            result.profileImage || image
+        );
+
+        showMessage("Profile photo saved successfully.");
+    } catch (error) {
+        console.error("PROFILE PHOTO ERROR:", error);
+        showMessage(error.message || "Unable to save photo.");
+    } finally {
+        input.value = "";
+    }
+}
+
+
+        /* =====================================================
+           PROFILE
+        ===================================================== */
+
+        async function loadProfile(){
+
+            if(!deliveryToken){
+
+                showMessage(
+                    "Delivery Boy login required."
+                );
+
+                return;
+
+            }
+
+
+            try{
+
+                const data =
+                    await apiRequest(
+                        "/api/delivery-boys/profile"
+                    );
+
+
+                const boy =
+                    data.deliveryBoy;
+
+                    displayDeliveryBoyPhoto(boy.profileImage || "");
+
+
+                document
+                    .getElementById("boyName")
+                    .textContent =
+                    boy.name || "-";
+
+
+                document
+                    .getElementById("boyPhone")
+                    .textContent =
+                    boy.phone || "-";
+
+
+                document
+                    .getElementById("boyCity")
+                    .textContent =
+                    boy.city || "-";
+
+
+                document
+                    .getElementById("boyVehicle")
+                    .textContent =
+                    (boy.vehicleType || "-") +
+                    " " +
+                    (boy.vehicleNumber || "");
+
+
+                
+isOnline = boy.isOnline === true;
+
+// Refresh ke baad pending Offline status ko confirm karein
+if (localStorage.getItem("deliveryBoyWentOffline") === "true") {
+    try {
+        await apiRequest("/api/delivery-boys/status", {
+            method: "PATCH",
+            body: JSON.stringify({
+                isOnline: false
+            })
+        });
+
+        isOnline = false;
+        localStorage.removeItem("deliveryBoyWentOffline");
+        stopLocationTracking();
+
+    } catch (error) {
+        // Screen par Offline dikhayein; agle load par retry hoga
+        isOnline = false;
+        console.error("Offline status confirmation failed:", error);
+    }
+}
+
+updateStatusUI();
+
+
+            }
+            catch(error){
+
+                console.error(error);
+
+                showMessage(
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           STATUS UI
+        ===================================================== */
+
+       
+
+function updateStatusUI() {
+    const onlineButton = document.getElementById("onlineButton");
+    const offlineButton = document.getElementById("offlineButton");
+    const statusMessage = document.getElementById("statusMessage");
+
+    if (!onlineButton || !offlineButton || !statusMessage) return;
+
+    onlineButton.classList.toggle("active", isOnline);
+    offlineButton.classList.toggle("active", !isOnline);
+
+    statusMessage.textContent = isOnline
+        ? "You are now online"
+        : "Go online to receive deliveries";
+
+}
+
+
+
+async function setDeliveryStatus(desiredStatus) {
+    if (isOnline === desiredStatus) return;
+
+    await toggleOnlineStatus();
+}
+
+
+
+
+
+        /* =====================================================
+           ONLINE / OFFLINE
+        ===================================================== */
+
+        async function toggleOnlineStatus(){
+
+            const newStatus =
+                !isOnline;
+
+
+            try{
+
+                await apiRequest(
+                    "/api/delivery-boys/status",
+                    {
+
+                        method:"PATCH",
+
+                        body:
+                            JSON.stringify({
+
+                                isOnline:
+                                    newStatus
+
+                            })
+
+                    }
+                );
+
+
+                isOnline =
+                    newStatus;
+
+
+                updateStatusUI();
+
+
+                if (isOnline) {
+                startLocationTracking();
+                } else {
+                  stopLocationTracking();
+                }
+
+            }
+            catch(error){
+
+                console.error(error);
+
+                showMessage(
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           GPS TRACKING
+        ===================================================== */
+
+        function startLocationTracking(){
+
+            if(!navigator.geolocation){
+
+                showMessage(
+                    "GPS is not supported on this device."
+                );
+
+                return;
+
+            }
+
+
+            if(locationWatcher !== null){
+
+                return;
+
+            }
+
+
+            locationWatcher =
+                navigator.geolocation.watchPosition(
+
+                    sendLocation,
+
+                    locationError,
+
+                    {
+
+                        enableHighAccuracy:true,
+
+                        maximumAge:10000,
+
+                        timeout:15000
+
+                    }
+
+                );
+
+        }
+
+
+        function stopLocationTracking(){
+
+            if(locationWatcher !== null){
+
+                navigator.geolocation.clearWatch(
+                    locationWatcher
+                );
+
+
+                locationWatcher =
+                    null;
+
+            }
+
+        }
+
+
+        async function sendLocation(
+            position
+        ){
+
+            const latitude =
+                position.coords.latitude;
+
+
+            const longitude =
+                position.coords.longitude;
+
+
+            const accuracy =
+                position.coords.accuracy;
+
+
+            document
+                .getElementById(
+                    "locationStatus"
+                )
+                .innerHTML =
+
+                "Latitude: " +
+                latitude.toFixed(6) +
+
+                "<br>" +
+
+                "Longitude: " +
+                longitude.toFixed(6) +
+
+                "<br>" +
+
+                "Accuracy: " +
+                Math.round(
+                    accuracy
+                ) +
+                " meters";
+
+
+            try{
+
+                await apiRequest(
+                    "/api/delivery-boys/location",
+                    {
+
+                        method:"POST",
+
+                        body:
+                            JSON.stringify({
+
+                                latitude,
+
+                                longitude,
+
+                                accuracy
+
+                            })
+
+                    }
+                );
+
+            }
+            catch(error){
+
+                console.error(
+                    "Location update failed:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        function locationError(error){
+
+            console.error(
+                "GPS Error:",
+                error
+            );
+
+
+            let message =
+                "Unable to get GPS location.";
+
+
+            if(error.code === 1){
+
+                message =
+                    "Please allow location permission.";
+
+            }
+
+
+            if(error.code === 2){
+
+                message =
+                    "GPS location unavailable.";
+
+            }
+
+
+            if(error.code === 3){
+
+                message =
+                    "GPS request timed out.";
+
+            }
+
+
+            showMessage(
+                message
+            );
+
+        }
+
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        function logout(){
+
+    // GPS tracking stop
+    stopLocationTracking();
+
+    // Login token remove
+    localStorage.removeItem("deliveryBoyToken");
+
+    // Delivery boy data remove
+    localStorage.removeItem("deliveryBoy");
+
+    // Delivery Boy Login page
+    window.location.replace(
+        "delivery-boy-login.html"
+    );
+
+}
+
+
+        /* =====================================================
+           ASSIGNED ORDERS
+        ===================================================== */
+
+        async function loadAssignedOrders(){
+
+            if(!deliveryToken){
+
+                return;
+
+            }
+
+
+            try{
+
+                const data =
+                    await apiRequest(
+                        "/api/delivery-boys/my-orders"
+                    );
+
+
+                const orders =
+    (data.orders || [])
+    .filter(order => order.orderStatus !== "DELIVERED");
+
+
+                const box =
+                    document.getElementById(
+                        "assignedOrders"
+                    );
+
+
+                if(orders.length === 0){
+
+                    box.innerHTML =
+                        "No assigned orders right now.";
+
+                    return;
+
+                }
+
+
+                box.innerHTML =
+                    orders
+                    .map((order)=>{
+
+                        return `
+
+                            <div class="order-card">
+
+                                <strong>
+                                    Order #${order._id}
+                                </strong>
+
+                                <br>
+
+                                Status:
+
+                                <span class="order-status">
+                                    ${order.orderStatus}
+                                </span>
+
+                                <br>
+
+                                ${order.deliveryAddress?.name
+                                 || order.customerId?.deliveryAddress?.name
+                                 || "-"}
+
+                                <br>
+
+                                Phone:
+                                ${order.customerId?.phone || "-"}
+
+                                <br>
+
+                                Address:
+                                ${order.deliveryAddress?.address || "-"}
+
+
+                                ${
+                                    order.deliveryAddress?.latitude &&
+                                    order.deliveryAddress?.longitude
+                                    ? `
+
+                                        <button
+                                            onclick="
+                                                openCustomerLocation(
+                                                    ${order.deliveryAddress.latitude},
+                                                    ${order.deliveryAddress.longitude}
+                                                )
+                                            "
+                                            class="customer-location-btn"
+                                        >
+                                            📍 Open Customer Location
+                                        </button>
+
+                                    `
+                                    : ""
+                                }
+
+
+                                <div style="margin-top:10px;">
+
+                                    ${
+                                        order.orderStatus === "ASSIGNED"
+                                        ? `
+
+                                            <button
+                                                onclick="
+                                                    updateOrderStatus(
+                                                        '${order._id}',
+                                                        'PICKED_UP'
+                                                    )
+                                                "
+                                                class="pickup-btn"
+                                            >
+                                                📦 Pick Up Order
+                                            </button>
+
+                                        `
+                                        : ""
+                                    }
+
+
+                                    ${
+                                        order.orderStatus === "PICKED_UP"
+                                        ? `
+
+                                            <button
+                                                onclick="
+                                                    updateOrderStatus(
+                                                        '${order._id}',
+                                                        'OUT_FOR_DELIVERY'
+                                                    )
+                                                "
+                                                class="delivery-btn"
+                                            >
+                                                🚴 Start Delivery
+                                            </button>
+
+                                        `
+                                        : ""
+                                    }
+
+
+                                    ${
+                                        order.orderStatus === "OUT_FOR_DELIVERY"
+                                        ? `
+
+                                            <button
+                                                onclick="
+                                                    updateOrderStatus(
+                                                        '${order._id}',
+                                                        'DELIVERED'
+                                                    )
+                                                "
+                                                class="delivered-btn"
+                                            >
+                                                ✅ Mark Delivered
+                                            </button>
+
+                                        `
+                                        : ""
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    })
+                    .join("");
+
+            }
+            catch(error){
+
+                console.error(
+                    "Assigned Orders Error:",
+                    error
+                );
+
+
+                document
+                    .getElementById(
+                        "assignedOrders"
+                    )
+                    .textContent =
+                    error.message;
+
+            }
+
+        }
+
+
+async function refreshAssignedOrders() {
+    const button = document.getElementById(
+        "refreshAssignedOrdersBtn"
+    );
+
+    const icon = document.getElementById(
+        "refreshAssignedOrdersIcon"
+    );
+
+    if (!button || button.disabled) {
+        return;
+    }
+
+    button.disabled = true;
+
+    if (icon) {
+        icon.classList.add("is-refreshing");
+    }
+
+    try {
+        await loadAssignedOrders();
+    } finally {
+        button.disabled = false;
+
+        if (icon) {
+            icon.classList.remove("is-refreshing");
+        }
+    }
+}
+
+        /* =====================================================
+           CUSTOMER LOCATION
+        ===================================================== */
+
+        function openCustomerLocation(
+            latitude,
+            longitude
+        ){
+
+            const url =
+
+                "https://www.google.com/maps/dir/?api=1&destination=" +
+
+                latitude +
+
+                "," +
+
+                longitude;
+
+
+            window.open(
+                url,
+                "_blank"
+            );
+
+        }
+
+
+        /* =====================================================
+           UPDATE ORDER STATUS
+        ===================================================== */
+
+        async function updateOrderStatus(
+            orderId,
+            status
+        ){
+
+            try{
+
+                await apiRequest(
+
+                    "/api/delivery-boys/my-orders/" +
+                    orderId +
+                    "/status",
+
+                    {
+
+                        method:"PUT",
+
+                        body:
+                            JSON.stringify({
+
+                                orderStatus:
+                                    status
+
+                            })
+
+                    }
+
+                );
+
+
+                showMessage(
+                    "Order status updated to " +
+                    status
+                );
+
+
+                loadAssignedOrders();
+
+            }
+            catch(error){
+
+                console.error(
+                    "Update Order Status Error:",
+                    error
+                );
+
+
+                showMessage(
+                    error.message
+                );
+
+            }
+
+        }
+
+       function openProfile() {
+  const dashboard = document.getElementById("dashboardSection");
+  const profile = document.getElementById("profileSection");
+
+  if (!profile) return;
+
+  if (dashboard) {
+    dashboard.style.display = "none";
+  }
+
+  profile.style.display = "block";
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+function closeProfile() {
+  const dashboard = document.getElementById("dashboardSection");
+  const profile = document.getElementById("profileSection");
+
+  if (profile) {
+    profile.style.display = "none";
+  }
+
+  if (dashboard) {
+    dashboard.style.display = "block";
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+
+
+        /* =====================================================
+           INITIAL LOAD
+        ===================================================== */
+
+        loadProfile();
+
+        loadAssignedOrders();
+
+
+
+        /* =====================================================
+   ORDER HISTORY
+===================================================== */
+
+
+let allDeliveredHistoryOrders = [];
+
+function getHistoryDateKey(value) {
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return "";
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+function setHistoryDateToToday() {
+    const input = document.getElementById("historyDateFilter");
+
+    if (input) {
+        input.value = getHistoryDateKey(new Date());
+    }
+}
+
+function resetHistoryDateFilter() {
+    setHistoryDateToToday();
+    renderFilteredOrderHistory();
+}
+
+function renderFilteredOrderHistory() {
+    const box = document.getElementById("orderHistoryList");
+    const input = document.getElementById("historyDateFilter");
+    const hint = document.getElementById("historyFilterHint");
+    const count = document.getElementById("historyFilterCount");
+
+    if (!box || !input) return;
+
+    const selectedDate = input.value;
+
+    const orders = allDeliveredHistoryOrders.filter(order =>
+    getHistoryDateKey(order.deliveredAt || order.updatedAt || order.createdAt) === selectedDate
+);
+
+    if (hint) {
+        hint.textContent =
+            selectedDate === getHistoryDateKey(new Date())
+                ? "Showing orders placed today"
+                : "Showing orders for " + new Date(
+                    selectedDate + "T12:00:00"
+                ).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                });
+    }
+
+    if (count) {
+        count.textContent =
+            orders.length + (orders.length === 1 ? " order" : " orders");
+    }
+
+    if (orders.length === 0) {
+        box.innerHTML = `
+            <div class="history-empty">
+                <div style="font-size:25px;margin-bottom:8px;">📅</div>
+                No delivered orders for this date.
+                <div style="margin-top:6px;font-size:11px;">
+                    Choose another date to view older history.
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    const formatDateTime = value => {
+        if (!value) return "Not available";
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) return "Not available";
+
+        return date.toLocaleString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        });
+    };
+
+    const safe = value => String(value ?? "-").replace(
+        /[&<>"']/g,
+        char => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[char]
+    );
+
+    const paymentMethodMap = {
+        COD: "Cash on Delivery",
+        ONLINE: "Online Payment",
+        WALLET: "Wallet Payment"
+    };
+
+    box.innerHTML = orders.map(order => {
+        const rawPaymentMethod =
+            order.paymentMethod ||
+            order.paymentDetails?.method ||
+            order.payment?.method ||
+            "";
+
+        const paymentMethod =
+            paymentMethodMap[rawPaymentMethod] ||
+            rawPaymentMethod ||
+            "Not available";
+
+        const customerName =
+            order.deliveryAddress?.name ||
+            order.customerId?.deliveryAddress?.name ||
+            order.customerId?.name ||
+            order.customerId?.fullName ||
+            "-";
+
+        return `
+           <CodeBlock language="html" editable>
+<div class="history-order-card">
+    <div class="history-order-head">
+        <strong>Order #${safe(order._id)}</strong>
+        <span class="history-delivered-status">DELIVERED</span>
+    </div>
+
+<div class="history-order-grid">
+<div class="history-order-item">
+<span class="history-order-label">Customer Name</span>
+<span class="history-order-value">${safe(customerName)}</span>
+</div>
+<div class="history-order-item">
+<span class="history-order-label">Order Date</span>
+<span class="history-order-value">${safe(formatDateTime(order.createdAt))}</span>
+</div>
+<div class="history-order-item">
+<span class="history-order-label">Delivered Date</span>
+<span class="history-order-value">${safe(formatDateTime(order.deliveredAt))}</span>
+</div>
+<div class="history-order-item">
+<span class="history-order-label">Payment Method</span>
+<span class="history-order-value">${safe(paymentMethod)}</span>
+</div>
+<div class="history-order-item history-order-address">
+<span class="history-order-label">Delivery Address</span>
+<span class="history-order-value">${safe(order.deliveryAddress?.address || "-")}</span>
+</div>
+</div>
+</div>
+</CodeBlock>
+        `;
+    }).join("");
+}
+
+async function loadOrderHistory() {
+    if (!deliveryToken) return;
+
+    const box = document.getElementById("orderHistoryList");
+    const input = document.getElementById("historyDateFilter");
+
+    if (!box) return;
+
+    box.innerHTML = "Loading history...";
+
+    try {
+        const data = await apiRequest(
+            "/api/delivery-boys/my-orders"
+        );
+
+        allDeliveredHistoryOrders = (data.orders || [])
+            .filter(order => order.orderStatus === "DELIVERED")
+            .sort((a, b) =>
+                new Date(b.createdAt || 0) -
+                new Date(a.createdAt || 0)
+            );
+
+        if (input && !input.dataset.listenerAttached) {
+            input.addEventListener(
+                "change",
+                renderFilteredOrderHistory
+            );
+
+            input.dataset.listenerAttached = "true";
+        }
+
+        renderFilteredOrderHistory();
+
+    } catch (error) {
+        console.error("Order History Error:", error);
+        box.textContent = error.message || "Unable to load history.";
+    }
+}
+
+
+
+/* =====================================================
+   OPEN HISTORY PAGE
+===================================================== */
+
+function openHistory(){
+
+    const dashboard =
+        document.getElementById(
+            "dashboardSection"
+        );
+
+    const profile =
+        document.getElementById(
+            "profileSection"
+        );
+
+    const history =
+        document.getElementById(
+            "historySection"
+        );
+
+
+    if(!history){
+
+        showMessage(
+            "History section not found."
+        );
+
+        return;
+
+    }
+
+
+    if(dashboard){
+
+        dashboard.style.display =
+            "none";
+
+    }
+
+
+    if(profile){
+
+        profile.style.display =
+            "none";
+
+    }
+
+
+    history.style.display =
+        "block";
+
+
+    loadOrderHistory();
+    setHistoryDateToToday();
+
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+/* =====================================================
+   CLOSE HISTORY
+===================================================== */
+
+function closeHistory(){
+
+    const dashboard =
+        document.getElementById(
+            "dashboardSection"
+        );
+
+    const profile =
+        document.getElementById(
+            "profileSection"
+        );
+
+    const history =
+        document.getElementById(
+            "historySection"
+        );
+
+
+    if(history){
+
+        history.style.display =
+            "none";
+
+    }
+
+
+    if(dashboard){
+
+        dashboard.style.display =
+            "block";
+
+    }
+
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+
+/* वेबसाइट या टैब बंद होने पर Offline करने की कोशिश */
+window.addEventListener("pagehide", function () {
+    if (!isOnline) return;
+
+localStorage.setItem("deliveryBoyWentOffline", "true");
+
+    const headers = {
+        "Content-Type": "application/json"
+    };
+
+    if (deliveryToken) {
+        headers.Authorization = "Bearer " + deliveryToken;
+    }
+
+    // मौजूदा API को Offline स्टेटस भेजें
+    fetch(API_BASE + "/api/delivery-boys/status", {
+        method: "PATCH",
+        headers: headers,
+        body: JSON.stringify({
+            isOnline: false
+        }),
+        keepalive: true
+    }).catch(function (error) {
+        console.error("Offline status update failed:", error);
+    });
+});
+
+
+
+
+    </script>
+
+</body>
+
+</html>

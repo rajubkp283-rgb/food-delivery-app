@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Checkout</title>
+
+   <style>
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    html {
+        background: #090d20;
+    }
+
+    body {
+        background: #090d20;
+        color: #ffffff;
+        min-height: 100vh;
+    }
+
+    /* =========================
+       MAIN APP
+    ========================= */
+
+    .app-container {
+    width: 100%;
+    max-width: 500px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: #0b1224;
+
+    border-top: 1px solid rgba(92,125,180,.75);
+    border-left: 1px solid rgba(92,125,180,.75);
+    border-right: 1px solid rgba(92,125,180,.75);
+    border-bottom: 1px solid rgba(92,125,180,.75);
+
+    box-shadow: 0 0 25px rgba(71,115,190,.12);
+    overflow-x: hidden;
+}
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+
+        display: flex;
+        align-items: center;
+
+        padding: 14px 16px;
+
+        background: #0b1224;
+
+        border-bottom: 1px solid #334b78;
+
+        box-shadow:
+            0 4px 18px rgba(0,0,0,.20);
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-icon {
+        width: 38px;
+        height: 38px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #142039;
+
+        border: 1px solid #2d4167;
+
+        border-radius: 12px;
+
+        font-size: 19px;
+    }
+
+    .header h2 {
+        font-size: 19px;
+        font-weight: 800;
+        color: #ffffff;
+    }
+
+    .header-subtitle {
+        margin-top: 3px;
+
+        font-size: 10px;
+
+        color: #8fa2c2;
+    }
+
+    /* =========================
+       CONTENT
+    ========================= */
+
+    .container {
+        width: 100%;
+        max-width: 500px;
+
+        margin: auto;
+
+        padding: 15px 14px 35px;
+    }
+
+    /* =========================
+       BACK BUTTON
+    ========================= */
+
+    .back-btn {
+        width: 100%;
+
+        padding: 11px 14px;
+
+        border: 1px solid #2d4167;
+
+        border-radius: 12px;
+
+        background: #142039;
+
+        color: #dbe4f5;
+
+        font-size: 13px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition: .2s;
+    }
+
+    .back-btn:hover {
+        background: #1a2a49;
+        border-color: #456497;
+    }
+
+    /* =========================
+       PREMIUM CARD
+    ========================= */
+
+    .card {
+        background:
+            linear-gradient(
+                145deg,
+                #111c33,
+                #142039
+            );
+
+        border: 1px solid #2d4167;
+
+        border-radius: 16px;
+
+        padding: 15px;
+
+        margin-top: 13px;
+
+        box-shadow:
+            0 8px 25px rgba(0,0,0,.18);
+    }
+
+    /* =========================
+       CARD TITLE
+    ========================= */
+
+    .title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        padding-bottom: 12px;
+
+        border-bottom: 1px solid rgba(92,125,180,.22);
+
+        font-size: 15px;
+
+        font-weight: 800;
+
+        color: #ffffff;
+    }
+
+    /* =========================
+       ORDER SUMMARY
+    ========================= */
+
+    #orderSummary {
+        padding-top: 5px;
+    }
+
+    .summary-row {
+        display: flex;
+
+        justify-content: space-between;
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 8px 0;
+
+        border-bottom: 1px solid rgba(92,125,180,.12);
+
+        font-size: 13px;
+
+        color: #aebbd3;
+    }
+
+    .summary-row:last-child {
+        border-bottom: none;
+    }
+
+    .summary-row span:first-child {
+        min-width: 0;
+
+        overflow: hidden;
+
+        white-space: nowrap;
+
+        text-overflow: ellipsis;
+    }
+
+    .summary-row b {
+        white-space: nowrap;
+
+        color: #ffffff;
+
+        font-weight: 700;
+    }
+
+    .total {
+        margin-top: 6px;
+
+        padding-top: 13px;
+
+        border-top: 1px solid rgba(92,125,180,.30);
+
+        border-bottom: none;
+
+        font-size: 17px;
+
+        font-weight: 800;
+
+        color: #ffffff;
+    }
+
+    .total span:last-child {
+        color: #ff5360;
+
+        font-size: 19px;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    #checkoutForm {
+        padding-top: 4px;
+    }
+
+    label {
+        display: block;
+
+        margin-top: 13px;
+        margin-bottom: 6px;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        color: #aebbd3;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+
+        padding: 11px 12px;
+
+        background: #0d162a;
+
+        border: 1px solid #2d4167;
+
+        border-radius: 10px;
+
+        color: #ffffff;
+
+        font-size: 13px;
+
+        outline: none;
+
+        transition: .2s;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #617493;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #5276ad;
+
+        background: #101a30;
+
+        box-shadow:
+            0 0 0 2px rgba(82,118,173,.10);
+    }
+
+    textarea {
+        min-height: 82px;
+
+        resize: vertical;
+    }
+
+    select {
+        cursor: pointer;
+    }
+
+    select option {
+        background: #142039;
+
+        color: #ffffff;
+    }
+
+    /* =========================
+       LOCATION BUTTON
+    ========================= */
+
+    .location-btn {
+        width: 100%;
+
+        padding: 11px;
+
+        margin-top: 12px;
+
+        border: 1px solid #36527f;
+
+        border-radius: 10px;
+
+        background: #142039;
+
+        color: #dbe4f5;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition: .2s;
+    }
+
+    .location-btn:hover {
+        background: #1a2a49;
+
+        border-color: #5276ad;
+    }
+
+    /* =========================
+       LOCATION STATUS
+    ========================= */
+
+    .location-status {
+        margin-top: 8px;
+
+        padding: 9px 10px;
+
+        background: rgba(45,65,103,.18);
+
+        border: 1px solid rgba(45,65,103,.45);
+
+        border-radius: 9px;
+
+        font-size: 11px;
+
+        color: #8fa2c2;
+
+        line-height: 1.6;
+    }
+
+    /* =========================
+       PLACE ORDER
+    ========================= */
+
+    .place-btn {
+        width: 100%;
+
+        padding: 14px 16px;
+
+        margin-top: 16px;
+
+        border: 1px solid rgba(255,63,74,.45);
+
+        border-radius: 13px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #ff3f4a,
+                #e92f3d
+            );
+
+        color: #ffffff;
+
+        font-size: 14px;
+
+        font-weight: 800;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 7px 18px rgba(255,63,74,.20);
+
+        transition: .2s;
+    }
+
+    .place-btn:hover {
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 10px 24px rgba(255,63,74,.28);
+    }
+
+    .place-btn:disabled {
+        background: #253552;
+
+        border-color: #334b78;
+
+        color: #7184a4;
+
+        cursor: not-allowed;
+
+        box-shadow: none;
+
+        transform: none;
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading {
+        text-align: center;
+
+        padding: 25px 10px;
+
+        color: #8fa2c2;
+
+        font-size: 12px;
+    }
+
+    .loading::before {
+        content: "🛒";
+
+        display: block;
+
+        margin-bottom: 7px;
+
+        font-size: 24px;
+    }
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error {
+        text-align: center;
+
+        padding: 14px;
+
+        background: rgba(255,63,74,.07);
+
+        border: 1px solid rgba(255,63,74,.25);
+
+        border-radius: 11px;
+
+        color: #ff6972;
+
+        font-size: 12px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 500px) {
+
+        body {
+            background: #0b1224;
+        }
+
+        .app-container {
+            max-width: 500px;
+
+            border-left: none;
+            border-right: none;
+
+            box-shadow: none;
+        }
+
+        .header {
+            padding: 13px 14px;
+        }
+
+        .container {
+            padding: 14px 13px 30px;
+        }
+
+        .card {
+            border-radius: 15px;
+
+            padding: 14px;
+        }
+
+        input,
+        textarea,
+        select {
+            font-size: 13px;
+        }
+
+        .place-btn {
+            padding: 14px;
+        }
+
+    }
+
+
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+    <div class="app-container">
+
+   <div class="header">
+
+    <div class="header-left">
+
+        <div class="header-icon">
+            💳
+        </div>
+
+        <div>
+
+            <h2>Checkout</h2>
+
+            <div class="header-subtitle">
+                Complete your order securely
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+    <div class="container">
+
+        <button
+            class="back-btn"
+            onclick="goBack()"
+        >
+            ← Back to Cart
+        </button>
+
+
+        <!-- Order Summary -->
+
+        <div class="card">
+
+            <div class="title">
+                🛒 Order Summary
+            </div>
+
+            <div id="orderSummary">
+
+                <div class="loading">
+                    Loading cart...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Delivery Address -->
+
+        <div class="card">
+
+            <div class="title">
+                📍 Delivery Address
+            </div>
+
+
+            <form id="checkoutForm">
+
+                <label>
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your name"
+                    required
+                >
+
+
+                <label>
+                    Phone
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Enter mobile number"
+                    required
+                >
+
+
+                <label>
+                    Address
+                </label>
+
+                <textarea
+                    id="address"
+                    placeholder="House no, street, area..."
+                    required
+                ></textarea>
+
+
+                <label>
+                    City
+                </label>
+
+                <input
+                    type="text"
+                    id="city"
+                    placeholder="Enter city"
+                    required
+                >
+
+
+                <label>
+    Pincode
+</label>
+
+<input
+    type="text"
+    id="pincode"
+    placeholder="Enter 6 digit pincode"
+    maxlength="6"
+    inputmode="numeric"
+    required
+>
+
+
+                <button
+                    type="button"
+                    class="location-btn"
+                    onclick="getLocation()"
+                >
+                    📍 Use My Current Location
+                </button>
+
+
+                <div
+                    id="locationStatus"
+                    class="location-status"
+                >
+                    Location not selected
+                </div>
+
+
+                <label>
+                    Customer Note
+                </label>
+
+                <textarea
+                    id="customerNote"
+                    placeholder="Any special instruction..."
+                ></textarea>
+
+
+                <label>
+                    Payment Method
+                </label>
+
+                <select id="paymentMethod">
+
+                    <option value="COD">
+                        Cash on Delivery
+                    </option>
+
+                    <option value="ONLINE">
+                        Online Payment
+                    </option>
+
+                    <option value="WALLET">
+                        Wallet
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="submit"
+                    class="place-btn"
+                    id="placeOrderBtn"
+                >
+                    🛍️ Place Order
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+    </div>
+    
+
+
+    <script>
+
+        const token =
+            localStorage.getItem("authToken");
+
+
+        let cartData = null;
+
+        let latitude = null;
+
+        let longitude = null;
+
+
+        if (!token) {
+
+            document.getElementById(
+                "orderSummary"
+            ).innerHTML = `
+                <div class="error">
+                    Please login as customer first.
+                </div>
+            `;
+
+        } else {
+
+            loadCart();
+            loadSavedAddress();
+
+        }
+
+
+        async function apiRequest(
+            url,
+            options = {}
+        ) {
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        ...options,
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " + token,
+
+                            ...(options.headers || {})
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Request failed"
+                );
+
+            }
+
+
+            return data;
+
+        }
+
+
+        async function loadCart() {
+
+            try {
+
+                const data =
+                    await apiRequest(
+                        "/api/cart"
+                    );
+
+
+                cartData =
+                    data.cart;
+
+
+                const items =
+                    cartData?.items || [];
+
+
+                if (items.length === 0) {
+
+                    document.getElementById(
+                        "orderSummary"
+                    ).innerHTML = `
+                        <div class="error">
+                            Your cart is empty.
+                        </div>
+                    `;
+
+                    document.getElementById(
+                        "placeOrderBtn"
+                    ).disabled = true;
+
+                    return;
+
+                }
+
+
+                const subtotal =
+                    Number(
+                        cartData.subtotal || 0
+                    );
+
+
+                const deliveryFee =
+                    subtotal > 0
+                    ? 30
+                    : 0;
+
+
+                const total =
+                    subtotal +
+                    deliveryFee;
+
+
+                document.getElementById(
+                    "orderSummary"
+                ).innerHTML = `
+
+                    ${items.map(
+                        item => `
+
+                        <div
+                            class="summary-row"
+                        >
+
+                            <span>
+                                ${item.name}
+                                × ${item.quantity}
+                            </span>
+
+                            <b>
+                                ₹${item.total}
+                            </b>
+
+                        </div>
+
+                    `
+                    ).join("")}
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <b>
+                            ₹${subtotal}
+                        </b>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Delivery Fee
+                        </span>
+
+                        <b>
+                            ₹${deliveryFee}
+                        </b>
+
+                    </div>
+
+
+                    <div
+                        class="summary-row total"
+                    >
+
+                        <span>
+                            Total
+                        </span>
+
+                        <span>
+                            ₹${total}
+                        </span>
+
+                    </div>
+
+                `;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Checkout Cart Error:",
+                    error
+                );
+
+                document.getElementById(
+                    "orderSummary"
+                ).innerHTML = `
+                    <div class="error">
+                        ${error.message}
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+
+        /* Load Saved Customer Address */
+async function loadSavedAddress() {
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/customer/address"
+            );
+
+        if (
+            !data.success ||
+            !data.address
+        ) {
+            return;
+        }
+
+        const savedAddress =
+            data.address;
+
+
+        if (savedAddress.name) {
+
+            document.getElementById("name").value =
+                savedAddress.name;
+
+        }
+
+
+        if (savedAddress.phone) {
+
+            document.getElementById("phone").value =
+                savedAddress.phone;
+
+        }
+
+
+        if (savedAddress.address) {
+
+            document.getElementById("address").value =
+                savedAddress.address;
+
+        }
+
+
+        if (savedAddress.city) {
+
+            document.getElementById("city").value =
+                savedAddress.city;
+
+        }
+
+
+        if (savedAddress.pincode) {
+
+    document.getElementById("pincode").value =
+        savedAddress.pincode;
+
+}
+
+        console.log(
+            "Saved address loaded successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Load Saved Address Error:",
+            error
+        );
+
+    }
+
+}
+
+
+        function getLocation() {
+
+            if (!navigator.geolocation) {
+
+                document.getElementById(
+                    "locationStatus"
+                ).textContent =
+                    "GPS is not supported.";
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "locationStatus"
+            ).textContent =
+                "Getting your location...";
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function(position) {
+
+                    latitude =
+                        position.coords.latitude;
+
+                    longitude =
+                        position.coords.longitude;
+
+
+                    document.getElementById(
+                        "locationStatus"
+                    ).innerHTML =
+
+                        "✅ Location selected<br>" +
+
+                        "Latitude: " +
+                        latitude.toFixed(6) +
+
+                        "<br>" +
+
+                        "Longitude: " +
+                        longitude.toFixed(6);
+
+                },
+
+                function(error) {
+
+                    console.error(
+                        "Location Error:",
+                        error
+                    );
+
+                    document.getElementById(
+                        "locationStatus"
+                    ).textContent =
+                        "Unable to get location. Please allow GPS permission.";
+
+                },
+
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 10000
+                }
+
+            );
+
+        }
+
+
+        document.getElementById(
+            "checkoutForm"
+        ).addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                if (!cartData) {
+
+                    alert(
+                        "Cart is not loaded yet."
+                    );
+
+                    return;
+
+                }
+
+
+                const items =
+                    cartData.items || [];
+
+
+                if (items.length === 0) {
+
+                    alert(
+                        "Your cart is empty."
+                    );
+
+                    return;
+
+                }
+
+
+                const name =
+                    document.getElementById(
+                        "name"
+                    ).value.trim();
+
+
+                const phone =
+                    document.getElementById(
+                        "phone"
+                    ).value.trim();
+
+
+                const address =
+                    document.getElementById(
+                        "address"
+                    ).value.trim();
+
+
+                const city =
+                    document.getElementById(
+                        "city"
+                    ).value.trim();
+
+
+                    const pincode =
+    document.getElementById(
+        "pincode"
+    ).value.trim();
+
+                const customerNote =
+                    document.getElementById(
+                        "customerNote"
+                    ).value.trim();
+
+
+                const paymentMethod =
+                    document.getElementById(
+                        "paymentMethod"
+                    ).value;
+
+
+               if (
+    !name ||
+    !phone ||
+    !address ||
+    !city ||
+    !pincode
+) {
+
+
+    if (!/^\d{6}$/.test(pincode)) {
+
+    alert(
+        "Please enter a valid 6 digit pincode."
+    );
+
+    return;
+}
+
+                    alert(
+                        "Please fill all required fields."
+                    );
+
+                    return;
+
+                }
+
+                if (
+    latitude === null ||
+    longitude === null
+) {
+    alert(
+        "Please select your current location first."
+    );
+
+    return;
+}
+
+
+                const placeButton =
+                    document.getElementById(
+                        "placeOrderBtn"
+                    );
+
+
+                placeButton.disabled = true;
+
+                placeButton.textContent =
+                    "Placing Order...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/orders/from-cart",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Authorization":
+                                        "Bearer " +
+                                        token
+                                },
+
+                                body: JSON.stringify({
+
+                                    deliveryAddress: {
+
+                                        name:
+                                            name,
+
+                                        phone:
+                                            phone,
+
+                                        address:
+                                            address,
+
+                                        city:
+                                            city,
+
+                                            pincode:
+                                              pincode,
+
+                                        latitude:
+                                            latitude,
+
+                                        longitude:
+                                            longitude
+
+                                    },
+
+                                    paymentMethod:
+                                        paymentMethod,
+
+                                    customerNote:
+                                        customerNote
+
+                                })
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            "Failed to place order"
+                        );
+
+                    }
+
+
+                    alert(
+                        "🎉 Order placed successfully!"
+                    );
+
+
+                    if (
+                        data.order &&
+                        data.order._id
+                    ) {
+
+                        window.location.href =
+                            "customer-order.html?id=" +
+                            data.order._id;
+
+                    } else {
+
+                        window.location.href =
+                            "customer-restaurants.html";
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Place Order Error:",
+                        error
+                    );
+
+                    alert(
+                        error.message
+                    );
+
+
+                    placeButton.disabled = false;
+
+                    placeButton.textContent =
+                        "🛍️ Place Order";
+
+                }
+
+            }
+        );
+
+
+        function goBack() {
+
+            window.history.back();
+
+        }
+
+    </script>
+
+    
+
+</body>
+
+
+
+
+</html>

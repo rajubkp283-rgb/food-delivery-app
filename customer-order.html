@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Order Details</title>
+
+    <style>
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    html {
+        background: #090d20;
+    }
+
+    body {
+        background: #090d20;
+        color: #ffffff;
+        min-height: 100vh;
+    }
+
+    .app-container {
+        width: 100%;
+        max-width: 500px;
+        min-height: 100vh;
+        margin: 0 auto;
+        background: #0b1224;
+
+        border-top: 1px solid rgba(92,125,180,.75);
+        border-left: 1px solid rgba(92,125,180,.75);
+        border-right: 1px solid rgba(92,125,180,.75);
+        border-bottom: 1px solid rgba(92,125,180,.75);
+
+        box-shadow: 0 0 25px rgba(71,115,190,.12);
+
+        overflow-x: hidden;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+        background: #0b1224;
+        color: #ffffff;
+        padding: 16px;
+        border-bottom: 1px solid #334b78;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .header-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: #142039;
+        border: 1px solid #38527f;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .header h2 {
+        font-size: 20px;
+        line-height: 1.2;
+        font-weight: 700;
+    }
+
+    .header-subtitle {
+        margin-top: 4px;
+        color: #8fa2c2;
+        font-size: 12px;
+    }
+
+    /* =========================
+       CONTAINER
+    ========================= */
+
+    .container {
+        width: 100%;
+        max-width: 500px;
+        margin: auto;
+        padding: 16px;
+    }
+
+    /* =========================
+       BACK BUTTON
+    ========================= */
+
+    .back-btn {
+        width: 100%;
+        padding: 12px 14px;
+
+        border: 1px solid #334b78;
+        border-radius: 12px;
+
+        background: #142039;
+        color: #ffffff;
+
+        font-size: 14px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        margin-bottom: 14px;
+
+        transition: .2s ease;
+    }
+
+    .back-btn:hover {
+        background: #192847;
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .card {
+    background: #142039;
+
+    border: 1px solid #2d4167;
+    border-radius: 14px;
+
+    padding: 12px 14px;
+    margin-bottom: 10px;
+
+    box-shadow: 0 5px 14px rgba(0,0,0,.10);
+}
+
+    .title {
+    display: flex;
+    align-items: center;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    color: #ffffff;
+
+    margin-bottom: 7px;
+    padding-bottom: 8px;
+
+    border-bottom: 1px solid rgba(92,125,180,.18);
+}
+
+    /* =========================
+       ROW
+    ========================= */
+
+    .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 32px;
+    padding: 5px 0;
+
+    font-size: 12px;
+
+    border-bottom: 1px solid rgba(92,125,180,.10);
+}
+
+    .row:last-child {
+        border-bottom: none;
+    }
+
+    .label {
+    color: #8fa2c2;
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+    .value {
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-align: right;
+
+    max-width: 68%;
+
+    word-break: break-word;
+}
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status {
+        display: inline-block;
+
+        padding: 6px 10px;
+
+        border-radius: 20px;
+
+        background: rgba(255,63,74,.12);
+        border: 1px solid rgba(255,63,74,.28);
+
+        color: #ff6b73;
+
+        font-size: 11px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    /* =========================
+       ITEMS
+    ========================= */
+
+    .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    border-top: 1px solid rgba(92,125,180,.12);
+
+    padding: 8px 0;
+}
+
+    .item:first-child {
+        border-top: none;
+    }
+
+   .item-name {
+    color: #ffffff;
+
+    font-weight: 600;
+    font-size: 13px;
+
+    line-height: 1.3;
+
+    flex: 1;
+}
+
+    .item-info {
+    color: #8fa2c2;
+
+    font-size: 11px;
+
+    margin-top: 0;
+
+    line-height: 1.3;
+
+    white-space: nowrap;
+}
+
+.item-info b {
+    color: #ffffff;
+    font-size: 12px;
+}
+
+    /* =========================
+       TOTAL
+    ========================= */
+
+    .total {
+        border-top: 1px solid #334b78 !important;
+
+        margin-top: 8px;
+
+        padding-top: 13px !important;
+
+        font-size: 17px;
+
+        font-weight: 700;
+
+        color: #ffffff;
+    }
+
+    .total span:last-child {
+        color: #ff3f4a;
+        font-size: 19px;
+    }
+
+    /* =========================
+       TRACK BUTTON
+    ========================= */
+
+   .track-btn {
+    width: 100%;
+
+    min-height: 42px;
+    padding: 10px 12px;
+
+    border: 1px solid rgba(255,63,74,.35);
+    border-radius: 11px;
+
+    background: #ff3f4a;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.track-btn:hover {
+    opacity: .92;
+    transform: translateY(-1px);
+}
+
+    /* =========================
+       CALL BUTTONS
+    ========================= */
+
+    .call-btn,
+    .restaurant-call-btn {
+        display: block;
+
+        width: 100%;
+        box-sizing: border-box;
+
+        padding: 11px 12px;
+
+        border: 1px solid #334b78;
+        border-radius: 10px;
+
+        background: #192847;
+        color: #ffffff;
+
+        font-size: 13px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        margin-top: 10px;
+
+        text-align: center;
+
+        text-decoration: none !important;
+
+        transition: .2s ease;
+    }
+
+    .call-btn:hover,
+    .restaurant-call-btn:hover {
+        background: #213458;
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading {
+        text-align: center;
+
+        padding: 45px 10px;
+
+        color: #8fa2c2;
+
+        font-size: 14px;
+    }
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error {
+        text-align: center;
+
+        padding: 35px 15px;
+
+        color: #ff6b73;
+
+        background: #142039;
+
+        border: 1px solid rgba(255,63,74,.25);
+
+        border-radius: 16px;
+    }
+
+    /* =========================
+       TIMELINE
+    ========================= */
+
+   .timeline {
+    margin-top: 4px;
+
+    line-height: 1.5;
+
+    font-size: 12px;
+}
+
+    .timeline > div {
+    display: flex;
+    align-items: center;
+
+    min-height: 28px;
+
+    padding: 4px 0;
+
+    border-bottom: 1px solid rgba(92,125,180,.08);
+}
+
+    .timeline > div:last-child {
+        border-bottom: none;
+    }
+
+    .completed {
+        color: #69d28f;
+
+        font-weight: 700;
+    }
+
+    .current {
+        color: #ff3f4a;
+
+        font-weight: 700;
+    }
+
+    .pending {
+        color: #65799c;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 520px) {
+
+        .app-container {
+            border-left: none;
+            border-right: none;
+        }
+
+        .header {
+            padding: 14px;
+        }
+
+        .container {
+            padding: 14px;
+        }
+
+        .card {
+            padding: 14px;
+            border-radius: 15px;
+        }
+
+        .title {
+            font-size: 15px;
+        }
+
+        .row {
+            font-size: 12px;
+            gap: 10px;
+        }
+
+        .value {
+            max-width: 62%;
+        }
+
+        .item-name {
+            font-size: 13px;
+        }
+
+        .item-info {
+            font-size: 11px;
+        }
+
+    }
+
+    /* =========================
+   DELIVERY ADDRESS
+========================= */
+
+.card .row:has(.label) .value {
+    line-height: 1.4;
+}
+
+.card .row .label {
+    min-width: 72px;
+}
+
+.card .row .value {
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   CUSTOMER NOTE
+========================= */
+
+.card div[style*="background:#f8fafc"] {
+    background: #101a30 !important;
+    color: #aebbd3 !important;
+
+    border: 1px solid rgba(92,125,180,.16);
+
+    padding: 9px 10px !important;
+    border-radius: 10px;
+
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+}
+
+
+/* =========================
+   ORDER ACTIONS
+========================= */
+
+.card:has(.track-btn) {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.card:has(.track-btn) .track-btn {
+    margin: 0;
+}
+
+/* =========================
+   DELIVERY PARTNER
+========================= */
+
+.card:has(.call-btn) {
+    padding: 11px 14px;
+}
+
+.card:has(.call-btn) .title {
+    margin-bottom: 5px;
+}
+
+.card:has(.call-btn) .row {
+    min-height: 30px;
+    padding: 4px 0;
+}
+
+.card:has(.call-btn) .call-btn {
+    margin-top: 7px;
+}
+
+
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+    <div class="app-container">
+
+    <div class="header">
+
+    <div class="header-left">
+
+        <div class="header-icon">
+            📦
+        </div>
+
+        <div>
+
+            <h2>
+                Order Details
+            </h2>
+
+            <div class="header-subtitle">
+                Track and manage your order
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+    <div class="container">
+
+        <button
+            class="back-btn"
+            onclick="goBack()"
+        >
+            ← Back
+        </button>
+
+
+        <div id="orderBox">
+
+            <div class="loading">
+                Loading order...
+            </div>
+
+        </div>
+
+    </div>
+
+    </div>
+
+
+    <script>
+
+        const token =
+            localStorage.getItem("authToken");
+
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const orderId =
+            params.get("id");
+
+
+        if (!token) {
+
+            document.getElementById(
+                "orderBox"
+            ).innerHTML = `
+                <div class="error">
+                    Please login as customer first.
+                </div>
+            `;
+
+        } else if (!orderId) {
+
+            document.getElementById(
+                "orderBox"
+            ).innerHTML = `
+                <div class="error">
+                    Order ID not found.
+                </div>
+            `;
+
+        } else {
+
+            loadOrder();
+
+        }
+
+
+        async function loadOrder() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/orders/" +
+                        orderId +
+                        "/tracking",
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    "Bearer " +
+                                    token
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load order"
+                    );
+
+                }
+
+
+                const order =
+                    data.order;
+
+
+                renderOrder(order);
+
+
+            } catch (error) {
+
+                console.error(
+                    "Order Error:",
+                    error
+                );
+
+                document.getElementById(
+                    "orderBox"
+                ).innerHTML = `
+                    <div class="error">
+                        ${error.message}
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        function renderOrder(order) {
+
+            const items =
+                order.items || [];
+
+
+                const isGrocery =
+    order.restaurant?.category === "Groceries";
+
+const storeTitle = isGrocery
+    ? "🛒 Grocery Store"
+    : "🏪 Restaurant";
+
+const callStoreText = isGrocery
+    ? "📞 Call Grocery Store"
+    : "📞 Call Restaurant";
+
+const orderedItemsTitle = isGrocery
+    ? "🛍️ Ordered Products"
+    : "🍽️ Ordered Items";
+
+
+            const statusSteps = [
+    {
+        key: "PLACED",
+        label: "📝 Order Placed"
+    },
+    {
+        key: "CONFIRMED",
+        label: isGrocery
+            ? "✅ Store Confirmed"
+            : "✅ Restaurant Confirmed"
+    },
+    {
+        key: "PREPARING",
+        label: isGrocery
+            ? "📦 Product Packing"
+            : "👨‍🍳 Preparing Food"
+    },
+    {
+        key: "READY",
+        label: isGrocery
+            ? "📦 Product Ready"
+            : "📦 Food Ready"
+    },
+    {
+        key: "ASSIGNED",
+        label: "🛵 Delivery Partner Assigned"
+    },
+    {
+        key: "PICKED_UP",
+        label: "📦 Order Picked Up"
+    },
+    {
+        key: "OUT_FOR_DELIVERY",
+        label: "🚴 Out for Delivery"
+    },
+    {
+        key: "DELIVERED",
+        label: "🎉 Delivered"
+    }
+];
+
+
+            const currentIndex =
+                statusSteps.findIndex(
+                    step =>
+                        step.key ===
+                        order.orderStatus
+                );
+
+
+            document.getElementById(
+                "orderBox"
+            ).innerHTML = `
+
+
+                <!-- Order Information -->
+
+                <div class="card">
+
+                    <div class="title">
+                        📦 Order Information
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Order ID
+                        </span>
+
+                        <span class="value">
+                           ${order.id}
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Status
+                        </span>
+
+                        <span class="value">
+
+                            <span class="status">
+                                ${order.orderStatus}
+                            </span>
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Payment
+                        </span>
+
+                        <span class="value">
+                            ${order.paymentMethod}
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Payment Status
+                        </span>
+
+                        <span class="value">
+                            ${order.paymentStatus}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Restaurant -->
+
+                <div class="card">
+
+                    <div class="title">
+                     ${storeTitle}
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Name
+                        </span>
+
+                        <span class="value">
+                           ${order.restaurant?.name || "-"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Phone
+                        </span>
+
+                        <span class="value">
+                            ${order.restaurant?.phone || "-"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Address
+                        </span>
+
+                        <span class="value">
+                           ${order.restaurant?.address || "-"}
+                        </span>
+
+                    </div>
+
+
+                    <a
+    class="restaurant-call-btn"
+    href="tel:${order.restaurant?.phone || ""}"
+>
+    ${callStoreText}
+</a>
+
+                </div>
+
+
+                <!-- Items -->
+
+                <div class="card">
+
+                    <div class="title">
+                         ${orderedItemsTitle}
+                    </div>
+
+
+                    ${
+                        items.map(
+                            item => `
+
+                            <div class="item">
+
+                                <div
+                                    class="item-name"
+                                >
+                                    ${item.name}
+                                </div>
+
+
+                                <div
+                                    class="item-info"
+                                >
+                                    ₹${item.price}
+                                    ×
+                                    ${item.quantity}
+                                    =
+                                    <b>
+                                        ₹${item.total}
+                                    </b>
+                                </div>
+
+                            </div>
+
+                        `
+                        ).join("")
+                    }
+
+
+                    <div
+                        class="row"
+                        style="margin-top:10px;"
+                    >
+
+                        <span class="label">
+                            Subtotal
+                        </span>
+
+                        <span class="value">
+                            ₹${order.subtotal}
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Delivery Fee
+                        </span>
+
+                        <span class="value">
+                            ₹${order.deliveryFee}
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="row total"
+                    >
+
+                        <span>
+                            Total
+                        </span>
+
+                        <span>
+                            ₹${order.totalAmount}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Delivery Address -->
+
+                <div class="card">
+
+                    <div class="title">
+                        📍 Delivery Address
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Name
+                        </span>
+
+                        <span class="value">
+                            ${order.deliveryAddress?.name || "-"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Phone
+                        </span>
+
+                        <span class="value">
+                            ${order.deliveryAddress?.phone || "-"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            Address
+                        </span>
+
+                        <span class="value">
+                            ${order.deliveryAddress?.address || "-"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <span class="label">
+                            City
+                        </span>
+
+                        <span class="value">
+                            ${order.deliveryAddress?.city || "-"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+    <span class="label">
+        Pincode
+    </span>
+
+    <span class="value">
+        ${order.deliveryAddress?.pincode || "-"}
+    </span>
+
+</div>
+
+                </div>
+
+<!-- Customer Note -->
+
+${
+    order.customerNote
+    ?
+    `
+        <div class="card">
+
+            <div class="title">
+                📝 Customer Note
+            </div>
+
+            <div
+                style="
+                    font-size:14px;
+                    color:#475569;
+                    line-height:1.6;
+                    background:#f8fafc;
+                    padding:12px;
+                    border-radius:8px;
+                "
+            >
+                ${order.customerNote}
+            </div>
+
+        </div>
+    `
+    :
+    ""
+}
+
+
+
+
+
+                <!-- Order Timeline -->
+
+                <div class="card">
+
+                    <div class="title">
+                        🔄 Order Status
+                    </div>
+
+
+                    <div class="timeline">
+
+                        ${
+                            statusSteps.map(
+                                (step, index) => {
+
+                                    let className =
+                                        "pending";
+
+                                    let icon =
+                                        "○";
+
+                                    if (
+                                        index <
+                                        currentIndex
+                                    ) {
+
+                                        className =
+                                            "completed";
+
+                                        icon =
+                                            "✓";
+
+                                    } else if (
+                                        index ===
+                                        currentIndex
+                                    ) {
+
+                                        className =
+                                            "current";
+
+                                        icon =
+                                            "●";
+
+                                    }
+
+
+                                    return `
+
+                                        <div
+                                            class="${className}"
+                                        >
+                                            ${icon}
+                                            ${step.label}
+                                        </div>
+
+                                    `;
+
+                                }
+                            ).join("")
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- Track -->
+
+                ${
+                    order.orderStatus !==
+                    "DELIVERED"
+                    &&
+                    order.orderStatus !==
+                    "CANCELLED"
+                    ?
+                    `
+
+                        <div class="card">
+
+                            <button
+                                class="track-btn"
+                                onclick="
+                                    trackOrder()
+                                "
+                            >
+                                📍 Track My Order
+                            </button>
+
+                        </div>
+
+                    `
+                    :
+                    ""
+                }
+
+                                <!-- Reorder -->
+
+                <div class="card">
+
+                    <button
+                        class="track-btn"
+                        onclick="reorderOrder()"
+                    >
+                        🔄 Reorder This Order
+                    </button>
+
+                </div>
+
+
+                ${
+                   order.deliveryBoy
+                    ?
+                    `
+
+                        <div class="card">
+
+                            <div class="title">
+                                🛵 Delivery Partner
+                            </div>
+
+
+                            <div class="row">
+
+                                <span class="label">
+                                    Name
+                                </span>
+
+                                <span class="value">
+                                    ${
+                                        order.deliveryBoy?.name || "-"
+                                    }
+                                </span>
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <span class="label">
+                                    Phone
+                                </span>
+
+                                <span class="value">
+                                    ${
+                                        order.deliveryBoy?.phone || "-"
+                                    }
+                                </span>
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <span class="label">
+                                    Vehicle
+                                </span>
+
+                                <span class="value">
+                                    ${
+                                        order.deliveryBoy?.vehicleType || "-"
+                                    }
+                                    ${
+                                       order.deliveryBoy?.vehicleNumber || ""
+                                    }
+                                </span>
+
+                            </div>
+
+
+                            <a
+    class="call-btn"
+    href="tel:${order.deliveryBoy?.phone || ""}"
+>
+    📞 Call Delivery Partner
+</a>
+
+                        </div>
+
+                    `
+                    :
+                    ""
+                }
+
+            `;
+
+        }
+
+
+
+        async function reorderOrder() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/orders/" +
+                orderId +
+                "/reorder",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message ||
+                "Failed to reorder"
+            );
+
+        }
+
+
+        alert(
+            "Previous order added to cart successfully!"
+        );
+
+
+        window.location.href =
+            "customer-cart.html";
+
+
+    } catch (error) {
+
+        console.error(
+            "Reorder Error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Failed to reorder this order."
+        );
+
+    }
+
+}
+
+
+        function trackOrder() {
+
+            window.location.href =
+                "customer-tracking.html?orderId=" +
+                orderId;
+
+        }
+
+
+        function goBack() {
+
+            window.history.back();
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>

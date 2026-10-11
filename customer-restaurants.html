@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Restaurants</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            width: 100%;
+            height: 100vh;
+
+            overflow: hidden;
+
+            font-family: Arial, sans-serif;
+
+            background: #090d20;
+
+            color: #ffffff;
+        }
+
+
+        .app-container {
+
+            width: 100%;
+
+            max-width: 500px;
+
+            height: calc(100vh - 2px);
+
+            margin: 1px auto;
+
+            background: #0b1224;
+
+            border: 1px solid rgba(92, 125, 180, 0.75);
+
+            border-radius: 7px;
+
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.03),
+                0 8px 30px rgba(0,0,0,0.45),
+                0 0 18px rgba(70,120,255,0.18);
+
+            overflow-y: auto;
+
+            overflow-x: hidden;
+
+            scrollbar-width: none;
+        }
+
+
+        .app-container::-webkit-scrollbar {
+            display: none;
+        }
+
+
+        .container {
+
+            padding:
+                20px
+                15px
+                40px;
+        }
+
+
+        /* HEADER */
+
+        .page-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .back-button {
+
+            width: 42px;
+
+            height: 42px;
+
+            border: 1px solid #2d4167;
+
+            border-radius: 12px;
+
+            background: #142039;
+
+            color: #ffffff;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+
+        .header-content {
+
+            flex: 1;
+        }
+
+
+        .header-title {
+
+            font-size: 22px;
+
+            font-weight: 700;
+        }
+
+
+        .header-subtitle {
+
+            margin-top: 4px;
+
+            font-size: 12px;
+
+            color: #91a0bb;
+        }
+
+
+        /* TITLE */
+
+        .section-title {
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+
+        /* RESTAURANT LIST */
+
+        .restaurant-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+
+        /* CARD */
+
+        .restaurant-card {
+
+            background: #142039;
+
+            border: 1px solid #2d4167;
+
+            border-radius: 16px;
+
+            padding: 12px;
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.20);
+        }
+
+
+        .restaurant-top {
+
+            display: flex;
+
+            gap: 12px;
+        }
+
+
+        /* IMAGE */
+
+        .restaurant-image {
+
+            width: 82px;
+
+            height: 82px;
+
+            flex-shrink: 0;
+
+            border-radius: 14px;
+
+            overflow: hidden;
+
+            background: #202d49;
+        }
+
+
+        .restaurant-image img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+
+        /* INFO */
+
+        .restaurant-info {
+
+            min-width: 0;
+
+            flex: 1;
+        }
+
+
+        .restaurant-name {
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+            color: #ffffff;
+
+            margin-bottom: 5px;
+        }
+
+
+        .restaurant-owner {
+
+            font-size: 12px;
+
+            color: #aebbd1;
+
+            margin-bottom: 6px;
+        }
+
+
+        .restaurant-location {
+
+            font-size: 12px;
+
+            color: #91a0bb;
+
+            line-height: 1.4;
+        }
+
+
+        /* STATUS */
+
+        .status-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 8px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .status {
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            padding: 4px 8px;
+
+            border-radius: 20px;
+        }
+
+
+        .status.open {
+
+            color: #71e6a5;
+
+            background:
+                rgba(54, 211, 130, 0.12);
+        }
+
+
+        .status.closed {
+
+            color: #ff8f8f;
+
+            background:
+                rgba(255, 80, 80, 0.12);
+        }
+
+
+        .category-badge {
+
+            font-size: 11px;
+
+            color: #b9c7df;
+        }
+
+
+        /* DETAILS */
+
+        .restaurant-details {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 7px;
+
+            margin-top: 12px;
+        }
+
+
+        .detail-box {
+
+            background: #0e172b;
+
+            border: 1px solid #263858;
+
+            border-radius: 10px;
+
+            padding: 8px 6px;
+
+            text-align: center;
+        }
+
+
+        .detail-label {
+
+            font-size: 9px;
+
+            color: #71809b;
+
+            margin-bottom: 3px;
+        }
+
+
+        .detail-value {
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            color: #dbe4f5;
+        }
+
+
+        /* DESCRIPTION */
+
+        .restaurant-description {
+
+            margin-top: 11px;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+            color: #9eabc1;
+        }
+
+
+        /* BUTTON */
+
+        .view-btn {
+
+            width: 100%;
+
+            margin-top: 12px;
+
+            padding: 11px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #36578F;
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        .view-btn:active {
+
+            transform: scale(0.98);
+        }
+
+
+        /* LOADING */
+
+        .loading {
+
+            text-align: center;
+
+            padding: 40px 20px;
+
+            color: #91a0bb;
+
+            font-size: 13px;
+        }
+
+
+        /* EMPTY */
+
+        .empty {
+
+            text-align: center;
+
+            padding: 50px 20px;
+
+            color: #91a0bb;
+        }
+
+
+        .empty-icon {
+
+            font-size: 45px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .empty-title {
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+            color: #ffffff;
+
+            margin-bottom: 6px;
+        }
+
+
+        .empty-text {
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        /* ERROR */
+
+        .error {
+
+            text-align: center;
+
+            padding: 35px 20px;
+
+            color: #ff8f8f;
+
+            font-size: 13px;
+        }
+
+        
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app-container">
+
+
+    <div class="container">
+
+
+        <!-- HEADER -->
+
+        <div class="page-header">
+
+
+            <button
+                class="back-button"
+                onclick="window.location.href='food-index.html'"
+            >
+                ←
+            </button>
+
+
+            <div class="header-content">
+
+                <div class="header-title">
+                    🍽️ Restaurants
+                </div>
+
+
+                <div class="header-subtitle">
+                    Restaurants near you
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- TITLE -->
+
+        <div class="section-title">
+            Restaurants
+        </div>
+
+
+
+        <!-- LIST -->
+
+        <div
+            id="restaurantList"
+            class="restaurant-list"
+        >
+
+            <div class="loading">
+                Loading restaurants...
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* LOAD RESTAURANTS */
+
+async function loadRestaurants() {
+
+
+    const box =
+        document.getElementById(
+            "restaurantList"
+        );
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "/api/restaurants?category=Restaurant"
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Restaurant Stores:",
+            data
+        );
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Failed to load restaurants"
+            );
+
+        }
+
+
+        const restaurants =
+            data.restaurants || [];
+
+
+        /* EMPTY */
+
+        if (
+            restaurants.length === 0
+        ) {
+
+
+            box.innerHTML = `
+
+                <div class="empty">
+
+
+                    <div class="empty-icon">
+                        🍽️
+                    </div>
+
+
+                    <div class="empty-title">
+                        No Restaurants
+                    </div>
+
+
+                    <div class="empty-text">
+
+                        No approved restaurant
+                        is available right now.
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+
+            return;
+
+        }
+
+
+
+        /* CARDS */
+
+        box.innerHTML =
+
+            restaurants
+
+            .map(
+                restaurant => {
+
+
+                    const image =
+
+                        restaurant.image &&
+                        restaurant.image.trim()
+
+                            ?
+
+                        restaurant.image
+
+                            :
+
+                        "images/restaurant.jpg";
+
+
+
+                    const location =
+
+                        [
+                            restaurant.address,
+                            restaurant.city
+                        ]
+
+                        .filter(Boolean)
+
+                        .join(", ")
+
+                        ||
+
+                        "Location not available";
+
+
+
+                    const status =
+
+                        restaurant.isOpen
+
+                            ?
+
+                        `
+                            <span
+                                class="status open"
+                            >
+                                ● Open
+                            </span>
+                        `
+
+                            :
+
+                        `
+                            <span
+                                class="status closed"
+                            >
+                                ● Closed
+                            </span>
+                        `;
+
+
+
+                    return `
+
+                        <div
+                            class="restaurant-card"
+                        >
+
+
+                            <!-- TOP -->
+
+                            <div
+                                class="restaurant-top"
+                            >
+
+
+                                <!-- IMAGE -->
+
+                                <div
+                                    class="restaurant-image"
+                                >
+
+                                    <img
+                                        src="${escapeHtml(image)}"
+                                        alt="${escapeHtml(
+                                            restaurant.name ||
+                                            "Restaurant"
+                                        )}"
+                                        onerror="
+                                            this.src=
+                                            'images/restaurant.jpg'
+                                        "
+                                    >
+
+                                </div>
+
+
+
+                                <!-- INFO -->
+
+                                <div
+                                    class="restaurant-info"
+                                >
+
+
+                                    <div
+                                        class="restaurant-name"
+                                    >
+
+                                        ${escapeHtml(
+                                            restaurant.name ||
+                                            "Restaurant"
+                                        )}
+
+                                    </div>
+
+
+                                    <div
+                                        class="restaurant-owner"
+                                    >
+
+                                        👤 Owner:
+                                        ${escapeHtml(
+                                            restaurant.ownerName ||
+                                            "Not available"
+                                        )}
+
+                                    </div>
+
+
+                                    <div
+                                        class="restaurant-location"
+                                    >
+
+                                        📍
+                                        ${escapeHtml(
+                                            location
+                                        )}
+
+                                    </div>
+
+
+                                    <div
+                                        class="status-row"
+                                    >
+
+                                        ${status}
+
+
+                                        <span
+                                            class="category-badge"
+                                        >
+                                            🍽️ Restaurant
+                                        </span>
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <!-- DETAILS -->
+
+                            <div
+                                class="restaurant-details"
+                            >
+
+
+                                <div
+                                    class="detail-box"
+                                >
+
+                                    <div
+                                        class="detail-label"
+                                    >
+                                        Rating
+                                    </div>
+
+
+                                    <div
+                                        class="detail-value"
+                                    >
+
+                                        ⭐
+                                        ${restaurant.rating || "New"}
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <div
+                                    class="detail-box"
+                                >
+
+                                    <div
+                                        class="detail-label"
+                                    >
+                                        Delivery
+                                    </div>
+
+
+                                    <div
+                                        class="detail-value"
+                                    >
+
+                                        ${
+                                            restaurant.deliveryTime ||
+                                            "30"
+                                        }
+                                        min
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <div
+                                    class="detail-box"
+                                >
+
+                                    <div
+                                        class="detail-label"
+                                    >
+                                        Delivery Fee
+                                    </div>
+
+
+                                    <div
+                                        class="detail-value"
+                                    >
+
+                                        ₹
+                                        ${
+                                            restaurant.deliveryFee ||
+                                            "30"
+                                        }
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <!-- DESCRIPTION -->
+
+                            ${
+                                restaurant.description
+
+                                ?
+
+                                `
+                                    <div
+                                        class="restaurant-description"
+                                    >
+
+                                        ${escapeHtml(
+                                            restaurant.description
+                                        )}
+
+                                    </div>
+                                `
+
+                                :
+
+                                ""
+                            }
+
+
+
+                            <!-- BUTTON -->
+
+                            <button
+                                class="view-btn"
+                                onclick="
+                                    openRestaurant(
+                                        '${restaurant._id}'
+                                    )
+                                "
+                            >
+
+                                View Restaurant
+
+                            </button>
+
+
+                        </div>
+
+                    `;
+
+                }
+            )
+
+            .join("");
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            "Restaurant List Error:",
+            error
+        );
+
+
+        box.innerHTML = `
+
+            <div class="error">
+
+                Failed to load restaurants.
+
+                <br><br>
+
+                Please try again.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* OPEN RESTAURANT */
+
+function openRestaurant(
+    restaurantId
+) {
+
+
+    window.location.href =
+
+        "customer-restaurant.html?id=" +
+
+        encodeURIComponent(
+            restaurantId
+        );
+
+}
+
+
+
+/* SAFE HTML */
+
+function escapeHtml(value) {
+
+
+    return String(
+        value ?? ""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+
+/* START */
+
+loadRestaurants();
+
+</script>
+
+
+</body>
+
+</html>

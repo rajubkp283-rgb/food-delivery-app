@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Live Delivery Tracking</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        background: #090d20;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #090d20;
+        color: #ffffff;
+        min-height: 100vh;
+    }
+
+    /* =========================
+       APP CONTAINER
+    ========================= */
+
+    .app-container {
+        width: 100%;
+        max-width: 500px;
+        min-height: 100vh;
+        margin: 0 auto;
+
+        background: #0b1224;
+
+        border-top: 1px solid rgba(92,125,180,.75);
+        border-left: 1px solid rgba(92,125,180,.75);
+        border-right: 1px solid rgba(92,125,180,.75);
+        border-bottom: 1px solid rgba(92,125,180,.75);
+
+        box-shadow: 0 0 25px rgba(71,115,190,.12);
+
+        overflow-x: hidden;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+        background: #0b1224;
+        color: #ffffff;
+
+        padding: 16px;
+
+        border-bottom: 1px solid #334b78;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .header-icon {
+        width: 44px;
+        height: 44px;
+
+        border-radius: 12px;
+
+        background: #142039;
+        border: 1px solid #38527f;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 22px;
+
+        flex-shrink: 0;
+    }
+
+    .header h2 {
+        font-size: 19px;
+        line-height: 1.2;
+        font-weight: 700;
+    }
+
+    .header p {
+        margin-top: 4px;
+
+        font-size: 11px;
+        color: #8fa2c2;
+
+        opacity: 1;
+    }
+
+    /* =========================
+       CONTAINER
+    ========================= */
+
+    .container {
+        width: 100%;
+        max-width: 500px;
+
+        margin: auto;
+
+        padding: 14px;
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .card {
+        background: #142039;
+
+        border: 1px solid #2d4167;
+        border-radius: 14px;
+
+        padding: 12px 14px;
+
+        margin-bottom: 10px;
+
+        box-shadow: 0 5px 14px rgba(0,0,0,.10);
+    }
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status {
+        display: flex;
+
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 10px;
+    }
+
+    .status-title {
+        font-size: 13px;
+        font-weight: 700;
+
+        color: #ffffff;
+    }
+
+    .badge {
+        padding: 5px 9px;
+
+        border-radius: 20px;
+
+        background: rgba(105,210,143,.12) !important;
+
+        border: 1px solid rgba(105,210,143,.25);
+
+        color: #69d28f !important;
+
+        font-size: 10px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    .error {
+        color: #ff6b73;
+
+        background: rgba(255,63,74,.08);
+
+        border: 1px solid rgba(255,63,74,.22);
+
+        padding: 9px 10px;
+
+        border-radius: 9px;
+
+        font-size: 11px;
+
+        display: none;
+
+        margin-top: 9px;
+    }
+
+    /* =========================
+   ORDER STATUS
+========================= */
+
+.order-status-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    padding-bottom: 8px;
+
+    border-bottom: 1px solid rgba(92,125,180,.18);
+}
+
+.order-status-label {
+    font-size: 11px;
+    color: #8fa2c2;
+    font-weight: 600;
+}
+
+.order-status-value {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: right;
+}
+
+.status-timeline {
+    margin-top: 8px;
+
+    color: #8fa2c2;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.status-timeline > div {
+    padding: 3px 0;
+}
+
+    /* =========================
+       MAP
+    ========================= */
+
+   #map {
+    width: 100%;
+    height: 360px;
+
+    border-radius: 11px;
+
+    overflow: hidden;
+
+    border: 1px solid #334b78;
+
+    box-shadow: 0 5px 14px rgba(0,0,0,.16);
+}
+
+
+    /* =========================
+   MAP HEADER
+========================= */
+
+.map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    margin-bottom: 9px;
+}
+
+.map-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.map-live {
+    font-size: 9px;
+    font-weight: 700;
+
+    color: #69d28f;
+
+    background: rgba(105,210,143,.10);
+
+    border: 1px solid rgba(105,210,143,.22);
+
+    padding: 4px 7px;
+
+    border-radius: 20px;
+
+    white-space: nowrap;
+}
+
+    /* =========================
+       LOCATION INFO
+    ========================= */
+
+   .location-info {
+    margin-top: 8px;
+
+    font-size: 10px;
+    line-height: 1.5;
+
+    color: #8fa2c2;
+
+    background: #101a30;
+
+    border: 1px solid rgba(92,125,180,.16);
+
+    border-radius: 10px;
+
+    padding: 8px 10px;
+
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.015);
+}
+
+    /* =========================
+       DISTANCE + ETA
+    ========================= */
+
+    .tracking-stats {
+        display: flex;
+
+        gap: 8px;
+
+        margin-top: 9px;
+    }
+
+   .tracking-stat {
+    flex: 1;
+
+    background: linear-gradient(
+        135deg,
+        #101a30,
+        #121e36
+    ) !important;
+
+    border: 1px solid rgba(92,125,180,.20);
+
+    padding: 9px 8px;
+
+    border-radius: 11px;
+
+    text-align: center;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,.10);
+}
+
+    .tracking-stat-label {
+        font-size: 10px;
+
+        color: #8fa2c2;
+
+        margin-bottom: 3px;
+    }
+
+    .tracking-stat-value {
+        font-size: 14px;
+
+        font-weight: 700;
+
+        color: #ffffff;
+    }
+
+    #distance {
+        color: #ffffff !important;
+    }
+
+    #eta {
+        color: #69d28f !important;
+    }
+
+    /* =========================
+       LEAFLET
+    ========================= */
+
+    .leaflet-container {
+        font-family: Arial, sans-serif;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 520px) {
+
+        .app-container {
+            border-left: none;
+            border-right: none;
+        }
+
+        .header {
+            padding: 14px;
+        }
+
+        .container {
+            padding: 12px;
+        }
+
+        .card {
+            padding: 11px 12px;
+
+            border-radius: 13px;
+        }
+
+        #map {
+          height: 340px;
+        }
+
+        .tracking-stats {
+            gap: 7px;
+        }
+
+        .tracking-stat {
+            padding: 8px 6px;
+        }
+
+    }
+
+
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+    <div class="app-container">
+
+   <div class="header">
+
+    <div class="header-left">
+
+        <div class="header-icon">
+            🚴
+        </div>
+
+        <div>
+
+            <h2>
+                Live Delivery Tracking
+            </h2>
+
+            <p>
+                Track your delivery partner in real time
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="status">
+
+                <div class="status-title">
+                📍 Delivery Partner Location
+                </div>
+
+                <div
+                    id="connectionBadge"
+                    class="badge"
+                >
+                    Connecting...
+                </div>
+
+            </div>
+
+            <div
+                id="errorMessage"
+                class="error"
+            ></div>
+
+        </div>
+
+        <div class="card">
+
+   <div class="order-status-head">
+
+    <div class="order-status-label">
+        📦 Order Status
+    </div>
+
+    <div
+        id="orderStatus"
+        class="order-status-value"
+    >
+        Loading...
+    </div>
+
+</div>
+
+<div
+    id="statusTimeline"
+    class="status-timeline"
+>
+    Loading order status...
+</div>
+
+</div>
+
+
+        <div class="card">
+
+            <div class="map-header">
+
+    <div class="map-title">
+        🗺️ Live Location
+    </div>
+
+    <div class="map-live">
+        ● LIVE TRACKING
+    </div>
+
+</div>
+
+<div id="map"></div>
+
+            <div
+                id="locationInfo"
+                class="location-info"
+            >
+                Waiting for delivery partner location...
+            </div>
+
+
+    <div class="tracking-stats">
+
+    <div class="tracking-stat">
+
+        <div class="tracking-stat-label">
+            📍 Distance
+        </div>
+
+        <div
+            id="distance"
+            class="tracking-stat-value"
+        >
+            Calculating...
+        </div>
+
+    </div>
+
+
+    <div class="tracking-stat">
+
+        <div class="tracking-stat-label">
+            ⏱️ ETA
+        </div>
+
+        <div
+            id="eta"
+            class="tracking-stat-value"
+        >
+            Calculating...
+        </div>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </div>
+
+
+    </div>
+
+
+    <!-- Leaflet JS -->
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
+    <script>
+
+        /*
+         * IMPORTANT:
+         * Testing ke liye yahan Delivery Boy ID daalo.
+         *
+         * Example:
+         *
+         * const deliveryBoyId =
+         *     "68xxxxxxxxxxxxxxxx";
+         */
+
+        const orderId =
+    new URLSearchParams(window.location.search).get("orderId");
+
+const customerToken =
+    localStorage.getItem("authToken");
+
+const API_BASE = "";
+
+
+        
+
+
+        let map = null;
+
+        // ===============================
+// CUSTOM MAP ICONS
+// ===============================
+
+const customerIcon = L.divIcon({
+    className: "customer-map-icon",
+    html: "🏠",
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
+});
+
+const deliveryIcon = L.divIcon({
+    className: "delivery-map-icon",
+    html: "🚴",
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
+});
+
+let deliveryMarker = null;
+let customerMarker = null;
+let routeLine = null;
+let routeRequestId = 0;
+let etaCountdownTimer = null;
+let currentEtaSeconds = 0;
+
+let firstLocation = true;
+
+
+        function showError(message) {
+
+            const errorBox =
+                document.getElementById(
+                    "errorMessage"
+                );
+
+            errorBox.textContent =
+                message;
+
+            errorBox.style.display =
+                "block";
+        }
+
+
+        function updateConnectionStatus(
+            text,
+            online = true
+        ) {
+
+            const badge =
+                document.getElementById(
+                    "connectionBadge"
+                );
+
+            badge.textContent = text;
+
+            if (online) {
+
+                badge.style.background =
+                    "#dcfce7";
+
+                badge.style.color =
+                    "#166534";
+
+            } else {
+
+                badge.style.background =
+                    "#fee2e2";
+
+                badge.style.color =
+                    "#991b1b";
+            }
+        }
+
+
+
+        function calculateDistance(
+    lat1,
+    lon1,
+    lat2,
+    lon2
+) {
+    const R = 6371;
+
+    const dLat =
+        (lat2 - lat1) * Math.PI / 180;
+
+    const dLon =
+        (lon2 - lon1) * Math.PI / 180;
+
+    const a =
+        Math.sin(dLat / 2) *
+        Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) *
+        Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+
+    const c =
+        2 * Math.atan2(
+            Math.sqrt(a),
+            Math.sqrt(1 - a)
+        );
+
+    return R * c;
+}
+
+
+function calculateETA(distanceKm) {
+
+    // Average delivery speed
+    const averageSpeed = 25; // km/h
+
+    const timeHours =
+        distanceKm / averageSpeed;
+
+    const timeMinutes =
+        Math.ceil(timeHours * 60);
+
+    if (timeMinutes <= 1) {
+        return "Arriving soon";
+    }
+
+    return timeMinutes + " min";
+}
+
+
+// ===============================
+// ETA COUNTDOWN
+// ===============================
+
+function startEtaCountdown(seconds) {
+
+    currentEtaSeconds = seconds;
+
+    if (etaCountdownTimer) {
+        clearInterval(etaCountdownTimer);
+    }
+
+    function updateEtaDisplay() {
+
+        const etaElement =
+            document.getElementById("eta");
+
+        if (!etaElement) {
+            return;
+        }
+
+        if (currentEtaSeconds <= 60) {
+
+            etaElement.innerText =
+                "Arriving soon";
+
+            return;
+        }
+
+        const minutes =
+            Math.ceil(
+                currentEtaSeconds / 60
+            );
+
+        etaElement.innerText =
+            minutes + " min";
+
+        currentEtaSeconds--;
+    }
+
+    updateEtaDisplay();
+
+    etaCountdownTimer =
+        setInterval(function() {
+
+            if (currentEtaSeconds > 0) {
+                updateEtaDisplay();
+            } else {
+                clearInterval(
+                    etaCountdownTimer
+                );
+            }
+
+        }, 1000);
+}
+
+
+// ===============================
+// ROAD ROUTE FUNCTION
+// ===============================
+
+async function updateRoadRoute(
+    customerLat,
+    customerLng,
+    deliveryLat,
+    deliveryLng
+) {
+
+    const currentRequestId = ++routeRequestId;
+
+    try {
+
+        const url =
+    "https://router.project-osrm.org/route/v1/driving/" +
+    deliveryLng + "," + deliveryLat +
+    ";" +
+    customerLng + "," + customerLat +
+    "?overview=full&geometries=geojson";
+
+        const response =
+            await fetch(url);
+
+
+        const data =
+            await response.json();
+
+            if (currentRequestId !== routeRequestId) {
+            return;
+            }
+
+        if (
+            !data.routes ||
+            !data.routes.length
+        ) {
+            console.log(
+                "Road route not found."
+            );
+            return;
+        }
+
+        const routeCoordinates =
+            data.routes[0]
+                .geometry
+                .coordinates
+                .map(function(point) {
+
+                    return [
+                        point[1],
+                        point[0]
+                    ];
+
+                });
+
+                // ===============================
+// ACTUAL ROAD DISTANCE & ETA
+// ===============================
+
+const roadDistance =
+    data.routes[0].distance;
+
+const roadDuration =
+    data.routes[0].duration;
+
+// Distance in KM
+const roadDistanceKm =
+    roadDistance / 1000;
+
+// Time in minutes
+const roadEtaMinutes =
+    Math.ceil(roadDuration / 60);
+
+
+    // Start live ETA countdown
+      startEtaCountdown(
+    Math.ceil(roadDuration)
+    );
+
+console.log(
+    "Road Distance:",
+    roadDistanceKm.toFixed(2),
+    "KM"
+);
+
+console.log(
+    "Road ETA:",
+    roadEtaMinutes,
+    "minutes"
+);
+
+
+
+// Show actual road distance and ETA
+const distanceElement =
+    document.getElementById("distance");
+
+const etaElement =
+    document.getElementById("eta");
+
+if (distanceElement) {
+    distanceElement.innerText =
+        roadDistanceKm.toFixed(2) + " KM";
+}
+
+if (etaElement) {
+    etaElement.innerText =
+        roadEtaMinutes + " min";
+}
+
+        if (!routeLine) {
+
+    routeLine = L.polyline(
+        routeCoordinates,
+        {
+            weight: 5,
+            opacity: 0.8
+        }
+    ).addTo(map);
+
+} else {
+
+    routeLine.setLatLngs(
+        routeCoordinates
+    );
+
+}
+
+
+
+// Update remaining route progress
+updateRouteProgress(
+    deliveryLat,
+    deliveryLng
+);
+
+    } catch (error) {
+
+        console.error(
+            "Road Route Error:",
+            error
+        );
+    }
+}
+
+
+
+// ===============================
+// ROUTE PROGRESS FUNCTION
+// ===============================
+
+function updateRouteProgress(
+    deliveryLat,
+    deliveryLng
+) {
+
+    if (!routeLine) {
+        return;
+    }
+
+    const routePoints =
+        routeLine.getLatLngs();
+
+    if (
+        !routePoints ||
+        routePoints.length < 2
+    ) {
+        return;
+    }
+
+    const deliveryPosition =
+        L.latLng(
+            deliveryLat,
+            deliveryLng
+        );
+
+    let nearestIndex = 0;
+    let nearestDistance = Infinity;
+
+    routePoints.forEach(
+        function(point, index) {
+
+            const distance =
+                deliveryPosition.distanceTo(
+                    point
+                );
+
+            if (distance < nearestDistance) {
+
+                nearestDistance =
+                    distance;
+
+                nearestIndex =
+                    index;
+            }
+        }
+    );
+
+    const remainingRoute =
+        routePoints.slice(
+            nearestIndex
+        );
+
+    if (remainingRoute.length >= 2) {
+
+        routeLine.setLatLngs(
+            remainingRoute
+        );
+    }
+}
+
+
+
+       function initializeMap(latitude, longitude) {
+
+    if (map) {
+        return;
+    }
+
+    map = L.map("map").setView(
+        [latitude, longitude],
+        16
+    );
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+}
+
+
+      function updateMap(latitude,longitude,deliveryBoy) {
+
+    if (!map) {
+        initializeMap(
+            latitude,
+            longitude
+        );
+    }
+
+   const newPosition = [
+    latitude ,
+    longitude
+];
+
+
+    
+
+
+    
+
+    // ===============================
+    // DELIVERY BOY MARKER
+    // ===============================
+
+    if (!deliveryMarker) {
+
+        deliveryMarker =
+            L.marker(
+                newPosition,
+                {
+                    icon: deliveryIcon,
+                    zIndexOffset: 1000
+                }
+            )
+            .addTo(map)
+           .bindPopup(`
+    <div style="
+        text-align:center;
+        min-width:180px;
+        font-family:Arial,sans-serif;
+    ">
+
+        <div style="
+            font-size:16px;
+            font-weight:700;
+            margin-bottom:8px;
+        ">
+            🚴 Delivery Partner
+        </div>
+
+        <div style="
+            font-size:13px;
+            font-weight:700;
+            margin-bottom:5px;
+        ">
+            ${deliveryBoy?.name || "Not available"}
+        </div>
+
+        <div style="
+            font-size:12px;
+            color:#475569;
+            margin-bottom:4px;
+        ">
+            <a
+    href="tel:${deliveryBoy?.phone || ""}"
+    style="
+        color:#2563eb;
+        text-decoration:none;
+        font-weight:600;
+    "
+>
+    📞 ${deliveryBoy?.phone || "Not available"}
+</a>
+        </div>
+
+        <div style="
+            font-size:12px;
+            color:#475569;
+            margin-bottom:4px;
+        ">
+            🛵 ${deliveryBoy?.vehicleType || "Not available"}
+        </div>
+
+        <div style="
+            font-size:12px;
+            color:#475569;
+            margin-bottom:8px;
+        ">
+            🚗 ${deliveryBoy?.vehicleNumber || "Not available"}
+        </div>
+
+        <div style="
+            color:#16a34a;
+            font-size:12px;
+            font-weight:700;
+        ">
+            🟢 LIVE LOCATION
+        </div>
+
+                ${deliveryBoy?.phone ? `
+        <a
+            href="tel:${deliveryBoy.phone}"
+            style="
+                display:block;
+                margin-top:10px;
+                padding:10px 14px;
+                background:#16a34a;
+                color:white;
+                text-align:center;
+                text-decoration:none;
+                border-radius:8px;
+                font-weight:600;
+                font-size:14px;
+            "
+        >
+            📞 Call Delivery Partner
+        </a>
+        ` : ""}
+
+    </div>
+`);
+
+    } else {
+
+    const startPosition =
+        deliveryMarker.getLatLng();
+
+    const endPosition =
+        L.latLng(
+            newPosition[0],
+            newPosition[1]
+        );
+
+    const duration = 1000;
+    const startTime = performance.now();
+
+    function animateMarker(currentTime) {
+
+        const elapsed =
+            currentTime - startTime;
+
+        const progress =
+            Math.min(
+                elapsed / duration,
+                1
+            );
+
+        const latitude =
+            startPosition.lat +
+            (
+                endPosition.lat -
+                startPosition.lat
+            ) * progress;
+
+        const longitude =
+            startPosition.lng +
+            (
+                endPosition.lng -
+                startPosition.lng
+            ) * progress;
+
+        deliveryMarker.setLatLng([
+            latitude,
+            longitude
+        ]);
+
+        if (progress < 1) {
+            requestAnimationFrame(
+                animateMarker
+            );
+        }
+    }
+
+    requestAnimationFrame(
+        animateMarker
+    );
+}
+
+
+
+
+
+
+
+    // ===============================
+// KEEP MAP POSITION STABLE
+// ===============================
+
+if (customerMarker && deliveryMarker) {
+
+    const currentCenter = map.getCenter();
+
+    const distance =
+        map.distance(
+            currentCenter,
+            newPosition
+        );
+
+    // Only move map if Delivery Partner
+    // is outside the visible area
+    if (!map.getBounds().contains(newPosition)) {
+
+        map.panTo(
+            newPosition,
+            {
+                animate: true,
+                duration: 1
+            }
+        );
+    }
+}
+
+}
+
+
+        async function getOrderTracking() {
+
+    if (!orderId) {
+        showError("Order ID is missing.");
+        updateConnectionStatus("Waiting", false);
+        return;
+    }
+
+    if (!customerToken) {
+        showError("Customer login token not found.");
+        updateConnectionStatus("Login Required", false);
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            API_BASE +
+            "/api/orders/" +
+            orderId +
+            "/tracking",
+            {
+                method: "GET",
+                headers: {
+                    "Authorization":
+                        "Bearer " + customerToken
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message ||
+                "Order tracking unavailable."
+            );
+        }
+
+        const order = data.order;
+
+const isGrocery =
+    order.restaurant?.category === "Groceries";
+
+// Customer Location
+const customerLatitude =
+    Number(order.deliveryAddress?.latitude);
+
+const customerLongitude =
+    Number(order.deliveryAddress?.longitude);
+
+
+
+    // Show Customer Location
+if (
+    Number.isFinite(customerLatitude) &&
+    Number.isFinite(customerLongitude)
+) {
+    if (!map) {
+        initializeMap(
+            customerLatitude,
+            customerLongitude
+        );
+    }
+
+    if (!customerMarker) {
+        customerMarker =
+            L.marker(
+    [
+        customerLatitude,
+        customerLongitude
+    ],
+    {
+        icon: customerIcon
+    }
+)
+            .addTo(map)
+            .bindPopup(
+                "🏠 Customer Location"
+            );
+    } else {
+        customerMarker.setLatLng([
+            customerLatitude,
+            customerLongitude
+        ]);
+    }
+}
+
+        // Update Order Status
+const statusSteps = [
+    {
+        key: "PLACED",
+        label: "📝 Order Placed"
+    },
+    {
+        key: "CONFIRMED",
+        label: isGrocery
+            ? "✅ Store Confirmed"
+            : "✅ Restaurant Confirmed"
+    },
+    {
+        key: "PREPARING",
+        label: isGrocery
+            ? "📦 Product Packing"
+            : "👨‍🍳 Preparing Food"
+    },
+    {
+        key: "READY",
+        label: isGrocery
+            ? "📦 Product Ready"
+            : "📦 Food Ready"
+    },
+    {
+        key: "ASSIGNED",
+        label: "🛵 Delivery Partner Assigned"
+    },
+    {
+        key: "PICKED_UP",
+        label: "📦 Order Picked Up"
+    },
+    {
+        key: "OUT_FOR_DELIVERY",
+        label: "🚴 Out for Delivery"
+    },
+    {
+        key: "DELIVERED",
+        label: "🎉 Delivered"
+    }
+];
+
+const currentStatusIndex =
+    statusSteps.findIndex(
+        status => status.key === order.orderStatus
+    );
+
+document.getElementById(
+    "orderStatus"
+).textContent =
+    "Order Status: " + order.orderStatus;
+
+document.getElementById(
+    "statusTimeline"
+).innerHTML =
+    statusSteps.map((status, index) => {
+
+        const completed =
+            index <= currentStatusIndex;
+
+        return `
+            <div style="
+                color: ${completed ? "#36578F" : "#94a3b8"};
+                font-weight: ${completed ? "700" : "400"};
+            ">
+                ${completed ? "✓" : "○"} ${status.label}
+            </div>
+        `;
+
+    }).join("");
+
+        const location =
+            order.deliveryLocation;
+
+        if (!location) {
+
+            document.getElementById(
+                "locationInfo"
+            ).innerHTML =
+                "Delivery partner location is not available yet.";
+
+            updateConnectionStatus(
+                order.orderStatus || "Waiting",
+                true
+            );
+
+            return;
+        }
+
+        const latitude =
+            Number(location.latitude);
+
+        const longitude =
+            Number(location.longitude);
+
+            
+
+        if (
+            !Number.isFinite(latitude) ||
+            !Number.isFinite(longitude)
+        ) {
+            throw new Error(
+                "Invalid delivery location received."
+            );
+        }
+
+        updateMap(
+          latitude,
+          longitude,
+          order.deliveryBoy
+        );
+
+
+        // Update road route
+if (
+    Number.isFinite(customerLatitude) &&
+    Number.isFinite(customerLongitude) &&
+    Number.isFinite(latitude) &&
+    Number.isFinite(longitude)
+) {
+    updateRoadRoute(
+        customerLatitude,
+        customerLongitude,
+        latitude,
+        longitude
+    );
+
+
+    
+}
+
+        const distanceKm = calculateDistance(
+    customerLatitude,
+    customerLongitude,
+    latitude,
+    longitude
+);
+
+const distanceText =
+    distanceKm < 1
+        ? Math.round(distanceKm * 1000) + " meters"
+        : distanceKm.toFixed(2) + " km";
+
+
+        const etaText = calculateETA(
+        distanceKm
+        );
+
+
+        const lastLocationUpdate =
+    new Date(location.updatedAt);
+
+const secondsSinceUpdate =
+    (Date.now() - lastLocationUpdate.getTime()) / 1000;
+
+const locationStatus =
+    secondsSinceUpdate <= 30
+        ? "🟢 LIVE"
+        : "🟡 Location may be delayed";
+
+
+        const updateAgo =
+    secondsSinceUpdate < 60
+        ? Math.floor(secondsSinceUpdate) + " seconds ago"
+        : Math.floor(secondsSinceUpdate / 60) + " minutes ago";
+
+        
+
+
+
+        document.getElementById(
+            "locationInfo"
+        ).innerHTML =
+
+           "Order Status: " +
+            order.orderStatus +
+           "<br>" +
+
+           "Delivery Location: " +
+           locationStatus +
+           "<br>" +
+
+            "Latitude: " +
+            latitude.toFixed(6) +
+            "<br>" +
+
+            "Longitude: " +
+            longitude.toFixed(6) +
+            "<br>" +
+
+           
+
+
+            "Accuracy: " +
+            (
+                location.accuracy !== null
+                    ? Math.round(
+                        location.accuracy
+                    ) + " meters"
+                    : "Not available"
+            ) +
+            "<br>" +
+
+            "Last Update: " +
+             updateAgo +
+            "<br>" +
+            "Updated At: " +
+            new Date(
+            location.updatedAt
+            ).toLocaleTimeString();
+
+        updateConnectionStatus(
+            "LIVE",
+            true
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Order Tracking Error:",
+            error
+        );
+
+        showError(
+            error.message
+        );
+
+        updateConnectionStatus(
+            "Offline",
+            false
+        );
+    }
+}
+
+
+getOrderTracking();
+
+
+setInterval(
+    getOrderTracking,
+    5000
+);
+
+
+
+    </script>
+
+</body>
+
+</html>

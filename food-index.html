@@ -1,0 +1,6996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Food Delivery</title>
+
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Fixed Mobile App Screen */
+
+html {
+    background: #090d20;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 500px;
+
+    height: calc(100vh - 2px);
+    min-height: 0;
+
+    margin: 1px auto;
+
+    background: #0b1224;
+
+    border: 1px solid rgba(92, 125, 180, 0.75);
+    border-radius: 7px;
+
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 8px 30px rgba(0, 0, 0, 0.45),
+        0 0 18px rgba(70, 120, 255, 0.18);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    position: relative;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.app-container::-webkit-scrollbar {
+    display: none;
+}
+
+     body {
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+
+    font-family: Arial, sans-serif;
+
+    background: #090d20;
+
+    color: #ffffff;
+}
+
+        
+
+        /* Header */
+        .header {
+    background: #0b1224;
+
+    padding: 14px 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #334b78;
+    box-shadow:
+    0 2px 10px rgba(70, 120, 255, 0.10);
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+       .logo {
+    font-size: 23px;
+    font-weight: 800;
+    color: #ff3f4a;
+    letter-spacing: 0.3px;
+}
+
+        .header-right {
+    display: flex;
+    gap: 7px;
+}
+
+       .header-btn {
+    border: 1px solid #2d4167;
+
+    background: #142039;
+    color: #dbe4f5;
+
+    padding: 9px 11px;
+
+    border-radius: 11px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.header-btn:hover {
+    background: #1b2c4b;
+    border-color: #45689f;
+}
+
+        /* Hero */
+        .hero {
+    margin: 14px 18px 0;
+
+    padding: 26px 18px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111c33,
+            #182844
+        );
+
+    border: 1px solid #2d4167;
+
+      background-image: url("./images/login-food-5.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    filter: brightness(1);  /* bahut dark */
+
+
+    border-radius: 18px;
+
+    text-align: left;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.25);
+}
+
+        .hero h1 {
+    margin: 0 0 8px;
+
+    font-size: 32px;
+    line-height: 1.1;
+
+    color: #ffffff;
+}
+
+       .hero p {
+    margin: 0 0 18px;
+
+    color: #aebbd3;
+
+    font-size: 14px;
+}
+
+       .search-box {
+    max-width: 650px;
+    margin: auto;
+
+    display: flex;
+
+    background: #0b1224;
+
+    border: 1px solid #344b73;
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.30);
+}
+
+        .search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+
+    background: transparent;
+    color: white;
+
+    padding: 16px;
+    font-size: 15px;
+}
+
+.search-box input::placeholder {
+    color: #9aa8c0;
+}
+
+        .search-box button {
+    border: none;
+
+    background: #ff3f4a;
+    color: white;
+
+    padding: 0 22px;
+
+    font-weight: bold;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+        /* Main */
+        .container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px 15px 95px;
+}
+
+        .section-title {
+    margin: 0 0 15px;
+    font-size: 22px;
+    color: #ffffff;
+}
+
+        /* Categories */
+      .categories {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+}
+
+.categories::-webkit-scrollbar {
+    display: none;
+}
+
+       .category {
+    flex: 1;
+    min-width: 0;
+
+    height: 60px;
+
+    background: #142039;
+
+    border: 1px solid #2d4167;
+    border-radius: 14px;
+
+    padding: 8px;
+
+    cursor: pointer;
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.20);
+
+    transition: 0.2s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+    .category-icon {
+    width: 40px;
+    height: 45px;
+
+    border-radius: 50%;
+    overflow: hidden;
+
+    flex-shrink: 0;
+}
+
+.category-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+     .category-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #dbe4f5;
+    white-space: nowrap;
+}
+
+        /* Restaurant */
+        .restaurants {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+        .restaurant-card {
+    background: #142039;
+
+    border-radius: 16px;
+    overflow: hidden;
+
+    border: 1px solid #2d4167;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,0.25);
+}
+
+        .restaurant-card:hover {
+            transform: translateY(-3px);
+        }
+
+       .restaurant-image {
+    height: 170px;
+    background: #101a30;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 50px;
+}
+
+        .restaurant-info {
+            padding: 14px;
+        }
+
+        .restaurant-name {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 7px;
+    color: #ffffff;
+}
+
+       .restaurant-meta {
+    font-size: 13px;
+    color: #aebbd3;
+    line-height: 1.7;
+}
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 12px 15px;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+
+            .header-btn {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .hero {
+                padding: 35px 15px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .search-box input {
+                padding: 13px;
+            }
+
+            .search-box button {
+                padding: 0 15px;
+            }
+
+            .restaurants {
+                grid-template-columns: 1fr;
+            }
+
+            .restaurant-image {
+                height: 180px;
+            }
+        }
+
+
+
+        /* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    background: rgba(11, 18, 36, 0.97);
+
+    border-top: 1px solid #2d4167;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    padding: 8px 6px 10px;
+
+    z-index: 2000;
+
+   border-top: 1px solid #334b78;
+
+box-shadow:
+    0 -4px 12px rgba(70, 120, 255, 0.12),
+    0 -1px 6px rgba(70, 120, 255, 0.08);
+
+    backdrop-filter: blur(10px);
+}
+
+.bottom-nav a {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    color: #8fa2c2;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 0;
+    transition: 0.2s;
+}
+
+.bottom-nav a span {
+    display: block;
+    font-size: 21px;
+    line-height: 1;
+    margin-bottom: 5px;
+    transform: translateY(0);
+}
+
+.bottom-nav a {
+    position: relative;
+    min-height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottom-nav a:hover {
+    color: #ffffff;
+}
+
+.bottom-nav a.active {
+    color: #ff3f4a;
+    position: relative;
+}
+
+.bottom-nav a.active::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 3px;
+    background: #ff3f4a;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(255, 63, 74, 0.7);
+}
+
+
+/* =========================
+   LOCATION / ADDRESS
+========================= */
+
+.location-area {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+
+/* Common location button */
+
+.add-address-btn,
+.saved-location-btn {
+    width: 100%;
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    padding: 5px 2px;
+
+    color: #ffffff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    font-family: inherit;
+}
+
+
+/* Plus icon */
+
+.location-plus {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.12);
+
+    color: #ffffff;
+
+    font-size: 22px;
+    font-weight: 300;
+
+    margin-right: 9px;
+}
+
+
+/* Saved location pin */
+
+.location-pin {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.12);
+
+    font-size: 17px;
+
+    margin-right: 9px;
+}
+
+
+/* Location text */
+
+.location-text {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    line-height: 1.2;
+}
+
+
+/* Small "Deliver to" */
+
+.location-text small {
+    display: block;
+
+    color: rgba(255,255,255,.68);
+
+    font-size: 9px;
+
+    font-weight: 500;
+
+    margin-bottom: 2px;
+}
+
+
+/* Address */
+
+.location-text strong {
+    display: block;
+
+    max-width: 240px;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* Arrow */
+
+.location-arrow {
+    margin-left: auto;
+
+    padding-left: 8px;
+
+    color: rgba(255,255,255,.75);
+
+    font-size: 20px;
+
+    line-height: 1;
+}
+
+
+/* Touch effect */
+
+.add-address-btn:active,
+.saved-location-btn:active {
+    transform: scale(.98);
+}
+
+
+/* Mobile */
+
+@media (max-width: 500px) {
+
+    .add-address-btn,
+    .saved-location-btn {
+        min-height: 46px;
+
+        padding: 4px 1px;
+    }
+
+    .location-plus,
+    .location-pin {
+        width: 32px;
+        height: 32px;
+
+        margin-right: 8px;
+    }
+
+    .location-text small {
+        font-size: 8px;
+    }
+
+    .location-text strong {
+        max-width: 210px;
+
+        font-size: 11px;
+    }
+
+    .location-arrow {
+        font-size: 19px;
+    }
+
+}
+
+
+
+/* =========================
+   ADDRESS POPUP
+========================= */
+
+.address-popup {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    visibility: hidden;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+}
+
+
+.address-popup.active {
+
+    visibility: visible;
+
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+/* =========================
+   SAVED ADDRESS LIST
+========================= */
+
+.saved-addresses-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 16px;
+
+    max-height: 260px;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+
+}
+
+
+/* EMPTY STATE */
+
+.saved-address-empty {
+
+    padding: 14px;
+
+    text-align: center;
+
+    border: 1px dashed #344b73;
+
+    border-radius: 12px;
+
+    color: #8fa7cb;
+
+    font-size: 13px;
+
+}
+
+
+/* ADDRESS CARD */
+
+.saved-address-card {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 13px;
+
+    background: #142039;
+
+    border: 1px solid #2d4167;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+
+    box-sizing: border-box;
+
+}
+
+
+/* HOVER */
+
+.saved-address-card:hover {
+
+    transform: translateY(-1px);
+
+    border-color: #4d72ad;
+
+}
+
+
+/* SELECTED */
+
+.saved-address-card.selected {
+
+    border-color: #4d8cff;
+
+    background: #182b4b;
+
+}
+
+
+/* ICON */
+
+.saved-address-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    min-width: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #203657;
+
+    font-size: 18px;
+
+}
+
+
+/* ADDRESS CONTENT */
+
+.saved-address-content {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.saved-address-type {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-bottom: 4px;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+
+.saved-address-text {
+
+    color: #9fb0ca;
+
+    font-size: 12px;
+
+    line-height: 1.45;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+
+    line-clamp: 2;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
+}
+
+
+/* SELECTED BADGE */
+
+.saved-address-selected {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-top: 5px;
+
+    padding: 3px 7px;
+
+    border-radius: 20px;
+
+    background: rgba(77,140,255,.14);
+
+    color: #79a9ff;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+/* ARROW */
+
+.saved-address-arrow {
+
+    color: #6f85a7;
+
+    font-size: 18px;
+
+}
+
+/* DARK OVERLAY */
+
+.address-popup-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(0,0,0,.58);
+
+    backdrop-filter:
+        blur(3px);
+}
+
+
+/* POPUP BOX */
+
+.address-popup-box {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    max-width: 500px;
+
+    background: #0b1224;
+
+    border-radius:
+        24px 24px 0 0;
+
+    padding:
+        20px 18px 24px;
+
+    border:
+        1px solid rgba(92,125,180,.45);
+
+    box-shadow:
+        0 -12px 40px
+        rgba(0,0,0,.45);
+
+    transform:
+        translateY(100%);
+
+    transition:
+        transform .3s ease;
+}
+
+
+.address-popup.active
+.address-popup-box {
+
+    transform:
+        translateY(0);
+}
+
+
+/* HEADER */
+
+.address-popup-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+
+.address-popup-header h3 {
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+.address-popup-header p {
+
+    margin: 4px 0 0;
+
+    color: #8fa7cb;
+
+    font-size: 11px;
+}
+
+
+.address-close {
+
+    width: 34px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.10);
+
+    color: #ffffff;
+
+    font-size: 24px;
+
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+/* CURRENT LOCATION */
+
+.current-location-btn {
+
+    width: 100%;
+
+    min-height: 62px;
+
+    display: flex;
+
+    align-items: center;
+
+    text-align: left;
+
+    border: 1px solid
+        rgba(78,131,212,.55);
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #101d36,
+            #12223f
+        );
+
+    color: #ffffff;
+
+    padding: 10px 13px;
+
+    cursor: pointer;
+}
+
+
+.current-location-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,63,74,.14);
+
+    color: #ff5964;
+
+    font-size: 25px;
+
+    margin-right: 11px;
+}
+
+
+.current-location-text {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.current-location-text strong {
+
+    color: #ffffff;
+
+    font-size: 13px;
+}
+
+
+.current-location-text small {
+
+    color: #8fa7cb;
+
+    font-size: 10px;
+}
+
+
+.current-location-arrow {
+
+    margin-left: auto;
+
+    color: #8fa7cb;
+
+    font-size: 22px;
+}
+
+
+/* OR */
+
+.address-or {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 17px 0;
+
+    color: #7187aa;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.address-or::before,
+.address-or::after {
+
+    content: "";
+
+    height: 1px;
+
+    flex: 1;
+
+    background:
+        rgba(92,125,180,.25);
+}
+
+
+/* MANUAL ADDRESS */
+
+.manual-address label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #dce6f7;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.manual-address textarea {
+
+    width: 100%;
+
+    min-height: 82px;
+
+    resize: none;
+
+    outline: none;
+
+    border:
+        1px solid #355482;
+
+    border-radius: 13px;
+
+    background:
+        #101d36;
+
+    color: #ffffff;
+
+    padding: 12px;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 12px;
+
+    line-height: 1.45;
+}
+
+
+.manual-address textarea::placeholder {
+
+    color: #7187aa;
+}
+
+
+.manual-address textarea:focus {
+
+    border-color: #4e83d4;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(65,117,194,.12);
+}
+
+
+/* SAVE BUTTON */
+
+.save-address-btn {
+
+    width: 100%;
+
+    height: 49px;
+
+    margin-top: 15px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff5964,
+            #ff3040
+        );
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 20px
+        rgba(255,63,74,.20);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 500px) {
+
+    .address-popup-box {
+
+        padding:
+            18px 15px 20px;
+
+        border-radius:
+            22px 22px 0 0;
+    }
+
+}
+
+
+/* =========================
+   ADDRESS ACTION BUTTONS
+========================= */
+
+.saved-address-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 9px;
+
+}
+
+
+.saved-address-actions button {
+
+    border: none;
+
+    outline: none;
+
+    cursor: pointer;
+
+    padding: 5px 9px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    transition:
+        transform .2s ease,
+        opacity .2s ease;
+
+}
+
+
+.saved-address-actions button:hover {
+
+    transform: translateY(-1px);
+
+    opacity: .9;
+
+}
+
+
+.saved-address-edit {
+
+    background: #20385f;
+
+    color: #8db7ff;
+
+}
+
+
+.saved-address-delete {
+
+    background: #42252b;
+
+    color: #ff8f9b;
+
+}
+
+
+
+.deliver-arrow {
+    font-size: 12px;
+    margin-left: 3px;
+    color: rgba(255,255,255,.75);
+    vertical-align: middle;
+}
+
+
+/* ==========================================
+   YOUR NEAREST
+========================================== */
+
+.your-nearest-section {
+    width: 100%;
+
+    margin-top: 30px;
+    margin-bottom: 35px;
+
+    /*
+       IMPORTANT:
+       Section page ki vertical scrolling
+       ko block nahi karega.
+    */
+    overflow: visible;
+}
+
+
+/* Heading */
+
+.your-nearest-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.your-nearest-header .section-title {
+    margin: 0;
+}
+
+
+/* Restaurant / Grocery selector */
+
+.nearest-category-selector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f1f3f6;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.nearest-category-btn {
+    border: none;
+    background: transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.nearest-category-btn.active {
+    background: #36578F;
+    color: #fff;
+}
+
+
+/* Product block */
+
+.nearest-product-block {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+
+.nearest-products-row {
+    display: grid;
+
+    grid-auto-flow: column;
+
+    grid-auto-columns:
+        calc((100% - 20px) / 3);
+
+    gap: 10px;
+
+    /* Horizontal product scrolling */
+    overflow-x: auto;
+
+    /* Vertical scrolling page ko milega */
+    overflow-y: visible;
+
+    scroll-behavior: smooth;
+
+    /* Horizontal overscroll control */
+    overscroll-behavior-x: contain;
+
+    scrollbar-width: none;
+
+    padding: 2px 2px 8px;
+
+    /*
+       IMPORTANT:
+       Browser ko horizontal + vertical
+       dono gestures allow karo.
+    */
+    touch-action: pan-x pan-y;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.nearest-products-row::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Product card */
+
+.nearest-product-card {
+    width: 100%;
+    min-width: 0;
+
+    background: #fff;
+
+    border: 1px solid #e7e7e7;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.07);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.nearest-product-card:active {
+    transform: scale(.98);
+}
+
+
+/* Product image */
+
+.nearest-product-image {
+    width: 100%;
+    height: 115px;
+
+    background: #f5f5f5;
+
+    overflow: hidden;
+}
+
+.nearest-product-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+/* Product information */
+
+.nearest-product-info {
+    padding: 9px;
+}
+
+.nearest-product-name {
+    font-size: 14px;
+    font-weight: 700;
+
+    color: #222;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    margin-bottom: 5px;
+}
+
+.nearest-product-price {
+    font-size: 15px;
+    font-weight: 700;
+
+    color: #e23744;
+
+    margin-bottom: 4px;
+}
+
+.nearest-shop-name {
+    font-size: 11px;
+    color: #666;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nearest-distance {
+    font-size: 10px;
+    color: #777;
+
+    margin-top: 3px;
+}
+
+
+/* Loading */
+
+.nearest-loading {
+    text-align: center;
+    padding: 18px;
+    color: #777;
+    font-size: 13px;
+}
+
+
+/* Empty */
+
+.nearest-empty {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-size: 13px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .your-nearest-header {
+        align-items: center;
+    }
+
+    .your-nearest-header .section-title {
+        font-size: 20px;
+    }
+
+    .nearest-category-btn {
+        padding: 7px 9px;
+        font-size: 12px;
+    }
+
+    .nearest-products-row {
+
+        grid-auto-columns:
+            calc(
+                (100% - 20px) / 3
+            );
+
+        gap: 10px;
+    }
+
+    .nearest-product-image {
+        height: 100px;
+    }
+
+    .nearest-product-info {
+        padding: 7px;
+    }
+
+    .nearest-product-name {
+        font-size: 12px;
+    }
+
+    .nearest-product-price {
+        font-size: 13px;
+    }
+
+    .nearest-shop-name {
+        font-size: 10px;
+    }
+
+    .nearest-distance {
+        font-size: 9px;
+    }
+}
+
+
+/* ==========================================
+   NEAREST PRODUCT DETAILS POPUP
+========================================== */
+
+.nearest-details-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, 0.58);
+
+    display: none;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    z-index: 99999;
+
+    padding: 0;
+
+}
+
+.nearest-details-overlay.active {
+
+    display: flex;
+
+}
+
+
+/* Popup */
+
+.nearest-product-popup-box {
+    position: relative;
+
+    width: 100%;
+    max-width: 480px;
+
+    max-height: 92vh;
+
+    /* Scroll chalta rahega */
+    overflow-y: auto;
+
+    /* Scrollbar hide */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.30);
+
+    animation:
+        nearestPopupShow
+        0.25s
+        ease;
+}
+
+/* Chrome / Edge / Safari */
+.nearest-product-popup-box::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+
+/* Animation */
+
+@keyframes nearestDetailsUp {
+
+    from {
+
+        transform:
+            translateY(100%);
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        transform:
+            translateY(0);
+
+        opacity: 1;
+
+    }
+
+}
+
+
+/* Header */
+
+.nearest-details-header {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 15px 18px;
+
+    background: #fff;
+
+    border-bottom:
+        1px solid #eee;
+
+}
+
+.nearest-details-header h3 {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    color: #222;
+
+}
+
+
+.nearest-details-close {
+
+    width: 34px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f2f2f2;
+
+    color: #333;
+
+    font-size: 25px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+}
+
+
+/* Image */
+
+.nearest-details-image-box {
+
+    width: 100%;
+
+    height: 240px;
+
+    background: #f5f5f5;
+
+    overflow: hidden;
+
+}
+
+.nearest-details-image-box img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+}
+
+
+/* Content */
+
+.nearest-details-content {
+
+    padding: 18px;
+
+}
+
+
+.nearest-details-name {
+
+    margin:
+        0
+        0
+        5px;
+
+    font-size: 22px;
+
+    color: #222;
+
+}
+
+
+.nearest-details-price {
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #e23744;
+
+    margin-bottom: 18px;
+
+}
+
+
+/* Information grid */
+
+.nearest-details-info-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.nearest-detail-item {
+
+    padding: 12px;
+
+    background: #f7f8fa;
+
+    border-radius: 10px;
+
+}
+
+
+.nearest-detail-item span {
+
+    display: block;
+
+    font-size: 11px;
+
+    color: #777;
+
+    margin-bottom: 4px;
+
+}
+
+
+.nearest-detail-item strong {
+
+    display: block;
+
+    font-size: 13px;
+
+    color: #222;
+
+}
+
+
+/* Description */
+
+.nearest-details-description {
+
+    margin-bottom: 18px;
+
+}
+
+
+.nearest-details-description h4 {
+
+    margin:
+        0
+        0
+        7px;
+
+    font-size: 15px;
+
+    color: #222;
+
+}
+
+
+.nearest-details-description p {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    color: #666;
+
+}
+
+
+/* Shop */
+
+.nearest-shop-box {
+
+    padding: 14px;
+
+    background: #f7f8fa;
+
+    border-radius: 12px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.nearest-shop-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+
+    color: #222;
+
+}
+
+
+.nearest-shop-title i {
+
+    color: #36578F;
+
+}
+
+
+.nearest-shop-name-large {
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    color: #222;
+
+    margin-bottom: 7px;
+
+}
+
+
+.nearest-shop-address,
+.nearest-shop-distance {
+
+    display: flex;
+
+    gap: 8px;
+
+    align-items: flex-start;
+
+    font-size: 12px;
+
+    color: #666;
+
+    margin-top: 6px;
+
+}
+
+
+.nearest-shop-address i,
+.nearest-shop-distance i {
+
+    width: 15px;
+
+    margin-top: 2px;
+
+}
+
+
+/* Buttons */
+
+.nearest-details-actions {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 10px;
+
+    padding-bottom: 8px;
+
+}
+
+
+.nearest-call-btn,
+.nearest-add-cart-btn {
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 13px 10px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.nearest-call-btn {
+
+    background: #eef5ff;
+
+    color: #36578F;
+
+}
+
+
+.nearest-add-cart-btn {
+
+    background: #36578F;
+
+    color: #fff;
+
+}
+
+
+.nearest-call-btn:active,
+.nearest-add-cart-btn:active {
+
+    transform: scale(.98);
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .nearest-details-popup {
+
+        max-height: 94vh;
+
+    }
+
+
+    .nearest-details-image-box {
+
+        height: 210px;
+
+    }
+
+
+    .nearest-details-name {
+
+        font-size: 20px;
+
+    }
+
+}
+
+
+/* =========================================================
+   PREMIUM SHOPS NEAR YOU
+========================================================= */
+
+.nearest-shops-section {
+    width: 100%;
+    margin-top: 26px;
+    margin-bottom: 30px;
+}
+
+.nearest-shops-title {
+    margin: 0 0 14px 2px;
+
+    font-size: 19px;
+    font-weight: 800;
+
+    color: #f9f9f9;
+
+    letter-spacing: -0.2px;
+}
+
+
+/* =========================================================
+   SHOP LIST
+========================================================= */
+
+.nearest-shops-list {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 13px;
+
+    overflow: visible;
+}
+
+
+/* =========================================================
+   PREMIUM SHOP CARD
+========================================================= */
+
+.nearest-shop-card {
+    position: relative;
+
+    width: 100%;
+    min-height: 142px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: stretch;
+
+    gap: 13px;
+
+    padding: 10px;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(54, 87, 143, 0.08);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.07);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.nearest-shop-card:active {
+    transform: scale(0.985);
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   SHOP IMAGE
+========================================================= */
+
+.nearest-shop-image-wrap {
+    position: relative;
+
+    flex: 0 0 132px;
+
+    width: 132px;
+    height: 122px;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    background: #f1f3f6;
+}
+
+
+.nearest-shop-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.35s ease;
+}
+
+
+.nearest-shop-card:hover
+.nearest-shop-image {
+    transform: scale(1.04);
+}
+
+
+/* =========================================================
+   OPEN / CLOSED BADGE ON IMAGE
+========================================================= */
+
+.nearest-shop-status {
+    position: absolute;
+
+    left: 8px;
+    bottom: 8px;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    color: #ffffff;
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.nearest-shop-status.open {
+    background: rgba(18, 176, 74, 0.95);
+}
+
+.nearest-shop-status.closed {
+    background: rgba(225, 45, 45, 0.95);
+}
+
+
+/* =========================================================
+   SHOP CONTENT
+========================================================= */
+
+.nearest-shop-content {
+    min-width: 0;
+
+    flex: 1;
+
+    padding: 3px 52px 3px 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.nearest-shop-name {
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 800;
+
+    color: #171b24;
+
+    line-height: 1.25;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.nearest-shop-category {
+    margin-top: 4px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    color: #777;
+}
+
+
+/* =========================================================
+   ADDRESS
+========================================================= */
+
+.nearest-shop-address {
+    margin-top: 6px;
+
+    font-size: 11px;
+    line-height: 1.35;
+
+    color: #6d727b;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   DISTANCE BADGE
+========================================================= */
+
+.nearest-shop-distance {
+    position: absolute;
+
+    top: 80px;
+    right: 20px;
+
+    padding: 6px 9px;
+
+    border-radius: 20px;
+
+    background: #eef5ff;
+
+    color: #245db4;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   CALL BUTTON
+========================================================= */
+
+.nearest-shop-call {
+    position: absolute;
+
+    top: 11px;
+    right: 11px;
+
+    width: 39px;
+    height: 39px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #16b957;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 12px rgba(22, 185, 87, 0.25);
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease;
+}
+
+.nearest-shop-call:hover {
+    background: #109d48;
+}
+
+.nearest-shop-call:active {
+    transform: scale(0.9);
+}
+
+
+/* =========================================================
+   SHOP INFO CHIPS
+========================================================= */
+
+.nearest-shop-details {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin-top: auto;
+
+    padding-top: 8px;
+}
+
+
+.nearest-shop-chip {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    padding: 5px 8px;
+
+    border-radius: 9px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.nearest-shop-chip.delivery {
+    background: #edf5ff;
+    color: #2465bd;
+}
+
+
+.nearest-shop-chip.fee {
+    background: #fff3ed;
+    color: #e56a25;
+}
+
+
+.nearest-shop-chip.minimum {
+    background: #f3edff;
+    color: #7541d6;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .nearest-shops-section {
+        margin-top: 22px;
+    }
+
+    .nearest-shops-title {
+        font-size: 18px;
+    }
+
+    .nearest-shop-card {
+        min-height: 128px;
+
+        padding: 8px;
+
+        gap: 10px;
+
+        border-radius: 16px;
+    }
+
+    .nearest-shop-image-wrap {
+        flex-basis: 112px;
+
+        width: 112px;
+        height: 110px;
+
+        border-radius: 12px;
+    }
+
+    .nearest-shop-content {
+        padding-right: 48px;
+    }
+
+    .nearest-shop-name {
+        font-size: 14px;
+    }
+
+    .nearest-shop-category {
+        font-size: 10px;
+    }
+
+    .nearest-shop-address {
+        font-size: 10px;
+    }
+
+    .nearest-shop-distance {
+        right: 20px;
+
+        padding: 5px 7px;
+
+        font-size: 9px;
+    }
+
+    .nearest-shop-call {
+        top: 9px;
+        right: 9px;
+
+        width: 35px;
+        height: 35px;
+
+        font-size: 14px;
+    }
+
+    .nearest-shop-status {
+        left: 6px;
+        bottom: 6px;
+
+        padding: 4px 7px;
+
+        font-size: 9px;
+    }
+
+    .nearest-shop-chip {
+        padding: 4px 6px;
+
+        font-size: 9px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .nearest-shop-image-wrap {
+        flex-basis: 95px;
+
+        width: 95px;
+        height: 100px;
+    }
+
+    .nearest-shop-name {
+        font-size: 13px;
+    }
+
+    .nearest-shop-distance {
+        display: none;
+    }
+
+    .nearest-shop-content {
+        padding-right: 42px;
+    }
+
+}
+
+
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+
+
+    </style>
+</head>
+
+<body>
+
+
+
+    
+
+    <div class="app-container">
+
+        
+
+    <!-- Header -->
+    <header class="header">
+
+       <!-- =========================
+     LOCATION AREA
+========================= -->
+
+<div class="location-area" id="locationArea">
+
+    <!-- LOCATION NOT ADDED -->
+    <button
+        type="button"
+        class="add-address-btn"  
+        id="addAddressBtn"
+    >
+        <span class="location-plus">＋</span>
+
+        <span class="location-text">
+            <small>Deliver to <i class="fa-solid fa-chevron-down deliver-arrow"></i></small>
+            <strong>Add Address</strong>
+            
+        </span>
+
+       
+    </button>
+
+
+    <!-- LOCATION ADDED -->
+    <button
+        type="button"
+        class="saved-location-btn"
+        id="savedLocationBtn"
+        style="display:none;"
+    >
+        <span class="location-pin"><i class="fa-solid fa-location-dot" style="color: rgb(169, 19, 19);"></i></span>
+
+        <span class="location-text">
+            <small>Deliver to <i class="fa-solid fa-chevron-down deliver-arrow"></i></small>
+            <strong id="selectedAddress">
+                Your Address
+            </strong>
+        </span>
+
+        
+    </button>
+
+</div>
+
+        <div class="header-right">
+
+            <button
+    class="header-btn"
+    onclick="window.location.href='customer-cart.html'"
+    style="position:relative;"
+>
+    🛒
+    <span
+        id="foodCartBadge"
+        style="
+            display:none;
+            margin-left:5px;
+            background:#e23744;
+            color:white;
+            padding:2px 7px;
+            border-radius:20px;
+            font-size:11px;
+        "
+    >
+        0
+    </span>
+</button>
+
+            <button
+                class="header-btn"
+                onclick="window.location.href='customer-orders.html'"
+            >
+                📦 Orders
+            </button>
+
+           <button
+    class="header-btn"
+    id="accountBtn"
+    onclick="openAccount()"
+>
+    👤 Login
+</button>
+
+        </div>
+
+    </header>
+
+
+    
+
+           
+
+
+    <!-- Hero -->
+    <section class="hero">
+
+        <h1>
+            Order Food Online
+        </h1>
+
+        <p>
+            Discover the best restaurants and delicious food near you.
+        </p>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search restaurant..."
+                oninput="searchRestaurants()"
+            >
+
+            <button>
+                🔍 Search
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- Main -->
+    <main class="container">
+
+        <!-- Categories -->
+        <section>
+
+            <h2 class="section-title">
+                What's on your mind?
+            </h2>
+
+            <div class="categories">
+
+
+
+    <!-- RESTAURANT -->
+    <div
+        class="category"
+        onclick="window.location.href='customer-restaurants.html'"
+    >
+        <div class="category-icon">
+            <img
+                src="images/restaurant.jpg"
+                alt="Restaurant"
+            >
+        </div>
+
+        <div class="category-name">
+            Restaurant
+        </div>
+    </div>
+
+
+     <!-- GROCERIES -->
+    <div
+        class="category"
+        onclick="window.location.href='grocery.html'"
+    >
+        <div class="category-icon">
+            <img
+                src="images/groceries.jpg"
+                alt="Groceries"
+            >
+        </div>
+
+        <div class="category-name">
+            Groceries
+        </div>
+    </div>
+
+
+     <!-- HOME -->
+    <div
+        class="category"
+        onclick="window.location.href='food-index.html'"
+    >
+        <div class="category-icon">
+            <img
+                src="images/offer.jpg"
+                alt="Home"
+            >
+        </div>
+
+        <div class="category-name">
+            Offer
+        </div>
+    </div>
+
+<!-- </div>
+
+            <div style="margin-top:15px;">
+    <button
+        onclick="window.location.href='customer-restaurants.html'"
+        style="
+            border:none;
+            background:#e23744;
+            color:white;
+            padding:10px 18px;
+            border-radius:8px;
+            font-weight:600;
+            cursor:pointer;
+        "
+    >
+        🏪 All Restaurants
+    </button>
+</div> -->
+
+        </section>
+
+
+       <!-- ==========================================
+     YOUR NEAREST
+========================================== -->
+
+<section
+    class="your-nearest-section"
+    id="yourNearestSection"
+>
+
+    <!-- Heading + Category Selector -->
+
+    <div class="your-nearest-header">
+
+        <h2 class="section-title">
+            Your Nearest
+        </h2>
+
+        <div class="nearest-category-selector">
+
+            <button
+                type="button"
+                class="nearest-category-btn active"
+                data-category="Restaurant"
+                onclick="selectNearestCategory('Restaurant')"
+            >
+                Restaurant
+            </button>
+
+            <button
+                type="button"
+                class="nearest-category-btn"
+                data-category="Groceries"
+                onclick="selectNearestCategory('Groceries')"
+            >
+                Grocery
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- FIRST PRODUCT BLOCK -->
+
+    <div class="nearest-product-block">
+
+        <div
+            class="nearest-products-row"
+            id="nearestProductsRow1"
+        ></div>
+
+    </div>
+
+
+    <!-- SECOND PRODUCT BLOCK -->
+
+    <div class="nearest-product-block">
+
+        <div
+            class="nearest-products-row"
+            id="nearestProductsRow2"
+        ></div>
+
+    </div>
+
+        <!-- ==========================================
+         NEARBY SHOPS
+    ========================================== -->
+
+    <div class="nearest-shops-section">
+
+        <h3 class="nearest-shops-title">
+            Shops Near You
+        </h3>
+
+        <div
+            id="nearestShopsList"
+            class="nearest-shops-list"
+        ></div>
+
+    </div>
+    <!-- Loading -->
+
+    <div
+        id="nearestLoading"
+        class="nearest-loading"
+    >
+        Loading nearby products...
+    </div>
+
+
+    <!-- Empty -->
+
+    <div
+        id="nearestEmpty"
+        class="nearest-empty"
+        style="display:none;"
+    >
+        No products found within 5 KM.
+    </div>
+
+</section>
+    
+
+    </main>
+
+
+    
+
+
+<script>
+
+/* =========================================================
+   YOUR NEAREST - RESTAURANT / GROCERY
+========================================================= */
+
+let selectedNearestCategory = "Restaurant";
+
+let nearestProducts = [];
+
+let nearestRestaurants = [];
+
+
+/* =========================================================
+   SELECT RESTAURANT / GROCERY
+========================================================= */
+
+function selectNearestCategory(category) {
+
+    /* =========================================
+       CHANGE CATEGORY
+    ========================================= */
+
+    selectedNearestCategory = category;
+
+
+    /* =========================================
+       UPDATE ACTIVE BUTTON
+    ========================================= */
+
+    document
+        .querySelectorAll(".nearest-category-btn")
+        .forEach(function (button) {
+
+            const buttonCategory =
+                button.getAttribute("data-category");
+
+            button.classList.toggle(
+                "active",
+                buttonCategory === category
+            );
+
+        });
+
+
+    /* =========================================
+       IMPORTANT:
+       OLD SHOP CARDS IMMEDIATELY CLEAR
+    ========================================= */
+
+    const shopContainer =
+        document.getElementById(
+            "nearestShopsList"
+        );
+
+    if (shopContainer) {
+        shopContainer.innerHTML = "";
+    }
+
+
+    /* =========================================
+       CLEAR OLD PRODUCTS IMMEDIATELY
+    ========================================= */
+
+    const row1 =
+        document.getElementById(
+            "nearestProductsRow1"
+        );
+
+    const row2 =
+        document.getElementById(
+            "nearestProductsRow2"
+        );
+
+    if (row1) {
+        row1.innerHTML = "";
+    }
+
+    if (row2) {
+        row2.innerHTML = "";
+    }
+
+
+    /* =========================================
+       LOAD NEW CATEGORY
+    ========================================= */
+
+    loadYourNearestProducts();
+
+}
+
+
+/* =========================================================
+   GET SAVED ADDRESSES
+========================================================= */
+
+function getSavedAddresses() {
+
+    try {
+
+        const savedAddresses =
+            JSON.parse(
+                localStorage.getItem("savedAddresses") || "[]"
+            );
+
+        if (!Array.isArray(savedAddresses)) {
+            return [];
+        }
+
+        return savedAddresses;
+
+    } catch (error) {
+
+        console.error(
+            "GET SAVED ADDRESSES ERROR:",
+            error
+        );
+
+        return [];
+    }
+}
+
+
+/* =========================================================
+   GET SELECTED USER LOCATION
+========================================================= */
+
+function getNearestUserLocation() {
+
+    let latitude =
+        localStorage.getItem("userLatitude");
+
+    let longitude =
+        localStorage.getItem("userLongitude");
+
+
+    /*
+       If old location keys are not available,
+       try selected saved address.
+    */
+
+    if (
+        latitude === null ||
+        longitude === null ||
+        latitude === "" ||
+        longitude === ""
+    ) {
+
+        try {
+
+            const savedAddresses =
+                JSON.parse(
+                    localStorage.getItem(
+                        "savedAddresses"
+                    ) || "[]"
+                );
+
+            const selectedAddressId =
+                localStorage.getItem(
+                    "selectedAddressId"
+                );
+
+
+            const selectedAddress =
+                savedAddresses.find(
+                    function (address) {
+
+                        return String(
+                            address.id
+                        ) === String(
+                            selectedAddressId
+                        );
+
+                    }
+                );
+
+
+            if (selectedAddress) {
+
+                latitude =
+                    selectedAddress.latitude;
+
+                longitude =
+                    selectedAddress.longitude;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Saved Address Location Error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    if (
+        latitude === null ||
+        longitude === null ||
+        latitude === "" ||
+        longitude === ""
+    ) {
+
+        return null;
+
+    }
+
+
+    const lat =
+        Number(latitude);
+
+    const lng =
+        Number(longitude);
+
+
+    if (
+        !Number.isFinite(lat) ||
+        !Number.isFinite(lng)
+    ) {
+
+        return null;
+
+    }
+
+
+    return {
+        latitude: lat,
+        longitude: lng
+    };
+
+}
+
+
+/* =========================================================
+   LOAD YOUR NEAREST PRODUCTS
+========================================================= */
+
+async function loadYourNearestProducts() {
+
+    const loading =
+        document.getElementById(
+            "nearestLoading"
+        );
+
+    const empty =
+        document.getElementById(
+            "nearestEmpty"
+        );
+
+    const row1 =
+        document.getElementById(
+            "nearestProductsRow1"
+        );
+
+    const row2 =
+        document.getElementById(
+            "nearestProductsRow2"
+        );
+
+
+    if (!row1 || !row2) {
+
+        console.warn(
+            "Your Nearest product containers not found."
+        );
+
+        return;
+
+    }
+
+
+    /* Clear old products */
+
+    row1.innerHTML = "";
+
+    row2.innerHTML = "";
+
+    const shopContainer =
+    document.getElementById(
+        "nearestShopsList"
+    );
+
+if (shopContainer) {
+    shopContainer.innerHTML = "";
+}
+
+    if (loading) {
+
+        loading.style.display =
+            "block";
+
+        loading.textContent =
+            "Loading nearby products...";
+
+    }
+
+
+    if (empty) {
+
+        empty.style.display =
+            "none";
+
+    }
+
+
+    /* Get user location */
+
+    const location =
+        getNearestUserLocation();
+
+
+    if (!location) {
+
+        if (loading) {
+
+            loading.style.display =
+                "none";
+
+        }
+
+
+        if (empty) {
+
+            empty.style.display =
+                "block";
+
+            empty.textContent =
+                "Please select a delivery address with location.";
+
+        }
+
+        return;
+
+    }
+
+
+    try {
+
+        const url =
+            "/api/products/nearest" +
+            "?latitude=" +
+            encodeURIComponent(
+                location.latitude
+            ) +
+            "&longitude=" +
+            encodeURIComponent(
+                location.longitude
+            ) +
+            "&category=" +
+            encodeURIComponent(
+                selectedNearestCategory
+            );
+
+
+        console.log(
+            "YOUR NEAREST API:",
+            url
+        );
+
+
+        const response =
+            await fetch(url);
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "YOUR NEAREST RESPONSE:",
+            data
+        );
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Failed to load nearby products"
+            );
+
+        }
+
+
+        nearestProducts =
+            Array.isArray(
+                data.products
+            )
+                ? data.products
+                : [];
+
+
+        nearestRestaurants =
+            Array.isArray(
+                data.restaurants
+            )
+                ? data.restaurants
+                : [];
+
+
+        /* Hide loading */
+
+        if (loading) {
+
+            loading.style.display =
+                "none";
+
+        }
+
+
+        /* No products */
+
+        if (
+            nearestProducts.length === 0
+        ) {
+
+            if (empty) {
+
+                empty.style.display =
+                    "block";
+
+                empty.textContent =
+                    "No products found within 5 KM.";
+
+            }
+
+            return;
+
+        }
+
+
+        /* Render products */
+
+        renderYourNearestProducts(
+            nearestProducts
+        );
+
+        renderYourNearestShops(
+           nearestRestaurants
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "YOUR NEAREST ERROR:",
+            error
+        );
+
+
+        if (loading) {
+
+            loading.style.display =
+                "none";
+
+        }
+
+
+        if (empty) {
+
+            empty.style.display =
+                "block";
+
+            empty.textContent =
+                error.message ||
+                "Unable to load nearby products.";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER PRODUCTS
+   AUTO ARRANGE INTO 2 BLOCKS
+   - No duplicate products between blocks
+   - All products are shown
+   - Both blocks can scroll horizontally
+   - 3 cards visible at a time
+========================================================= */
+
+function renderYourNearestProducts(products) {
+
+    const row1 = document.getElementById(
+        "nearestProductsRow1"
+    );
+
+    const row2 = document.getElementById(
+        "nearestProductsRow2"
+    );
+
+    if (!row1 || !row2) {
+        return;
+    }
+
+    /* Clear old cards */
+    row1.innerHTML = "";
+    row2.innerHTML = "";
+
+    /* Safety check */
+    if (!Array.isArray(products) || products.length === 0) {
+        return;
+    }
+
+    /*
+       Automatically divide the products
+       between the two blocks.
+
+       Example:
+
+       10 products
+       Block 1 → 1-5
+       Block 2 → 6-10
+
+       20 products
+       Block 1 → 1-10
+       Block 2 → 11-20
+
+       50 products
+       Block 1 → 1-25
+       Block 2 → 26-50
+    */
+
+    const middle = Math.ceil(
+        products.length / 2
+    );
+
+    const block1Products =
+        products.slice(
+            0,
+            middle
+        );
+
+    const block2Products =
+        products.slice(
+            middle
+        );
+
+
+    /* =====================================================
+       BLOCK 1
+    ===================================================== */
+
+    block1Products.forEach(
+        function (product) {
+
+            const card =
+                createNearestProductCard(
+                    product
+                );
+
+            row1.appendChild(card);
+        }
+    );
+
+
+    /* =====================================================
+       BLOCK 2
+    ===================================================== */
+
+    block2Products.forEach(
+        function (product) {
+
+            const card =
+                createNearestProductCard(
+                    product
+                );
+
+            row2.appendChild(card);
+        }
+    );
+
+
+    /* =====================================================
+       HORIZONTAL SCROLL
+    ===================================================== */
+
+    [row1, row2].forEach(
+    function (row) {
+
+        /* Horizontal product scrolling */
+        row.style.overflowX = "auto";
+
+        /*
+           IMPORTANT:
+           Vertical page scrolling ko block
+           nahi karna hai.
+        */
+        row.style.overflowY = "visible";
+
+        row.style.display = "grid";
+        row.style.gridAutoFlow = "column";
+
+        /*
+           Mobile par horizontal + vertical
+           dono touch gestures allow.
+        */
+        row.style.touchAction =
+            "pan-x pan-y";
+
+        row.style.webkitOverflowScrolling =
+            "touch";
+
+        row.style.gridAutoColumns =
+            "calc((100% - 20px) / 3)";
+    }
+);
+
+}
+
+
+/* =========================================================
+   PREMIUM SHOP CARDS
+========================================================= */
+
+function renderYourNearestShops(restaurants) {
+
+    const container =
+        document.getElementById(
+            "nearestShopsList"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    /* Clear old cards */
+    container.innerHTML = "";
+
+
+    /* No shops */
+    if (
+        !Array.isArray(restaurants) ||
+        restaurants.length === 0
+    ) {
+        return;
+    }
+
+
+    restaurants.forEach(
+        function (restaurant) {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "nearest-shop-card";
+
+
+            /* =================================================
+               SHOP DATA
+            ================================================= */
+
+            const shopName =
+                restaurant.name ||
+                "Nearby Shop";
+
+
+            const address =
+                restaurant.address ||
+                restaurant.city ||
+                "Address not available";
+
+
+            const category =
+                restaurant.category ||
+                selectedNearestCategory ||
+                "Shop";
+
+
+            const distance =
+                Number(
+                    restaurant.distance || 0
+                );
+
+
+            const deliveryTime =
+                restaurant.deliveryTime ||
+                "30 min";
+
+
+            const deliveryFee =
+                restaurant.deliveryFee !== undefined &&
+                restaurant.deliveryFee !== null &&
+                restaurant.deliveryFee !== ""
+                    ? restaurant.deliveryFee
+                    : null;
+
+
+            const phone =
+                restaurant.phone ||
+                "";
+
+
+            /* =================================================
+               SHOP IMAGE
+
+               Different possible image field names
+               are supported.
+            ================================================= */
+
+            const shopImage =
+                restaurant.image ||
+                restaurant.shopImage ||
+                restaurant.logo ||
+                restaurant.restaurantImage ||
+                "images/food-placeholder.jpg";
+
+
+            /* =================================================
+               OPEN / CLOSED
+            ================================================= */
+
+            const isOpen =
+                restaurant.isOpen === true;
+
+
+            const statusClass =
+                isOpen
+                    ? "open"
+                    : "closed";
+
+
+            const statusText =
+                isOpen
+                    ? "● Open"
+                    : "● Closed";
+
+
+            /* =================================================
+               DELIVERY FEE
+            ================================================= */
+
+            let deliveryFeeHTML = "";
+
+
+            if (
+                deliveryFee !== null
+            ) {
+
+                deliveryFeeHTML = `
+
+                    <span
+                        class="nearest-shop-chip fee"
+                    >
+                        <i class="fa-solid fa-bag-shopping"></i>
+
+                        ₹${escapeNearestHtml(
+                            String(deliveryFee)
+                        )}
+                    </span>
+
+                `;
+
+            }
+
+
+            /* =================================================
+               CATEGORY ICON
+            ================================================= */
+
+            const categoryIcon =
+                String(category)
+                    .toLowerCase()
+                    .includes("groc")
+                    ? "fa-cart-shopping"
+                    : "fa-utensils";
+
+
+            /* =================================================
+               CARD
+            ================================================= */
+
+            card.innerHTML = `
+
+                <!-- SHOP IMAGE -->
+
+                <div
+                    class="nearest-shop-image-wrap"
+                >
+
+                    <img
+                        class="nearest-shop-image"
+
+                        src="${escapeNearestHtml(
+                            shopImage
+                        )}"
+
+                        alt="${escapeNearestHtml(
+                            shopName
+                        )}"
+
+                        loading="lazy"
+
+                        onerror="
+                            this.onerror=null;
+                            this.src='images/food-placeholder.jpg';
+                        "
+                    >
+
+
+                    <div
+                        class="
+                            nearest-shop-status
+                            ${statusClass}
+                        "
+                    >
+                        ${statusText}
+                    </div>
+
+                </div>
+
+
+                <!-- SHOP CONTENT -->
+
+                <div
+                    class="nearest-shop-content"
+                >
+
+                    <!-- SHOP NAME -->
+
+                    <div
+                        class="nearest-shop-name"
+                        title="${escapeNearestHtml(
+                            shopName
+                        )}"
+                    >
+                        ${escapeNearestHtml(
+                            shopName
+                        )}
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div
+                        class="nearest-shop-category"
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                ${categoryIcon}
+                            "
+                        ></i>
+
+                        ${escapeNearestHtml(
+                            category
+                        )}
+
+                    </div>
+
+
+                    <!-- ADDRESS -->
+
+                    <div
+                        class="nearest-shop-address"
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-location-dot
+                            "
+                        ></i>
+
+                        ${escapeNearestHtml(
+                            address
+                        )}
+
+                    </div>
+
+
+                    <!-- DETAILS -->
+
+                    <div
+                        class="nearest-shop-details"
+                    >
+
+                        <span
+                            class="
+                                nearest-shop-chip
+                                delivery
+                            "
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-motorcycle
+                                "
+                            ></i>
+
+                            ${escapeNearestHtml(
+                                String(
+                                    deliveryTime
+                                )
+                            )}
+
+                        </span>
+
+
+                        ${deliveryFeeHTML}
+
+                    </div>
+
+                </div>
+
+
+                <!-- DISTANCE -->
+
+                <div
+                    class="nearest-shop-distance"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-location-dot
+                        "
+                    ></i>
+
+                    ${distance.toFixed(1)}
+                    KM
+
+                </div>
+
+
+                <!-- CALL BUTTON -->
+
+                <button
+                    type="button"
+                    class="nearest-shop-call"
+                    aria-label="Call ${escapeNearestHtml(
+                        shopName
+                    )}"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-phone
+                        "
+                    ></i>
+
+                </button>
+
+            `;
+
+
+            /* =================================================
+               CALL BUTTON
+            ================================================= */
+
+            const callButton =
+                card.querySelector(
+                    ".nearest-shop-call"
+                );
+
+
+            if (callButton) {
+
+                callButton.addEventListener(
+                    "click",
+                    function (event) {
+
+                        /* Prevent card click */
+                        event.stopPropagation();
+
+
+                        if (!phone) {
+
+                            console.warn(
+                                "Shop phone number not available:",
+                                restaurant
+                            );
+
+                            return;
+                        }
+
+
+                        /*
+                         * Direct mobile dialer
+                         */
+
+                        window.location.href =
+                            "tel:" + phone;
+
+                    }
+                );
+
+            }
+
+
+            /* =================================================
+               SHOP CARD CLICK
+            ================================================= */
+
+            card.addEventListener(
+                "click",
+                function () {
+
+                    console.log(
+                        "Nearest shop clicked:",
+                        restaurant
+                    );
+
+                    /*
+                     * Future:
+                     * Open restaurant/shop page
+                     */
+
+                }
+            );
+
+
+            container.appendChild(card);
+
+        }
+    );
+}
+
+
+/* =========================================================
+   SAFE HTML
+========================================================= */
+
+function escapeNearestHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   CREATE PRODUCT CARD
+========================================================= */
+
+function createNearestProductCard(
+    product
+) {
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+
+    card.className =
+        "nearest-product-card";
+
+
+    const image =
+        product.image ||
+        "images/food-placeholder.jpg";
+
+
+    const productName =
+        product.name ||
+        "Product";
+
+
+    const price =
+        Number(
+            product.price || 0
+        );
+
+
+    const shop =
+        product.shop || {};
+
+
+    const shopName =
+        shop.name ||
+        "Nearby Shop";
+
+
+    const distance =
+        Number(
+            shop.distance ??
+            product.distance ??
+            0
+        );
+
+
+    card.innerHTML = `
+
+        <div class="nearest-product-image">
+
+            <img
+                src="${escapeNearestHtml(image)}"
+                alt="${escapeNearestHtml(productName)}"
+                loading="lazy"
+                onerror="this.src='images/food-placeholder.jpg'"
+            >
+
+        </div>
+
+
+        <div class="nearest-product-info">
+
+            <div
+                class="nearest-product-name"
+                title="${escapeNearestHtml(productName)}"
+            >
+                ${escapeNearestHtml(productName)}
+            </div>
+
+
+            <div class="nearest-product-price">
+                ₹${price}
+            </div>
+
+
+            <div
+                class="nearest-shop-name"
+                title="${escapeNearestHtml(shopName)}"
+            >
+                ${escapeNearestHtml(shopName)}
+            </div>
+
+
+            <div class="nearest-distance">
+                ${distance.toFixed(1)} km away
+            </div>
+
+        </div>
+
+    `;
+
+
+    /*
+       Product click
+       Details popup/page will be added
+       in the next step.
+    */
+
+    card.addEventListener(
+        "click",
+        function () {
+
+            openNearestProductDetails(
+                product
+            );
+
+        }
+    );
+
+
+    return card;
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeNearestHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   OPEN PRODUCT DETAILS
+========================================================= */
+
+let selectedNearestProduct = null;
+
+
+function openNearestProductDetails(
+    product
+) {
+
+    if (!product) {
+        return;
+    }
+
+
+    selectedNearestProduct =
+        product;
+
+
+    const popup =
+        document.getElementById(
+            "nearestProductDetailsPopup"
+        );
+
+
+    if (!popup) {
+        return;
+    }
+
+
+    const shop =
+        product.shop || {};
+
+
+    /* Product image */
+
+    const image =
+        document.getElementById(
+            "nearestDetailsImage"
+        );
+
+
+    if (image) {
+
+        image.src =
+            product.image ||
+            "images/food-placeholder.jpg";
+
+        image.alt =
+            product.name ||
+            "Product";
+
+    }
+
+
+    /* Product name */
+
+    const name =
+        document.getElementById(
+            "nearestDetailsName"
+        );
+
+
+    if (name) {
+
+        name.textContent =
+            product.name ||
+            "Product";
+
+    }
+
+
+    /* Price */
+
+    const price =
+        document.getElementById(
+            "nearestDetailsPrice"
+        );
+
+
+    if (price) {
+
+        price.textContent =
+            "₹" +
+            Number(
+                product.price || 0
+            );
+
+    }
+
+
+    /* Category */
+
+    const category =
+        document.getElementById(
+            "nearestDetailsCategory"
+        );
+
+
+    if (category) {
+
+        category.textContent =
+            product.category ||
+            "Other";
+
+    }
+
+
+    /* Veg */
+
+    const veg =
+        document.getElementById(
+            "nearestDetailsVeg"
+        );
+
+
+    if (veg) {
+
+        veg.textContent =
+            product.isVeg === true
+                ? "Veg"
+                : "Non-Veg";
+
+    }
+
+
+    /* Preparation / Delivery */
+
+    const time =
+        document.getElementById(
+            "nearestDetailsTime"
+        );
+
+
+    if (time) {
+
+        const preparationTime =
+            Number(
+                product.preparationTime ||
+                shop.deliveryTime ||
+                20
+            );
+
+
+        time.textContent =
+            preparationTime +
+            " min";
+
+    }
+
+
+    /* Distance */
+
+    const distance =
+        Number(
+            shop.distance ??
+            product.distance ??
+            0
+        );
+
+
+    const distanceText =
+        distance.toFixed(1) +
+        " km";
+
+
+    const distanceElement =
+        document.getElementById(
+            "nearestDetailsDistance"
+        );
+
+
+    if (distanceElement) {
+
+        distanceElement.textContent =
+            distanceText;
+
+    }
+
+
+    /* Description */
+
+    const description =
+        document.getElementById(
+            "nearestDetailsDescription"
+        );
+
+
+    if (description) {
+
+        description.textContent =
+            product.description &&
+            product.description.trim()
+                ? product.description
+                : "No description available.";
+
+    }
+
+
+    /* Shop name */
+
+    const shopName =
+        document.getElementById(
+            "nearestDetailsShopName"
+        );
+
+
+    if (shopName) {
+
+        shopName.textContent =
+            shop.name ||
+            "Nearby Shop";
+
+    }
+
+
+    /* Shop address */
+
+    const shopAddress =
+        document.getElementById(
+            "nearestDetailsShopAddress"
+        );
+
+
+    if (shopAddress) {
+
+        const addressParts = [
+            shop.address,
+            shop.city
+        ].filter(Boolean);
+
+
+        shopAddress.textContent =
+            addressParts.length
+                ? addressParts.join(", ")
+                : "Address not available";
+
+    }
+
+
+    /* Shop distance */
+
+    const shopDistance =
+        document.getElementById(
+            "nearestDetailsShopDistance"
+        );
+
+
+    if (shopDistance) {
+
+        shopDistance.textContent =
+            distanceText +
+            " from your location";
+
+    }
+
+
+    /* Open popup */
+
+    popup.classList.add(
+        "active"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   CLOSE PRODUCT DETAILS
+========================================================= */
+
+function closeNearestProductDetails() {
+
+    const popup =
+        document.getElementById(
+            "nearestProductDetailsPopup"
+        );
+
+
+    if (!popup) {
+        return;
+    }
+
+
+    popup.classList.remove(
+        "active"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+    selectedNearestProduct =
+        null;
+
+}
+
+
+/* =========================================================
+   CLOSE WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const popup =
+            document.getElementById(
+                "nearestProductDetailsPopup"
+            );
+
+
+        if (
+            !popup ||
+            !popup.classList.contains(
+                "active"
+            )
+        ) {
+            return;
+        }
+
+
+        if (
+            event.target === popup
+        ) {
+
+            closeNearestProductDetails();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CALL SHOP
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(
+                "#nearestCallShopBtn"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        if (
+            !selectedNearestProduct
+        ) {
+            return;
+        }
+
+
+        const shop =
+            selectedNearestProduct.shop ||
+            {};
+
+
+        const phone =
+            shop.phone;
+
+
+        if (!phone) {
+
+            alert(
+                "Shop phone number is not available."
+            );
+
+            return;
+
+        }
+
+
+        window.location.href =
+            "tel:" + phone;
+
+    }
+);
+
+
+
+/* =========================================================
+   YOUR NEAREST → ADD TO CART
+========================================================= */
+
+document.addEventListener(
+    "click",
+    async function (event) {
+
+        const button =
+            event.target.closest(
+                "#nearestAddToCartBtn"
+            );
+
+        if (!button) {
+            return;
+        }
+
+        /* Product selected hai ya nahi */
+        if (
+            !selectedNearestProduct ||
+            !selectedNearestProduct._id
+        ) {
+            alert(
+                "Product information not available."
+            );
+            return;
+        }
+
+        const token =
+            localStorage.getItem("authToken");
+
+        /* Login check */
+        if (!token) {
+            window.location.href =
+                "customer-login.html";
+            return;
+        }
+
+        try {
+
+            /* Button temporarily disable */
+            button.disabled = true;
+
+            const oldText =
+                button.innerHTML;
+
+            button.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i> Adding...';
+
+
+            /* =========================================
+               EXISTING CART API
+            ========================================= */
+
+            const response =
+                await fetch(
+                    "/api/cart/add",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " + token
+                        },
+
+                        body: JSON.stringify({
+                            productId:
+                                selectedNearestProduct._id,
+
+                            quantity: 1
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to add product to cart."
+                );
+            }
+
+
+            /* =========================================
+               SUCCESS
+            ========================================= */
+
+            alert(
+                "Product added to cart successfully!"
+            );
+
+
+            /* Cart count update */
+            window.dispatchEvent(
+                new Event("cartUpdated")
+            );
+
+
+            /* Popup close */
+            closeNearestProductDetails();
+
+
+            /* Restore button */
+            button.innerHTML =
+                oldText;
+
+            button.disabled = false;
+
+        } catch (error) {
+
+            console.error(
+                "Nearest Add To Cart Error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Unable to add product to cart."
+            );
+
+            button.innerHTML =
+                '<i class="fa-solid fa-cart-plus"></i> Add to Cart';
+
+            button.disabled = false;
+        }
+    }
+);
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadYourNearestProducts();
+
+    }
+);
+
+
+
+
+
+/* =========================
+   COMPLETE ADDRESS SYSTEM
+========================= */
+
+let selectedAddressType = "Home";
+
+function openAddressPopup() {
+    const popup = document.getElementById("addressPopup");
+    if (!popup) return;
+
+    renderSavedAddresses();
+    popup.classList.add("active");
+}
+
+function closeAddressPopup() {
+    const popup = document.getElementById("addressPopup");
+    if (!popup) return;
+
+    popup.classList.remove("active");
+    document.body.classList.remove("address-popup-open");
+}
+
+function renderSavedAddresses() {
+
+    const container =
+        document.getElementById(
+            "savedAddressesList"
+        );
+
+    if (!container) return;
+
+
+    const savedAddresses =
+        getSavedAddresses();
+
+    const selectedId =
+        localStorage.getItem(
+            "selectedAddressId"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (!savedAddresses.length) {
+
+        container.innerHTML = `
+            <div class="saved-address-empty">
+                No saved address yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    savedAddresses.forEach(function(address) {
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "saved-address-card";
+
+
+        card.dataset.addressId =
+            String(address.id);
+
+
+        const isSelected =
+            String(address.id) ===
+            String(selectedId);
+
+
+        if (isSelected) {
+            card.classList.add(
+                "selected"
+            );
+        }
+
+
+        /* ===============================
+           ADDRESS ICON
+        =============================== */
+
+        const icon =
+    '<i class="fa-solid fa-location-dot" style="color: rgb(170, 25, 25);"></i>';
+
+
+        const selectedBadge =
+            isSelected
+                ? `<span class="saved-address-selected">✓ Selected</span>`
+                : "";
+
+
+        card.innerHTML = `
+
+            <div class="saved-address-icon">
+                ${icon}
+            </div>
+
+
+            <div class="saved-address-content">
+
+                <div class="saved-address-text">
+                    ${escapeHtml(
+                        address.address || ""
+                    )}
+                </div>
+
+                ${selectedBadge}
+
+            </div>
+
+
+            <div class="saved-address-actions">
+
+                <button
+                    type="button"
+                    class="saved-address-edit"
+                    data-id="${escapeHtml(
+                        String(address.id)
+                    )}"
+                >
+                    ✏️ Edit
+                </button>
+
+
+                <button
+                    type="button"
+                    class="saved-address-delete"
+                    data-id="${escapeHtml(
+                        String(address.id)
+                    )}"
+                >
+                    🗑️ Delete
+                </button>
+
+            </div>
+        `;
+
+
+        container.appendChild(card);
+
+    });
+}
+
+function selectSavedAddress(addressId) {
+    const savedAddresses = getSavedAddresses();
+    const selected = savedAddresses.find(function(address) {
+        return String(address.id) === String(addressId);
+    });
+
+    if (!selected) return;
+
+    setSelectedAddress(selected);
+    renderSavedAddresses();
+}
+
+async function editSavedAddress(addressId) {
+
+    let savedAddresses = getSavedAddresses();
+
+    const addressToEdit = savedAddresses.find(function(address) {
+        return String(address.id) === String(addressId);
+    });
+
+    if (!addressToEdit) {
+        alert("Address not found.");
+        return;
+    }
+
+
+    /* ===============================
+       GET NEW ADDRESS
+    =============================== */
+
+    const newAddress = prompt(
+        "Edit your address:",
+        addressToEdit.address || ""
+    );
+
+    if (newAddress === null) {
+        return;
+    }
+
+
+    const trimmedAddress = newAddress.trim();
+
+    if (!trimmedAddress) {
+        alert("Please enter a valid address.");
+        return;
+    }
+
+
+    /* ===============================
+       AUTH TOKEN
+    =============================== */
+
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+        alert("Please login again.");
+        return;
+    }
+
+
+    /* ===============================
+       UPDATE BACKEND / MONGODB
+    =============================== */
+
+    try {
+
+        const response = await fetch(
+            "/api/customer/address",
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+
+                body: JSON.stringify({
+
+                    name: addressToEdit.name || "",
+
+                    phone:
+                        addressToEdit.phone ||
+                        "",
+
+                    address:
+                        trimmedAddress,
+
+                    city:
+                        addressToEdit.city ||
+                        "",
+
+                    pincode:
+                        addressToEdit.pincode ||
+                        "",
+
+                    latitude:
+                        addressToEdit.latitude ??
+                        null,
+
+                    longitude:
+                        addressToEdit.longitude ??
+                        null
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            console.error(
+                "UPDATE ADDRESS ERROR:",
+                data
+            );
+
+            alert(
+                data.message ||
+                "Address update nahi ho paya."
+            );
+
+            return;
+        }
+
+
+        /* ===============================
+           UPDATE LOCAL ADDRESS
+        =============================== */
+
+        addressToEdit.address =
+            trimmedAddress;
+
+
+        saveSavedAddresses(
+            savedAddresses
+        );
+
+
+        /* ===============================
+           MAKE EDITED ADDRESS SELECTED
+        =============================== */
+
+        localStorage.setItem(
+            "selectedAddressId",
+            String(addressToEdit.id)
+        );
+
+        localStorage.setItem(
+            "foodDeliveryLocation",
+            trimmedAddress
+        );
+
+
+        /* ===============================
+           UPDATE TOP LOCATION
+        =============================== */
+
+        updateTopLocation(
+            trimmedAddress
+        );
+
+
+        updateLocationButtons(
+            true
+        );
+
+
+        /* ===============================
+           REFRESH SAVED ADDRESS LIST
+        =============================== */
+
+        renderSavedAddresses();
+
+
+        console.log(
+            "Address updated successfully:",
+            data.address
+        );
+
+
+        alert(
+            "Address updated successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "EDIT ADDRESS ERROR:",
+            error
+        );
+
+        alert(
+            "Address update karte waqt server error aaya."
+        );
+    }
+}
+
+async function deleteSavedAddress(addressId) {
+
+    let savedAddresses = getSavedAddresses();
+
+    const addressToDelete = savedAddresses.find(function(address) {
+        return String(address.id) === String(addressId);
+    });
+
+    if (!addressToDelete) {
+        alert("Address not found.");
+        return;
+    }
+
+
+    /* ===============================
+       CONFIRM DELETE
+    =============================== */
+
+    const confirmDelete = confirm(
+        "Are you sure you want to permanently delete this address?"
+    );
+
+    if (!confirmDelete) {
+        return;
+    }
+
+
+    /* ===============================
+       CHECK CURRENTLY SELECTED ADDRESS
+    =============================== */
+
+    const selectedAddressId =
+        localStorage.getItem("selectedAddressId");
+
+    const wasSelected =
+        String(selectedAddressId) === String(addressId);
+
+
+    /* ===============================
+       DELETE FROM BACKEND
+       Only selected/current address
+       is connected with backend account
+    =============================== */
+
+    if (wasSelected) {
+
+        const token =
+            localStorage.getItem("authToken");
+
+        if (token) {
+
+            try {
+
+                const response = await fetch(
+                    "/api/customer/address",
+                    {
+                        method: "DELETE",
+
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok || !data.success) {
+
+                    console.error(
+                        "Backend Delete Error:",
+                        data
+                    );
+
+                    alert(
+                        data.message ||
+                        "Address delete nahi ho paya."
+                    );
+
+                    return;
+                }
+
+
+                console.log(
+                    "Address permanently deleted from database."
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "DELETE ADDRESS ERROR:",
+                    error
+                );
+
+                alert(
+                    "Address delete karte waqt server error aaya."
+                );
+
+                return;
+            }
+        }
+    }
+
+
+    /* ===============================
+       REMOVE FROM LOCAL STORAGE
+    =============================== */
+
+    savedAddresses =
+        savedAddresses.filter(function(address) {
+
+            return String(address.id) !==
+                   String(addressId);
+
+        });
+
+
+    saveSavedAddresses(
+        savedAddresses
+    );
+
+
+    /* ===============================
+       IF SELECTED ADDRESS WAS DELETED
+    =============================== */
+
+    if (wasSelected) {
+
+        if (savedAddresses.length > 0) {
+
+            const nextAddress =
+                savedAddresses.find(function(address) {
+                    return address.isDefault;
+                }) ||
+                savedAddresses[0];
+
+
+            setSelectedAddress(
+                nextAddress
+            );
+
+        } else {
+
+            localStorage.removeItem(
+                "selectedAddressId"
+            );
+
+            localStorage.removeItem(
+                "foodDeliveryLocation"
+            );
+
+            localStorage.removeItem(
+                "userLatitude"
+            );
+
+            localStorage.removeItem(
+                "userLongitude"
+            );
+
+            updateTopLocation(
+                ""
+            );
+
+            updateLocationButtons(
+                false
+            );
+        }
+    }
+
+
+    /* ===============================
+       REFRESH SAVED ADDRESS LIST
+    =============================== */
+
+    renderSavedAddresses();
+
+
+    console.log(
+        "Address Deleted Successfully:",
+        addressToDelete
+    );
+}
+
+async function useCurrentLocation() {
+
+    if (!navigator.geolocation) {
+        alert("Your browser does not support location.");
+        return;
+    }
+
+    const button = document.getElementById("currentLocationBtn");
+
+    if (button) {
+        button.disabled = true;
+        button.innerHTML = `
+            <span class="current-location-icon">◎</span>
+            <span class="current-location-text">
+                <strong>Detecting location...</strong>
+                <small>Please wait</small>
+            </span>
+        `;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        async function(position) {
+
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            console.log("GPS Coordinates:", latitude, longitude);
+
+            try {
+
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+                    {
+                        headers: {
+                            "Accept": "application/json"
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Unable to get address.");
+                }
+
+                const data = await response.json();
+
+                console.log("Nominatim Response:", data);
+
+                const a = data.address || {};
+
+                /*
+                 * FULL DETAILED ADDRESS
+                 */
+
+                const parts = [];
+
+                function addPart(value) {
+                    if (!value) return;
+
+                    value = String(value).trim();
+
+                    if (!value) return;
+
+                    const alreadyExists = parts.some(function(item) {
+                        return item.toLowerCase() === value.toLowerCase();
+                    });
+
+                    if (!alreadyExists) {
+                        parts.push(value);
+                    }
+                }
+
+                // House / Building
+                addPart(a.house_number);
+                addPart(a.building);
+
+                // Road
+                addPart(a.road);
+
+                // Local area
+                addPart(a.neighbourhood);
+                addPart(a.quarter);
+                addPart(a.residential);
+                addPart(a.suburb);
+
+                // Locality
+                addPart(a.locality);
+
+                // Village / Town / City
+                addPart(a.village);
+                addPart(a.town);
+                addPart(a.city);
+
+                // Municipality
+                addPart(a.municipality);
+
+                // District
+                addPart(a.district);
+
+                // State
+                addPart(a.state);
+
+                // PIN
+                addPart(a.postcode);
+
+                /*
+                 * Agar detailed fields nahi mile,
+                 * Nominatim ka display_name use hoga.
+                 */
+
+                let fullAddress = parts.join(", ");
+
+                if (!fullAddress) {
+                    fullAddress = String(
+                        data.display_name || ""
+                    ).trim();
+                }
+
+                if (!fullAddress) {
+                    throw new Error("Address not found.");
+                }
+
+                console.log("FINAL FULL ADDRESS:", fullAddress);
+
+                /*
+                 * -----------------------------------------
+                 * SAVE IN YOUR EXISTING ADDRESS SYSTEM
+                 * -----------------------------------------
+                 */
+
+                const savedAddresses = getSavedAddresses();
+
+                /*
+                 * Same GPS location already saved hai ya nahi
+                 */
+
+                const existing = savedAddresses.find(function(item) {
+
+                    return (
+                        item.latitude !== null &&
+                        item.longitude !== null &&
+                        Math.abs(
+                            Number(item.latitude) - latitude
+                        ) < 0.00001 &&
+                        Math.abs(
+                            Number(item.longitude) - longitude
+                        ) < 0.00001
+                    );
+
+                });
+
+                let selected;
+
+                if (existing) {
+
+                    /*
+                     * Existing address ko update karo
+                     */
+
+                    existing.address = fullAddress;
+                    existing.latitude = latitude;
+                    existing.longitude = longitude;
+
+                    selected = existing;
+
+                    saveSavedAddresses(savedAddresses);
+
+                } else {
+
+                    /*
+                     * New address create karo
+                     */
+
+                    selected = {
+                        id: Date.now().toString(),
+
+                        type: "Other",
+
+                        address: fullAddress,
+
+                        latitude: latitude,
+
+                        longitude: longitude,
+
+                        isDefault:
+                            savedAddresses.length === 0,
+
+                        createdAt:
+                            new Date().toISOString()
+                    };
+
+                    savedAddresses.push(selected);
+
+                    saveSavedAddresses(savedAddresses);
+                }
+
+                /*
+                 * -----------------------------------------
+                 * SELECT CURRENT ADDRESS
+                 * -----------------------------------------
+                 */
+
+                setSelectedAddress(selected);
+
+                /*
+                 * -----------------------------------------
+                 * REFRESH SAVED ADDRESS LIST
+                 * -----------------------------------------
+                 */
+
+                if (
+                    typeof renderSavedAddresses ===
+                    "function"
+                ) {
+                    renderSavedAddresses();
+                }
+
+                /*
+                 * -----------------------------------------
+                 * CLOSE LOCATION POPUP
+                 * -----------------------------------------
+                 */
+
+                if (
+                    typeof closeAddressPopup ===
+                    "function"
+                ) {
+                    closeAddressPopup();
+                }
+
+                /*
+                 * -----------------------------------------
+                 * SUCCESS
+                 * -----------------------------------------
+                 */
+
+                console.log(
+                    "Current Location Saved:",
+                    selected
+                );
+
+                alert(
+                    "Current location saved successfully!"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Current Location Address Error:",
+                    error
+                );
+
+                alert(
+                    "Location mil gayi, lekin detailed address nahi mil paya. Please try again."
+                );
+
+            } finally {
+
+                if (button) {
+
+                    button.disabled = false;
+
+                    button.innerHTML = `
+                        <span class="current-location-icon">◎</span>
+                        <span class="current-location-text">
+                            <strong>Use Current Location</strong>
+                            <small>Detect your location automatically</small>
+                        </span>
+                        <span class="current-location-arrow">›</span>
+                    `;
+
+                }
+            }
+        },
+
+        function(error) {
+
+            console.error(
+                "Location Error:",
+                error
+            );
+
+            let message =
+                "Unable to get your current location.";
+
+            if (error.code === 1) {
+                message =
+                    "Location permission denied. Please allow location permission.";
+            }
+
+            if (error.code === 2) {
+                message =
+                    "Your location could not be determined. Please try again.";
+            }
+
+            if (error.code === 3) {
+                message =
+                    "Location request timed out. Please try again.";
+            }
+
+            alert(message);
+
+            if (button) {
+
+                button.disabled = false;
+
+                button.innerHTML = `
+                    <span class="current-location-icon">◎</span>
+                    <span class="current-location-text">
+                        <strong>Use Current Location</strong>
+                        <small>Detect your location automatically</small>
+                    </span>
+                    <span class="current-location-arrow">›</span>
+                `;
+
+            }
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 0
+        }
+    );
+}
+
+async function saveManualAddress() {
+
+    const input =
+        document.getElementById("manualAddress");
+
+    const manualAddress =
+        input ? input.value.trim() : "";
+
+
+    if (!manualAddress) {
+
+        alert("Please enter your address.");
+
+        return;
+    }
+
+
+    /* ===============================
+       LOGIN CHECK
+    =============================== */
+
+    const token =
+        localStorage.getItem("authToken");
+
+    if (!token) {
+
+        alert("Please login again.");
+
+        return;
+    }
+
+
+    /* ===============================
+       SAVE / UPDATE BACKEND
+    =============================== */
+
+    try {
+
+        const response = await fetch(
+            "/api/customer/address",
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+
+                body: JSON.stringify({
+
+                    // Backend will use the
+                    // logged-in account phone
+                    phone: "",
+
+                    name: "Customer",
+
+                    address:
+                        manualAddress,
+
+                    city: "",
+
+                    pincode: "",
+
+                    latitude: null,
+
+                    longitude: null
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        /* ===============================
+           BACKEND ERROR
+        =============================== */
+
+        if (!response.ok || !data.success) {
+
+            console.error(
+                "SAVE ADDRESS ERROR:",
+                data
+            );
+
+            alert(
+                data.message ||
+                "Address save nahi ho paya."
+            );
+
+            return;
+        }
+
+
+        /* ===============================
+           GET SAVED ADDRESSES
+        =============================== */
+
+        const savedAddresses =
+            getSavedAddresses();
+
+
+        /* ===============================
+           CREATE LOCAL ADDRESS
+        =============================== */
+
+        const newAddress = {
+
+            id:
+                Date.now().toString(),
+
+          
+
+            address:
+                data.address?.address ||
+                manualAddress,
+
+            name:
+                data.address?.name ||
+                "Customer",
+
+            phone:
+                data.address?.phone ||
+                "",
+
+            city:
+                data.address?.city ||
+                "",
+
+            pincode:
+                data.address?.pincode ||
+                "",
+
+            latitude:
+                data.address?.latitude ??
+                null,
+
+            longitude:
+                data.address?.longitude ??
+                null,
+
+            isDefault:
+                savedAddresses.length === 0,
+
+            createdAt:
+                new Date().toISOString()
+        };
+
+
+        /* ===============================
+           ADD TO LOCAL STORAGE
+        =============================== */
+
+        savedAddresses.push(
+            newAddress
+        );
+
+        saveSavedAddresses(
+            savedAddresses
+        );
+
+
+        /* ===============================
+           SELECT NEW ADDRESS
+        =============================== */
+
+        setSelectedAddress(
+            newAddress
+        );
+
+
+        /* ===============================
+           CLEAR INPUT
+        =============================== */
+
+        if (input) {
+            input.value = "";
+        }
+
+
+       
+
+
+        /* ===============================
+           REFRESH SAVED ADDRESSES
+        =============================== */
+
+        renderSavedAddresses();
+
+
+        /* ===============================
+           CLOSE POPUP
+        =============================== */
+
+        closeAddressPopup();
+
+
+        console.log(
+            "Address saved successfully:",
+            data.address
+        );
+
+
+        alert(
+            "Address saved successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "SAVE ADDRESS ERROR:",
+            error
+        );
+
+        alert(
+            "Address save karte waqt server error aaya."
+        );
+    }
+}
+
+/* =========================
+   ADDRESS EVENTS
+========================= */
+
+document.addEventListener("click", function(event) {
+    const addButton = event.target.closest("#addAddressBtn");
+    const savedButton = event.target.closest("#savedLocationBtn");
+    const closeButton = event.target.closest("#addressClose");
+    const overlay = event.target.closest("#addressPopupOverlay");
+    const editButton = event.target.closest(".saved-address-edit");
+    const deleteButton = event.target.closest(".saved-address-delete");
+    const card = event.target.closest(".saved-address-card");
+    const typeButton = event.target.closest(".address-type-option");
+    const saveButton = event.target.closest("#saveAddressBtn");
+
+    if (addButton || savedButton) {
+        event.preventDefault();
+        openAddressPopup();
+        return;
+    }
+
+    if (closeButton || overlay) {
+        event.preventDefault();
+        closeAddressPopup();
+        return;
+    }
+
+    if (editButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        editSavedAddress(editButton.getAttribute("data-id"));
+        return;
+    }
+
+    if (deleteButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        deleteSavedAddress(deleteButton.getAttribute("data-id"));
+        return;
+    }
+
+    if (typeButton) {
+        event.preventDefault();
+
+        document.querySelectorAll(".address-type-option").forEach(function(item) {
+            item.classList.remove("active");
+        });
+
+        typeButton.classList.add("active");
+        selectedAddressType = typeButton.getAttribute("data-type") || "Home";
+        return;
+    }
+
+    if (saveButton) {
+        event.preventDefault();
+        saveManualAddress();
+        return;
+    }
+
+    if (card) {
+        event.preventDefault();
+        selectSavedAddress(card.dataset.addressId);
+    }
+});
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        closeAddressPopup();
+    }
+});
+
+/* Initialize location UI after popup HTML has been parsed. */
+document.addEventListener("DOMContentLoaded", function() {
+    const homeType = document.querySelector('.address-type-option[data-type="Home"]');
+    if (homeType) {
+        homeType.classList.add("active");
+    }
+
+    renderSavedAddresses();
+    updateTopLocation();
+    updateAccountButton();
+});
+
+
+function updateAccountButton() {
+
+    const button =
+        document.getElementById("accountBtn");
+
+    if (!button) {
+        return;
+    }
+
+    const token =
+        localStorage.getItem("authToken");
+
+    if (token) {
+
+        button.innerHTML = "👤";
+
+    } else {
+
+        button.innerHTML = "👤 Login";
+
+    }
+}
+
+function openAccount() {
+
+    const token =
+        localStorage.getItem("authToken");
+
+    if (!token) {
+
+        window.location.href =
+            "food-login.html";
+
+        return;
+    }
+
+    window.location.href =
+        "customer-account.html";
+}
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   SAVE SAVED ADDRESSES
+========================================================= */
+
+function saveSavedAddresses(addresses) {
+
+    try {
+
+        if (!Array.isArray(addresses)) {
+            addresses = [];
+        }
+
+        localStorage.setItem(
+            "savedAddresses",
+            JSON.stringify(addresses)
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "SAVE SAVED ADDRESSES ERROR:",
+            error
+        );
+
+        return false;
+    }
+}
+
+/* =========================================================
+   UPDATE TOP LOCATION
+========================================================= */
+
+function updateTopLocation() {
+
+    const addAddressBtn =
+        document.getElementById("addAddressBtn");
+
+    const savedLocationBtn =
+        document.getElementById("savedLocationBtn");
+
+    const selectedAddressElement =
+        document.getElementById("selectedAddress");
+
+    if (!addAddressBtn || !savedLocationBtn) {
+        return;
+    }
+
+    const savedAddresses =
+        getSavedAddresses();
+
+    const selectedAddressId =
+        localStorage.getItem("selectedAddressId");
+
+    const selectedAddress =
+        savedAddresses.find(function(address) {
+            return String(address.id) ===
+                   String(selectedAddressId);
+        });
+
+    if (selectedAddress) {
+
+        if (selectedAddressElement) {
+
+            selectedAddressElement.textContent =
+                selectedAddress.address ||
+                selectedAddress.city ||
+                "Your Address";
+        }
+
+        addAddressBtn.style.display = "none";
+        savedLocationBtn.style.display = "flex";
+
+    } else {
+
+        addAddressBtn.style.display = "flex";
+        savedLocationBtn.style.display = "none";
+
+        if (selectedAddressElement) {
+            selectedAddressElement.textContent =
+                "Your Address";
+        }
+    }
+}
+
+/* =========================================================
+   SET SELECTED ADDRESS
+========================================================= */
+
+function setSelectedAddress(address) {
+
+    if (!address || typeof address !== "object") {
+        return;
+    }
+
+    const savedAddresses =
+        getSavedAddresses();
+
+    /*
+     * Address ID
+     */
+    let addressId =
+        address.id;
+
+    if (!addressId) {
+        addressId =
+            "address_" +
+            Date.now();
+    }
+
+    /*
+     * Create/update address object
+     */
+    const newAddress = {
+        ...address,
+        id: String(addressId)
+    };
+
+    /*
+     * Check whether this address already exists
+     */
+    const existingIndex =
+        savedAddresses.findIndex(function(item) {
+
+            return String(item.id) ===
+                   String(newAddress.id);
+
+        });
+
+    if (existingIndex !== -1) {
+
+        savedAddresses[existingIndex] =
+            newAddress;
+
+    } else {
+
+        savedAddresses.push(
+            newAddress
+        );
+    }
+
+    /*
+     * Save addresses
+     */
+    saveSavedAddresses(
+        savedAddresses
+    );
+
+    /*
+     * Set selected address
+     */
+    localStorage.setItem(
+        "selectedAddressId",
+        String(newAddress.id)
+    );
+
+    /*
+     * Save coordinates separately
+     * for Your Nearest 5 KM search
+     */
+    if (
+        newAddress.latitude !== undefined &&
+        newAddress.latitude !== null
+    ) {
+        localStorage.setItem(
+            "userLatitude",
+            String(newAddress.latitude)
+        );
+    }
+
+    if (
+        newAddress.longitude !== undefined &&
+        newAddress.longitude !== null
+    ) {
+        localStorage.setItem(
+            "userLongitude",
+            String(newAddress.longitude)
+        );
+    }
+
+    /*
+     * Update top location
+     */
+    updateTopLocation();
+
+    /*
+     * Refresh nearest products/restaurants
+     */
+    if (
+        typeof loadYourNearestProducts ===
+        "function"
+    ) {
+        loadYourNearestProducts();
+    }
+}
+
+/* =========================================================
+   UPDATE LOCATION BUTTONS
+========================================================= */
+
+function updateLocationButtons() {
+
+    const savedAddresses =
+        getSavedAddresses();
+
+    const selectedAddressId =
+        localStorage.getItem("selectedAddressId");
+
+    const selectedAddress =
+        savedAddresses.find(function(address) {
+            return String(address.id) ===
+                   String(selectedAddressId);
+        });
+
+    /*
+     * Update top location
+     */
+    if (typeof updateTopLocation === "function") {
+        updateTopLocation();
+    }
+
+    /*
+     * Update saved address list
+     */
+    if (typeof renderSavedAddresses === "function") {
+        renderSavedAddresses();
+    }
+
+    /*
+     * Update current selected address text
+     */
+    const selectedAddressElement =
+        document.getElementById("selectedAddress");
+
+    if (selectedAddressElement) {
+
+        if (selectedAddress) {
+
+            selectedAddressElement.textContent =
+                selectedAddress.address ||
+                selectedAddress.city ||
+                "Your Address";
+
+        } else {
+
+            selectedAddressElement.textContent =
+                "Your Address";
+        }
+    }
+}
+
+</script>
+
+
+
+<!-- =========================
+     ADDRESS POPUP
+========================= -->
+
+<div class="address-popup" id="addressPopup">
+
+    <div class="address-popup-overlay" id="addressPopupOverlay"></div>
+
+    <div class="address-popup-box">
+
+        <div class="address-popup-header">
+
+            <div>
+                <h3>Add Address</h3>
+                <p>Choose your delivery location</p>
+            </div>
+
+           <button
+              type="button"
+              class="address-close"
+              id="addressClose"
+              onclick="closeAddressPopup()"
+            >
+               ×
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+          SAVED ADDRESS LIST
+            ========================= -->
+
+         <div
+             id="savedAddressesList"
+             class="saved-addresses-list"
+         ></div>
+
+
+        <!-- CURRENT LOCATION -->
+
+        <button
+          type="button"
+           class="current-location-btn"
+           id="currentLocationBtn"
+           onclick="useCurrentLocation()"
+        >
+
+            <span class="current-location-icon">
+                ◎
+            </span>
+
+            <span class="current-location-text">
+
+
+                <strong>
+                    Use Current Location
+                </strong>
+
+                <small>
+                    Detect your location automatically
+                </small>
+
+            </span>
+
+            <span class="current-location-arrow">
+                ›
+            </span>
+
+        </button>
+
+
+        <div class="address-or">
+            OR
+        </div>
+
+
+        <!-- MANUAL ADDRESS -->
+
+        <div class="manual-address">
+
+            <label for="manualAddress">
+                Enter your address
+            </label>
+
+
+            <!-- =========================
+     ADDRESS TYPE
+========================= -->
+
+<div class="address-type-section">
+
+   
+
+   
+
+</div>
+
+            <textarea
+                id="manualAddress"
+                rows="3"
+                placeholder="House no, street, area, city..."
+            ></textarea>
+
+        </div>
+
+
+        <!-- SAVE -->
+
+        <button
+            type="button"
+            class="save-address-btn"
+            id="saveAddressBtn"
+        >
+            Save Address
+        </button>
+
+    </div>
+
+
+
+
+    
+
+</div>
+
+
+
+
+
+    </div>
+
+    
+<!-- =========================================================
+     YOUR NEAREST PRODUCT DETAILS POPUP
+========================================================= -->
+
+<div id="nearestProductDetailsPopup" class="nearest-product-popup">
+
+    <div class="nearest-product-popup-box">
+
+        <!-- Close Button -->
+        <button
+            type="button"
+            class="nearest-popup-close"
+            onclick="closeNearestProductDetails()"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+
+        <!-- Product Image -->
+        <div class="nearest-details-image-box">
+
+            <img
+                id="nearestDetailsImage"
+                src="images/food-placeholder.jpg"
+                alt="Product"
+            >
+
+        </div>
+
+
+        <!-- Product Content -->
+        <div class="nearest-details-content">
+
+            <!-- Product Name -->
+            <h2 id="nearestDetailsName">
+                Product
+            </h2>
+
+
+            <!-- Price -->
+            <div class="nearest-details-price">
+
+                <span id="nearestDetailsPrice">
+                    ₹0
+                </span>
+
+            </div>
+
+
+            <!-- Category / Veg / Time -->
+            <div class="nearest-details-badges">
+
+                <span id="nearestDetailsCategory">
+                    Other
+                </span>
+
+                <span id="nearestDetailsVeg">
+                    Veg
+                </span>
+
+                <span id="nearestDetailsTime">
+                    20 min
+                </span>
+
+            </div>
+
+
+            <!-- Distance -->
+            <div class="nearest-details-row">
+
+                <span class="nearest-details-label">
+                    📍 Distance
+                </span>
+
+                <span
+                    id="nearestDetailsDistance"
+                    class="nearest-details-value"
+                >
+                    0.0 km
+                </span>
+
+            </div>
+
+
+            <!-- Product Description -->
+            <div class="nearest-details-section">
+
+                <h3>
+                    Product Details
+                </h3>
+
+                <p id="nearestDetailsDescription">
+                    No description available.
+                </p>
+
+            </div>
+
+
+            <!-- Shop Details -->
+            <div class="nearest-details-shop">
+
+                <h3>
+                    Shop Details
+                </h3>
+
+
+                <div class="nearest-shop-detail-row">
+
+                    <span class="nearest-shop-icon">
+                        🏪
+                    </span>
+
+
+                    <div>
+
+                        <strong id="nearestDetailsShopName">
+                            Nearby Shop
+                        </strong>
+
+
+                        <p id="nearestDetailsShopAddress">
+                            Address not available
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Shop Distance -->
+                <div
+                    id="nearestDetailsShopDistance"
+                    class="nearest-shop-distance"
+                >
+                    0.0 km from your location
+                </div>
+
+
+                <!-- Call Shop -->
+                <button
+                    type="button"
+                    id="nearestCallShopBtn"
+                    class="nearest-call-shop-btn"
+                >
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    Call Shop
+
+                </button>
+
+            </div>
+
+
+            <!-- Add To Cart -->
+            <button
+                type="button"
+                id="nearestAddToCartBtn"
+                class="nearest-add-cart-btn"
+            >
+
+                <i class="fa-solid fa-cart-plus"></i>
+
+                Add to Cart
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+/* =========================================================
+   YOUR NEAREST PRODUCT DETAILS POPUP
+========================================================= */
+
+.nearest-product-popup {
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 15px;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    z-index: 99999;
+
+}
+
+
+.nearest-product-popup.active {
+
+    display: flex;
+
+}
+
+
+/* Popup Box */
+
+.nearest-product-popup-box {
+
+    position: relative;
+
+    width: 100%;
+
+    max-width: 480px;
+
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.30);
+
+    animation:
+        nearestPopupShow
+        0.25s
+        ease;
+
+}
+
+
+/* Popup Animation */
+
+@keyframes nearestPopupShow {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(30px)
+            scale(0.96);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* Close Button */
+
+.nearest-popup-close {
+
+    position: absolute;
+
+    top: 12px;
+    right: 12px;
+
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    color: #ffffff;
+
+    font-size: 28px;
+
+    line-height: 38px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    z-index: 10;
+
+}
+
+
+/* Product Image */
+
+.nearest-details-image-box {
+
+    width: 100%;
+
+    height: 240px;
+
+    overflow: hidden;
+
+    background: #f5f5f5;
+
+}
+
+
+.nearest-details-image-box img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+}
+
+
+/* Content */
+
+.nearest-details-content {
+
+    padding: 20px;
+
+}
+
+
+.nearest-details-content h2 {
+
+    margin: 0 0 6px;
+
+    font-size: 23px;
+
+    line-height: 1.3;
+
+    color: #222222;
+
+}
+
+
+/* Price */
+
+.nearest-details-price {
+
+    margin-bottom: 14px;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    color: #e23744;
+
+}
+
+
+/* Badges */
+
+.nearest-details-badges {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.nearest-details-badges span {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    background: #f3f4f6;
+
+    color: #333333;
+
+    font-size: 13px;
+
+}
+
+
+/* Distance Row */
+
+.nearest-details-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 12px 0;
+
+    border-top: 1px solid #eeeeee;
+
+    border-bottom: 1px solid #eeeeee;
+
+}
+
+
+.nearest-details-label {
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #333333;
+
+}
+
+
+.nearest-details-value {
+
+    font-size: 14px;
+
+    color: #666666;
+
+}
+
+
+/* Product Details */
+
+.nearest-details-section {
+
+    margin-top: 18px;
+
+}
+
+
+.nearest-details-section h3 {
+
+    margin: 0 0 8px;
+
+    font-size: 17px;
+
+    color: #222222;
+
+}
+
+
+.nearest-details-section p {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    color: #666666;
+
+}
+
+
+/* Shop */
+
+.nearest-details-shop {
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border-radius: 14px;
+
+    background: #f8f9fa;
+
+}
+
+
+.nearest-details-shop h3 {
+
+    margin: 0 0 12px;
+
+    font-size: 17px;
+
+    color: #222222;
+
+}
+
+
+.nearest-shop-detail-row {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+}
+
+
+.nearest-shop-icon {
+
+    flex: 0 0 40px;
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    font-size: 20px;
+
+}
+
+
+.nearest-shop-detail-row strong {
+
+    display: block;
+
+    font-size: 15px;
+
+    color: #222222;
+
+}
+
+
+.nearest-shop-detail-row p {
+
+    margin: 4px 0 0;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    color: #666666;
+
+}
+
+
+.nearest-shop-distance {
+
+    margin-top: 10px;
+
+    font-size: 13px;
+
+    color: #777777;
+
+}
+
+
+/* Call Shop */
+
+.nearest-call-shop-btn {
+
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #f1f5f9;
+
+    color: #222222;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.nearest-call-shop-btn i {
+
+    margin-right: 7px;
+
+}
+
+
+/* Add To Cart */
+
+.nearest-add-cart-btn {
+
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #e23744;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.nearest-add-cart-btn i {
+
+    margin-right: 7px;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .nearest-product-popup {
+
+        padding: 8px;
+
+        align-items: flex-end;
+
+    }
+
+
+    .nearest-product-popup-box {
+
+        max-height: 94vh;
+
+        border-radius:
+            20px
+            20px
+            0
+            0;
+
+    }
+
+
+    .nearest-details-image-box {
+
+        height: 210px;
+
+    }
+
+
+    .nearest-details-content {
+
+        padding: 17px;
+
+    }
+
+
+    .nearest-details-content h2 {
+
+        font-size: 20px;
+
+    }
+
+}
+
+</style>
+    
+
+
+    
+
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurant Menu</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        .header {
+            background: #e23744;
+            color: white;
+            padding: 16px;
+        }
+
+        .header h2 {
+            font-size: 21px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .restaurant-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .restaurant-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .restaurant-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .products-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0 12px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .description {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .category {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .price {
+            color: #e23744;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .food-type {
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        .empty {
+            background: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            color: #777;
+        }
+
+        
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h2>🍽️ Restaurant Menu</h2>
+    </div>
+
+    <div class="container">
+
+        <div id="restaurantBox">
+            Loading restaurant...
+        </div>
+
+        <div class="products-title">
+            🍔 Food Menu
+        </div>
+
+        <div id="productsList">
+            Loading products...
+        </div>
+
+    </div>
+
+
+    <script>
+
+        async function loadRestaurantMenu() {
+
+            try {
+
+                const params =
+                    new URLSearchParams(window.location.search);
+
+                const restaurantId =
+                    params.get("restaurantId");
+
+                if (!restaurantId) {
+
+                    throw new Error(
+                        "Restaurant ID missing."
+                    );
+                }
+
+
+                const response =
+                    await fetch(
+                        "/api/products/restaurant/" +
+                        restaurantId
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load menu."
+                    );
+                }
+
+
+                const restaurant =
+                    data.restaurant;
+
+                const products =
+                    data.products || [];
+
+
+                // Restaurant information
+
+                document.getElementById(
+                    "restaurantBox"
+                ).innerHTML = `
+
+                    <div class="restaurant-card">
+
+                        <div class="restaurant-name">
+                            🍽️ ${restaurant.name}
+                        </div>
+
+                        <div class="restaurant-info">
+                            📍 ${restaurant.address || "-"}
+                        </div>
+
+                        <div class="restaurant-info">
+                            🏙️ ${restaurant.city || "-"}
+                        </div>
+
+                        <div class="restaurant-info">
+                            🍴 ${restaurant.category || "-"}
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                const productsList =
+                    document.getElementById(
+                        "productsList"
+                    );
+
+
+                if (products.length === 0) {
+
+                    productsList.innerHTML = `
+
+                        <div class="empty">
+                            🍔 No food products available.
+                        </div>
+
+                    `;
+
+                    return;
+                }
+
+
+                productsList.innerHTML =
+                    products.map(product => {
+
+                        return `
+
+                            <div class="product">
+
+                                ${
+                                    product.image
+                                    ? `
+                                        <img
+                                            src="${product.image}"
+                                            onerror="
+                                                this.style.display='none';
+                                            "
+                                        >
+                                    `
+                                    : ""
+                                }
+
+                                <div class="product-name">
+                                    ${product.name}
+                                </div>
+
+                                <div class="description">
+                                    ${
+                                        product.description ||
+                                        "No description"
+                                    }
+                                </div>
+
+                                <div class="category">
+                                    <b>Category:</b>
+                                    ${product.category || "-"}
+                                </div>
+
+                                <div class="price">
+                                    ₹${product.price}
+                                </div>
+
+                                <div class="food-type">
+
+                                    ${
+                                        product.isVeg
+                                        ? "🥬 Vegetarian"
+                                        : "🍗 Non-Vegetarian"
+                                    }
+
+                                </div>
+
+                                <button
+    onclick="addToCart('${product._id}')"
+    style="
+        width:100%;
+        margin-top:12px;
+        padding:12px;
+        border:none;
+        border-radius:8px;
+        background:#e23744;
+        color:white;
+        font-weight:bold;
+        cursor:pointer;
+    "
+>
+    🛒 Add to Cart
+</button>
+
+                            </div>
+
+                        `;
+
+                    }).join("");
+
+
+            } catch (error) {
+
+                console.error(
+                    "Restaurant Menu Error:",
+                    error
+                );
+
+                document.getElementById(
+                    "productsList"
+                ).innerHTML = `
+
+                    <div class="empty">
+                        ❌ ${error.message}
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        async function addToCart(productId) {
+
+    try {
+
+        const token =
+            localStorage.getItem("authToken");
+
+        if (!token) {
+            alert("Please login first.");
+            return;
+        }
+
+        const response = await fetch(
+            "/api/cart/add",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+
+                body: JSON.stringify({
+                    productId: productId,
+                    quantity: 1
+                })
+            }
+        );
+
+        const data =
+            await response.json();
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message ||
+                "Failed to add product to cart."
+            );
+        }
+
+        alert("🛒 Added to cart successfully.");
+
+    } catch (error) {
+
+        console.error(
+            "Add To Cart Error:",
+            error
+        );
+
+        alert(error.message);
+    }
+}
+
+
+        loadRestaurantMenu();
+
+    </script>
+
+</body>
+
+</html>

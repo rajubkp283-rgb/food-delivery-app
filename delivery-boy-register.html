@@ -1,0 +1,965 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Delivery Boy Registration</title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET + SCROLLBAR
+        ===================================================== */
+
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+            font-family:Arial,sans-serif;
+        }
+
+        html,
+        body{
+
+            width:100%;
+            min-height:100%;
+
+            background:#090d20;
+
+            scrollbar-width:none;
+            -ms-overflow-style:none;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar{
+
+            display:none;
+            width:0;
+        }
+
+
+        /* =====================================================
+           BODY
+        ===================================================== */
+
+        body{
+
+            min-height:100vh;
+            min-height:100dvh;
+
+            display:flex;
+
+            align-items:flex-start;
+            justify-content:center;
+
+            padding:14px;
+
+            color:#fff;
+
+            background:
+                radial-gradient(
+                    circle at 50% -5%,
+                    rgba(54,87,143,.30),
+                    transparent 38%
+                ),
+                linear-gradient(
+                    180deg,
+                    #080c1b 0%,
+                    #0b1122 100%
+                );
+        }
+
+
+        /* =====================================================
+           REGISTRATION CARD
+        ===================================================== */
+
+        .container{
+
+            width:100%;
+
+            max-width:430px;
+
+            margin:8px auto;
+
+            padding:25px 18px 22px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #101a30 0%,
+                    #0b1224 100%
+                );
+
+            border:1px solid rgba(54,87,143,.65);
+
+            border-radius:22px;
+
+            position:relative;
+
+            overflow:hidden;
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.45),
+                0 0 35px rgba(54,87,143,.10);
+        }
+
+
+        /* top shine */
+
+        .container::before{
+
+            content:"";
+
+            position:absolute;
+
+            top:0;
+            left:12%;
+
+            width:76%;
+            height:1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(130,170,230,.75),
+                    transparent
+                );
+        }
+
+
+        /* =====================================================
+           LOGO
+        ===================================================== */
+
+        .logo{
+
+            width:70px;
+            height:70px;
+
+            margin:0 auto 16px;
+
+            display:flex;
+
+            align-items:center;
+            justify-content:center;
+
+            border-radius:20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #1a2c4d,
+                    #10192e
+                );
+
+            border:1px solid #36578f;
+
+            font-size:33px;
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,.35),
+                inset 0 1px 0 rgba(255,255,255,.05);
+        }
+
+
+        /* =====================================================
+           HEADING
+        ===================================================== */
+
+        h2{
+
+            text-align:center;
+
+            color:#ffffff;
+
+            font-size:24px;
+
+            font-weight:800;
+
+            line-height:1.25;
+
+            letter-spacing:-.3px;
+
+            margin-bottom:7px;
+        }
+
+
+        .subtitle{
+
+            text-align:center;
+
+            color:#8799b8;
+
+            font-size:12.5px;
+
+            line-height:1.5;
+
+            margin-bottom:23px;
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        .message{
+
+            display:none;
+
+            margin-bottom:15px;
+
+            padding:11px 12px;
+
+            border-radius:10px;
+
+            font-size:12px;
+
+            line-height:1.45;
+
+            text-align:center;
+
+            border:1px solid transparent;
+        }
+
+
+        .success{
+
+            display:block;
+
+            background:rgba(34,197,94,.12);
+
+            color:#4ade80;
+
+            border-color:rgba(74,222,128,.20);
+        }
+
+
+        .error{
+
+            display:block;
+
+            background:rgba(255,63,74,.10);
+
+            color:#ff6972;
+
+            border-color:rgba(255,63,74,.20);
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        #registerForm{
+
+            width:100%;
+        }
+
+
+        label{
+
+            display:block;
+
+            color:#d9e2f1;
+
+            font-size:12px;
+
+            font-weight:600;
+
+            margin-bottom:7px;
+        }
+
+
+        /* =====================================================
+           INPUT + SELECT
+        ===================================================== */
+
+        input,
+        select{
+
+            width:100%;
+
+            height:49px;
+
+            padding:0 13px;
+
+            margin-bottom:16px;
+
+            background:#142039;
+
+            border:1px solid #2d4167;
+
+            border-radius:11px;
+
+            outline:none;
+
+            color:#ffffff;
+
+            font-size:14px;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                box-shadow .2s ease;
+        }
+
+
+        input::placeholder{
+
+            color:#71829f;
+
+            opacity:1;
+        }
+
+
+        input:focus,
+        select:focus{
+
+            background:#172744;
+
+            border-color:#557bb8;
+
+            box-shadow:
+                0 0 0 3px rgba(72,119,190,.11);
+        }
+
+
+        select{
+
+            cursor:pointer;
+
+            appearance:auto;
+
+        }
+
+
+        select option{
+
+            background:#142039;
+
+            color:#ffffff;
+        }
+
+
+        /* =====================================================
+           REGISTER BUTTON
+        ===================================================== */
+
+        button{
+
+            width:100%;
+
+            height:52px;
+
+            margin-top:2px;
+
+            border:none;
+
+            border-radius:12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff4652 0%,
+                    #e92f3d 100%
+                );
+
+            color:#ffffff;
+
+            font-size:14px;
+
+            font-weight:700;
+
+            letter-spacing:.1px;
+
+            cursor:pointer;
+
+            box-shadow:
+                0 9px 22px rgba(255,63,74,.20);
+
+            transition:
+                transform .15s ease,
+                opacity .15s ease;
+        }
+
+
+        button:hover{
+
+            opacity:.96;
+        }
+
+
+        button:active{
+
+            transform:scale(.985);
+        }
+
+
+        button:disabled{
+
+            opacity:.55;
+
+            cursor:not-allowed;
+
+            transform:none;
+        }
+
+
+        /* =====================================================
+           LOGIN LINK
+        ===================================================== */
+
+        .login-link{
+
+            margin-top:20px;
+
+            padding-top:16px;
+
+            border-top:1px solid rgba(61,82,118,.45);
+
+            text-align:center;
+
+            color:#7f91ae;
+
+            font-size:12.5px;
+
+            line-height:1.6;
+        }
+
+
+        .login-link a{
+
+            color:#ff4652;
+
+            text-decoration:none;
+
+            font-weight:700;
+
+            margin-left:3px;
+        }
+
+
+        .login-link a:active{
+
+            opacity:.7;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media(max-width:600px){
+
+            body{
+
+                align-items:flex-start;
+
+                padding:10px;
+            }
+
+            .container{
+
+                margin:5px auto;
+
+                padding:
+                    23px
+                    16px
+                    20px;
+
+                border-radius:21px;
+            }
+
+            .logo{
+
+                width:66px;
+                height:66px;
+
+                font-size:31px;
+
+                border-radius:19px;
+            }
+
+            h2{
+
+                font-size:23px;
+            }
+
+            .subtitle{
+
+                font-size:12px;
+
+                margin-bottom:21px;
+            }
+
+            input,
+            select{
+
+                height:48px;
+
+                font-size:13.5px;
+            }
+
+            button{
+
+                height:50px;
+
+                font-size:13.5px;
+            }
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media(max-width:360px){
+
+            body{
+
+                padding:8px;
+            }
+
+            .container{
+
+                padding:
+                    21px
+                    13px
+                    19px;
+
+                border-radius:19px;
+            }
+
+            .logo{
+
+                width:61px;
+                height:61px;
+
+                font-size:29px;
+
+                border-radius:18px;
+
+                margin-bottom:14px;
+            }
+
+            h2{
+
+                font-size:21px;
+            }
+
+            .subtitle{
+
+                font-size:11.5px;
+            }
+
+            input,
+            select{
+
+                height:46px;
+
+                font-size:13px;
+
+                margin-bottom:14px;
+            }
+
+            button{
+
+                height:48px;
+
+                font-size:13px;
+            }
+
+            .login-link{
+
+                font-size:12px;
+            }
+        }
+
+
+        /* =====================================================
+           VERY SMALL MOBILE
+        ===================================================== */
+
+        @media(max-width:330px){
+
+            .container{
+
+                padding-left:11px;
+                padding-right:11px;
+            }
+
+            h2{
+
+                font-size:20px;
+            }
+
+            label{
+
+                font-size:11.5px;
+            }
+        }
+
+
+        
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- LOGO -->
+
+    <div class="logo">
+        🚴
+    </div>
+
+
+    <!-- HEADER -->
+
+    <h2>
+        Become a Delivery Partner
+    </h2>
+
+
+    <div class="subtitle">
+        Register your account and start delivering
+    </div>
+
+
+    <!-- MESSAGE -->
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <!-- FORM -->
+
+    <form id="registerForm">
+
+
+        <label>
+            Full Name
+        </label>
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Enter your name"
+            required
+        >
+
+
+        <label>
+            Phone Number
+        </label>
+
+        <input
+            type="tel"
+            id="phone"
+            placeholder="Enter phone number"
+            maxlength="10"
+            required
+        >
+
+
+        <label>
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Create password"
+            required
+        >
+
+
+        <label>
+            City
+        </label>
+
+        <input
+            type="text"
+            id="city"
+            placeholder="Enter city"
+            required
+        >
+
+
+        <label>
+            Vehicle Type
+        </label>
+
+        <select
+            id="vehicleType"
+            required
+        >
+
+            <option value="">
+                Select vehicle
+            </option>
+
+            <option value="Bike">
+                Bike
+            </option>
+
+            <option value="Scooter">
+                Scooter
+            </option>
+
+            <option value="Cycle">
+                Cycle
+            </option>
+
+            <option value="Other">
+                Other
+            </option>
+
+        </select>
+
+
+        <label>
+            Vehicle Number
+        </label>
+
+        <input
+            type="text"
+            id="vehicleNumber"
+            placeholder="Example: BR01AB1234"
+        >
+
+
+        <button type="submit">
+            Create Delivery Account
+        </button>
+
+
+    </form>
+
+
+    <!-- LOGIN -->
+
+    <div class="login-link">
+
+        Already registered?
+
+        <a href="delivery-boy-login.html">
+            Login
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+const form =
+    document.getElementById(
+        "registerForm"
+    );
+
+
+const messageBox =
+    document.getElementById(
+        "message"
+    );
+
+
+form.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        messageBox.className =
+            "message";
+
+        messageBox.style.display =
+            "none";
+
+
+        const name =
+            document
+            .getElementById("name")
+            .value
+            .trim();
+
+
+        const phone =
+            document
+            .getElementById("phone")
+            .value
+            .trim();
+
+
+        const password =
+            document
+            .getElementById("password")
+            .value;
+
+
+        const city =
+            document
+            .getElementById("city")
+            .value
+            .trim();
+
+
+        const vehicleType =
+            document
+            .getElementById("vehicleType")
+            .value;
+
+
+        const vehicleNumber =
+            document
+            .getElementById("vehicleNumber")
+            .value
+            .trim();
+
+
+        if(phone.length !== 10){
+
+            messageBox.textContent =
+                "Please enter a valid 10 digit phone number.";
+
+            messageBox.className =
+                "message error";
+
+            return;
+        }
+
+
+        try{
+
+
+            const response =
+                await fetch(
+                    "/api/delivery-boys/register",
+                    {
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                            "application/json"
+                        },
+
+                        body:JSON.stringify({
+
+                            name,
+
+                            phone,
+
+                            password,
+
+                            city,
+
+                            vehicleType,
+
+                            vehicleNumber
+
+                        })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if(
+                !response.ok ||
+                !data.success
+            ){
+
+                throw new Error(
+                    data.message ||
+                    "Registration failed"
+                );
+            }
+
+
+            messageBox.textContent =
+                data.message ||
+                "Registration successful. Please wait for admin approval.";
+
+
+            messageBox.className =
+                "message success";
+
+
+            form.reset();
+
+
+        }
+        catch(error){
+
+
+            console.error(
+                "Delivery Boy Registration Error:",
+                error
+            );
+
+
+            messageBox.textContent =
+                error.message;
+
+
+            messageBox.className =
+                "message error";
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

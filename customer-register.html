@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>FoodExpress - Register</title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html {
+            background: #090d20;
+        }
+
+
+        body {
+
+            width: 100%;
+
+            min-height: 100dvh;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    rgba(61, 94, 150, 0.18),
+                    transparent 35%
+                ),
+                #090d20;
+
+            color: #ffffff;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           MAIN APP
+        ===================================================== */
+
+        .app-container {
+
+            width: 100%;
+
+            max-width: 500px;
+
+            min-height: 100dvh;
+
+            margin: 0 auto;
+
+            background: #0b1224;
+
+            border-left:
+                1px solid rgba(92,125,180,.75);
+
+            border-right:
+                1px solid rgba(92,125,180,.75);
+
+            border-bottom:
+                1px solid rgba(92,125,180,.75);
+
+            box-shadow:
+                0 0 35px rgba(71,115,190,.14);
+
+            overflow: hidden;
+        }
+
+
+        /* =====================================================
+           FOOD IMAGE SLIDER
+        ===================================================== */
+
+        .hero-slider {
+
+            position: relative;
+
+            width: 100%;
+
+            height: 220px;
+
+            overflow: hidden;
+
+            background: #070b17;
+        }
+
+
+        .slides {
+
+            display: flex;
+
+            width: 500%;
+
+            height: 100%;
+
+            animation:
+                autoSlide 18s infinite;
+        }
+
+
+        .slide {
+
+            width: 20%;
+
+            height: 100%;
+
+            flex-shrink: 0;
+
+            overflow: hidden;
+            
+        }
+
+
+        .slide img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+            filter:
+                brightness(.72)
+                saturate(1.12);
+        }
+
+
+        .slide::after {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(0,0,0,.08),
+                    rgba(0,0,0,.20),
+                    rgba(7,13,28,.72)
+                );
+        }
+
+
+        /* =====================================================
+           SLIDER TEXT
+        ===================================================== */
+
+        .hero-content {
+
+            position: absolute;
+
+            left: 24px;
+
+            top: 42px;
+
+            z-index: 5;
+
+            max-width: 270px;
+        }
+
+
+        .hero-content h1 {
+
+            font-size: 32px;
+
+            line-height: 1.05;
+
+            font-weight: 900;
+
+            margin-bottom: 8px;
+
+            color: #ffffff;
+
+            text-shadow:
+                0 3px 12px rgba(0,0,0,.50);
+        }
+
+
+        .hero-content h1 span {
+
+            color: #ff3f4a;
+        }
+
+
+        .hero-content p {
+
+            font-size: 13px;
+
+            line-height: 1.45;
+
+            color: #dce6f7;
+
+            text-shadow:
+                0 2px 8px rgba(0,0,0,.55);
+        }
+
+
+
+        
+
+
+        
+
+
+        /* =====================================================
+           REGISTER SECTION
+        ===================================================== */
+
+        .register-section {
+
+            position: relative;
+
+            z-index: 10;
+
+            margin-top: -19px;
+
+            padding:
+                0 24px 25px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #0b1224 0%,
+                    #0b1224 80%,
+                    #0a1122 100%
+                );
+
+            box-shadow:
+                0 -15px 35px
+                rgba(20,65,130,.20);
+        }
+
+
+        /* =====================================================
+           LOGO
+        ===================================================== */
+
+        .logo {
+
+            text-align: center;
+
+            font-size: 31px;
+
+            font-weight: 900;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 4px;
+        }
+
+
+        .logo .food {
+
+            color: #ffffff;
+        }
+
+
+        .logo .express {
+
+            color: #ff3f4a;
+        }
+
+
+        /* =====================================================
+           WELCOME
+        ===================================================== */
+
+        .welcome {
+
+            text-align: center;
+
+            margin-bottom: 18px;
+        }
+
+
+        .welcome h2 {
+
+            font-size: 22px;
+
+            line-height: 1.2;
+
+            margin-bottom: 5px;
+
+            color: #ffffff;
+        }
+
+
+        .welcome p {
+
+            font-size: 12px;
+
+            line-height: 1.45;
+
+            color: #8fa2c2;
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-group {
+
+            position: relative;
+
+            margin-bottom: 11px;
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 16px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            z-index: 3;
+
+            font-size: 17px;
+        }
+
+
+        .form-group input {
+
+            width: 100%;
+
+            height: 52px;
+
+            padding:
+                0 45px;
+
+            border-radius: 14px;
+
+            border:
+                1px solid #355482;
+
+            outline: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #101d36,
+                    #12223f
+                );
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            transition: .2s ease;
+
+            box-shadow:
+                inset 0 0 0 1px
+                rgba(255,255,255,.015);
+        }
+
+
+        .form-group input::placeholder {
+
+            color: #8fa7ce;
+        }
+
+
+        .form-group input:focus {
+
+            border-color: #4e83d4;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(65,117,194,.13),
+
+                0 8px 20px
+                rgba(0,0,0,.14);
+        }
+
+
+        /* =====================================================
+           PASSWORD EYE
+        ===================================================== */
+
+        .password-eye {
+
+            position: absolute;
+
+            right: 14px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            border: none;
+
+            background: transparent;
+
+            color: #dce8fa;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+            padding: 5px;
+
+            z-index: 5;
+        }
+
+
+        /* =====================================================
+           REGISTER BUTTON
+        ===================================================== */
+
+        .register-btn {
+
+            width: 100%;
+
+            height: 53px;
+
+            border: none;
+
+            border-radius: 14px;
+
+            margin-top: 4px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff5964,
+                    #ff3040
+                );
+
+            color: #ffffff;
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 24px
+                rgba(255,63,74,.22);
+
+            transition: .2s ease;
+        }
+
+
+        .register-btn:hover {
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 13px 28px
+                rgba(255,63,74,.28);
+        }
+
+
+        .register-btn:disabled {
+
+            opacity: .65;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        /* =====================================================
+           AGREEMENT
+        ===================================================== */
+
+        .agreement {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 9px;
+
+            margin:
+                13px 3px 15px;
+
+            color: #b6c5dd;
+
+            font-size: 10.5px;
+
+            line-height: 1.5;
+        }
+
+
+        .agreement input {
+
+            width: 17px;
+
+            height: 17px;
+
+            margin-top: 1px;
+
+            flex-shrink: 0;
+
+            accent-color: #ff3f4a;
+
+            cursor: pointer;
+        }
+
+
+        .agreement a {
+
+            color: #5e9aff;
+
+            text-decoration: none;
+
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           MESSAGES
+        ===================================================== */
+
+        .message {
+
+            display: none;
+
+            padding:
+                9px 11px;
+
+            border-radius: 9px;
+
+            margin-bottom: 10px;
+
+            font-size: 11px;
+
+            line-height: 1.4;
+        }
+
+
+        #errorMessage {
+
+            background:
+                rgba(255,63,74,.10);
+
+            border:
+                1px solid
+                rgba(255,63,74,.25);
+
+            color: #ff7981;
+        }
+
+
+        #successMessage {
+
+            background:
+                rgba(105,210,143,.10);
+
+            border:
+                1px solid
+                rgba(105,210,143,.25);
+
+            color: #69d28f;
+        }
+
+
+        /* =====================================================
+           OR
+        ===================================================== */
+
+        .or-divider {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            margin:
+                4px 0 11px;
+
+            color: #7890b5;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        .or-divider::before,
+        .or-divider::after {
+
+            content: "";
+
+            height: 1px;
+
+            flex: 1;
+
+            background:
+                rgba(92,125,180,.28);
+        }
+
+
+        /* =====================================================
+           SOCIAL BUTTONS
+        ===================================================== */
+
+        .social-row {
+
+            display: flex;
+
+            gap: 9px;
+
+            width: 100%;
+        }
+
+
+        .social-btn {
+
+            flex: 1;
+
+            height: 45px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            border: none;
+
+            transition: .2s ease;
+        }
+
+
+        .google-btn {
+
+            background: #ffffff;
+
+            border:
+                1px solid #dce3ee;
+
+            color: #17233b;
+        }
+
+
+        .facebook-btn {
+
+            background: #1877f2;
+
+            border:
+                1px solid #3287f4;
+
+            color: #ffffff;
+        }
+
+
+        .social-icon {
+
+            font-size: 17px;
+
+            font-weight: 900;
+        }
+
+
+        .google-icon {
+
+            color: #4285f4;
+        }
+
+
+        .facebook-icon {
+
+            color: #ffffff;
+        }
+
+
+        /* =====================================================
+           LOGIN LINK
+        ===================================================== */
+
+        .login-link {
+
+            text-align: center;
+
+            margin-top: 15px;
+
+            color: #8fa7cb;
+
+            font-size: 11px;
+        }
+
+
+        .login-link a {
+
+            color: #ff4a55;
+
+            font-weight: 800;
+
+            text-decoration: none;
+
+            margin-left: 4px;
+        }
+
+
+        /* =====================================================
+           BACK HOME
+        ===================================================== */
+
+        .back-link {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 8px;
+
+            color: #7fa0d1;
+
+            font-size: 10.5px;
+
+            text-decoration: none;
+        }
+
+
+        .back-link:hover {
+
+            color: #ffffff;
+        }
+
+
+        /* =====================================================
+           SLIDER ANIMATION
+        ===================================================== */
+
+        @keyframes autoSlide {
+
+            0%,
+            15% {
+                transform: translateX(0);
+            }
+
+            20%,
+            35% {
+                transform: translateX(-20%);
+            }
+
+            40%,
+            55% {
+                transform: translateX(-40%);
+            }
+
+            60%,
+            75% {
+                transform: translateX(-60%);
+            }
+
+            80%,
+            95% {
+                transform: translateX(-80%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 500px) {
+
+            body {
+                min-height: 100dvh;
+            }
+
+
+            .app-container {
+
+                width: 100%;
+
+                max-width: 500px;
+
+                min-height: 100dvh;
+
+                border-left: none;
+
+                border-right: none;
+
+                box-shadow: none;
+            }
+
+
+            .hero-slider {
+
+                height: 205px;
+            }
+
+
+            .hero-content {
+
+                left: 19px;
+
+                top: 34px;
+
+                max-width: 235px;
+            }
+
+
+            .hero-content h1 {
+
+                font-size: 28px;
+            }
+
+
+            .hero-content p {
+
+                font-size: 11px;
+            }
+
+
+
+
+
+            .register-section {
+
+                margin-top: -18px;
+
+                padding:
+                    0 18px 20px;
+            }
+
+
+            .logo {
+
+                font-size: 29px;
+            }
+
+
+            .welcome {
+
+                margin-bottom: 15px;
+            }
+
+
+            .welcome h2 {
+
+                font-size: 21px;
+            }
+
+
+            .welcome p {
+
+                font-size: 11px;
+            }
+
+
+            .form-group {
+
+                margin-bottom: 9px;
+            }
+
+
+            .form-group input {
+
+                height: 49px;
+
+                border-radius: 13px;
+
+                font-size: 12px;
+            }
+
+
+            .input-icon {
+
+                left: 15px;
+
+                font-size: 16px;
+            }
+
+
+            .password-eye {
+
+                right: 13px;
+
+                font-size: 17px;
+            }
+
+
+            .register-btn {
+
+                height: 49px;
+
+                border-radius: 13px;
+
+                font-size: 15px;
+            }
+
+
+            .agreement {
+
+                margin:
+                    10px 2px 12px;
+
+                font-size: 9.5px;
+
+                gap: 7px;
+            }
+
+
+            .agreement input {
+
+                width: 16px;
+
+                height: 16px;
+            }
+
+
+            .social-btn {
+
+                height: 42px;
+
+                border-radius: 11px;
+
+                font-size: 10px;
+            }
+
+
+            .login-link {
+
+                margin-top: 12px;
+
+                font-size: 13.5px;
+            }
+
+
+            .back-link {
+
+                margin-top: 7px;
+
+                font-size: 13px;
+            }
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 360px) {
+
+            .hero-slider {
+
+                height: 190px;
+            }
+
+
+            .hero-content {
+
+                left: 16px;
+
+                top: 30px;
+            }
+
+
+            .hero-content h1 {
+
+                font-size: 25px;
+            }
+
+
+            .hero-content p {
+
+                font-size: 10px;
+            }
+
+
+            .register-section {
+
+                padding-left: 15px;
+
+                padding-right: 15px;
+            }
+
+
+            .logo {
+
+                font-size: 27px;
+            }
+
+
+            .welcome h2 {
+
+                font-size: 20px;
+            }
+
+
+            .social-btn {
+
+                font-size: 9px;
+            }
+        }
+
+        /* =========================================
+   MOBILE FULL SCREEN FIX
+========================================= */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+}
+
+body {
+    min-height: 100dvh;
+    height: 100dvh;
+}
+
+/* Main app always fits viewport */
+.app-container {
+    width: 100%;
+    max-width: 500px;
+
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+
+    margin: 0 auto;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* Slider */
+.hero-slider {
+    flex: 0 0 clamp(165px, 25dvh, 210px);
+
+    height: clamp(165px, 25dvh, 210px);
+
+    min-height: 0;
+
+    overflow: hidden;
+}
+
+
+
+
+
+
+
+
+
+/* =========================================
+   VERY SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+
+    .hero-slider {
+
+        flex-basis: 175px;
+
+        height: 175px;
+
+        min-height: 175px;
+        max-height: 175px;
+    }
+
+
+
+ 
+
+    .logo {
+
+        font-size: 24px;
+    }
+
+    .welcome h2 {
+
+        font-size: 18px;
+    }
+
+    .input-group input {
+
+        height: 41px;
+        min-height: 41px;
+    }
+
+    .login-btn {
+
+        height: 41px;
+        min-height: 41px;
+    }
+
+    .social-btn {
+
+        height: 34px;
+        min-height: 34px;
+    }
+}
+
+
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="app-container">
+
+
+        <!-- =================================================
+             FOOD IMAGE SLIDER
+        ================================================== -->
+
+        <section class="hero-slider">
+
+
+            <div class="slides">
+
+
+                <div class="slide">
+
+                    <img
+                        src="images/login-food-1.jpg"
+                        alt="Delicious Food"
+                    >
+
+                </div>
+
+
+                <div class="slide">
+
+                    <img
+                        src="images/login-food-2.jpg"
+                        alt="Delicious Food"
+                    >
+
+                </div>
+
+
+                <div class="slide">
+
+                    <img
+                        src="images/login-food-3.jpg"
+                        alt="Delicious Food"
+                    >
+
+                </div>
+
+
+                <div class="slide">
+
+                    <img
+                        src="images/login-food-4.jpg"
+                        alt="Delicious Food"
+                    >
+
+                </div>
+
+
+                <div class="slide">
+
+                    <img
+                        src="images/login-food-5.jpg"
+                        alt="Delicious Food"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <!-- SLIDER TEXT -->
+
+            <div class="hero-content">
+
+                <h1>
+                    Good Food,
+                    <br>
+                    <span>Good Mood</span>
+                </h1>
+
+
+                <p>
+                    Delicious food, delivered
+                    right to your doorstep
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             CURVE
+        ================================================== -->
+
+        <div class="curve"></div>
+
+
+        <!-- =================================================
+             REGISTER SECTION
+        ================================================== -->
+
+        <main class="register-section">
+
+
+            <!-- LOGO -->
+
+            <div class="logo">
+
+                <span class="food">
+                    Food
+                </span>
+
+                <span class="express">
+                    Express
+                </span>
+
+            </div>
+
+
+            <!-- WELCOME -->
+
+            <div class="welcome">
+
+                <h2>
+                    Create Account
+                </h2>
+
+                <p>
+                    Sign up to start ordering
+                    delicious food
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 REGISTER FORM
+            ================================================== -->
+
+            <form id="registerForm">
+
+
+                <!-- CUSTOMER NAME -->
+
+                <div class="form-group">
+
+                    <span class="input-icon">
+                        👤
+                    </span>
+
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter your name"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- MOBILE NUMBER -->
+
+                <div class="form-group">
+
+                    <span class="input-icon">
+                        📱
+                    </span>
+
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="Enter mobile number"
+                        maxlength="10"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <span class="input-icon">
+                        🔒
+                    </span>
+
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Create password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        class="password-eye"
+                        id="passwordEye"
+                        onclick="togglePassword('password','passwordEye')"
+                        aria-label="Show password"
+                    >
+                        👁
+                    </button>
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="form-group">
+
+                    <span class="input-icon">
+                        🔐
+                    </span>
+
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        class="password-eye"
+                        id="confirmPasswordEye"
+                        onclick="togglePassword('confirmPassword','confirmPasswordEye')"
+                        aria-label="Show password"
+                    >
+                        👁
+                    </button>
+
+                </div>
+
+
+                <!-- REGISTER BUTTON -->
+
+                <button
+                    type="submit"
+                    class="register-btn"
+                    id="registerBtn"
+                >
+                    Create Account →
+                </button>
+
+
+                <!-- AGREEMENT -->
+
+                <label class="agreement">
+
+
+                    <input
+                        type="checkbox"
+                        id="agreement"
+                    >
+
+
+                    <span>
+
+                        I agree to the
+
+                        <a
+                            href="#"
+                            onclick="return false;"
+                        >
+                            Terms & Conditions
+                        </a>,
+
+                        <a
+                            href="#"
+                            onclick="return false;"
+                        >
+                            Privacy Policy
+                        </a>
+
+                        and
+
+                        <a
+                            href="#"
+                            onclick="return false;"
+                        >
+                            User Agreement
+                        </a>
+
+                    </span>
+
+
+                </label>
+
+
+                <!-- ERROR -->
+
+                <div
+                    id="errorMessage"
+                    class="message"
+                ></div>
+
+
+                <!-- SUCCESS -->
+
+                <div
+                    id="successMessage"
+                    class="message"
+                ></div>
+
+
+            </form>
+
+
+            <!-- =================================================
+                 OR
+            ================================================== -->
+
+            <div class="or-divider">
+                OR
+            </div>
+
+
+            <!-- =================================================
+                 SOCIAL LOGIN
+            ================================================== -->
+
+            <div class="social-row">
+
+
+                <!-- GOOGLE -->
+
+                <button
+                    type="button"
+                    class="social-btn google-btn"
+                    onclick="googleLogin()"
+                >
+
+                    <span
+                        class="social-icon google-icon"
+                    >
+                        G
+                    </span>
+
+                    Google
+
+                </button>
+
+
+                <!-- FACEBOOK -->
+
+                <button
+                    type="button"
+                    class="social-btn facebook-btn"
+                    onclick="facebookLogin()"
+                >
+
+                    <span
+                        class="social-icon facebook-icon"
+                    >
+                        f
+                    </span>
+
+                    Facebook
+
+                </button>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 LOGIN
+            ================================================== -->
+
+            <div class="login-link">
+
+                Already have an account?
+
+                <a href="food-login.html">
+                    Login
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 BACK HOME
+            ================================================== -->
+
+            <a
+                href="food-index.html"
+                class="back-link"
+            >
+                 < Try the App First
+            </a>
+
+
+        </main>
+
+
+    </div>
+
+
+    <script>
+
+
+        /* =====================================================
+           PASSWORD SHOW / HIDE
+        ===================================================== */
+
+        function togglePassword(
+            inputId,
+            eyeId
+        ) {
+
+            const password =
+                document.getElementById(inputId);
+
+            const eye =
+                document.getElementById(eyeId);
+
+
+            if (password.type === "password") {
+
+                password.type = "text";
+
+                eye.textContent = "🙈";
+
+            } else {
+
+                password.type = "password";
+
+                eye.textContent = "👁";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           GOOGLE LOGIN
+        ===================================================== */
+
+        function googleLogin() {
+
+            alert(
+                "Google Login will be connected later."
+            );
+
+        }
+
+
+        /* =====================================================
+           FACEBOOK LOGIN
+        ===================================================== */
+
+        function facebookLogin() {
+
+            alert(
+                "Facebook Login will be connected later."
+            );
+
+        }
+
+
+        /* =====================================================
+           REGISTER FORM
+        ===================================================== */
+
+        const registerForm =
+            document.getElementById("registerForm");
+
+
+        const registerBtn =
+            document.getElementById("registerBtn");
+
+
+        const errorMessage =
+            document.getElementById("errorMessage");
+
+
+        const successMessage =
+            document.getElementById("successMessage");
+
+
+        registerForm.addEventListener(
+            "submit",
+            async function(event) {
+
+
+                event.preventDefault();
+
+
+                errorMessage.style.display =
+                    "none";
+
+
+                successMessage.style.display =
+                    "none";
+
+
+                /* CUSTOMER NAME */
+
+                const name =
+                    document
+                        .getElementById("name")
+                        .value
+                        .trim();
+
+
+                /* PHONE */
+
+                const phone =
+                    document
+                        .getElementById("phone")
+                        .value
+                        .trim();
+
+
+                /* PASSWORD */
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                /* CONFIRM PASSWORD */
+
+                const confirmPassword =
+                    document
+                        .getElementById("confirmPassword")
+                        .value;
+
+
+                /* AGREEMENT */
+
+                const agreement =
+                    document
+                        .getElementById("agreement")
+                        .checked;
+
+
+                /* =================================================
+                   VALIDATION
+                ================================================== */
+
+
+                if (
+                    !name ||
+                    !phone ||
+                    !password ||
+                    !confirmPassword
+                ) {
+
+                    errorMessage.textContent =
+                        "Please fill all fields.";
+
+                    errorMessage.style.display =
+                        "block";
+
+                    return;
+                }
+
+
+                if (phone.length !== 10) {
+
+                    errorMessage.textContent =
+                        "Please enter a valid 10 digit mobile number.";
+
+                    errorMessage.style.display =
+                        "block";
+
+                    return;
+                }
+
+
+                if (password.length < 6) {
+
+                    errorMessage.textContent =
+                        "Password must be at least 6 characters.";
+
+                    errorMessage.style.display =
+                        "block";
+
+                    return;
+                }
+
+
+                if (
+                    password !==
+                    confirmPassword
+                ) {
+
+                    errorMessage.textContent =
+                        "Passwords do not match.";
+
+                    errorMessage.style.display =
+                        "block";
+
+                    return;
+                }
+
+
+                if (!agreement) {
+
+                    errorMessage.textContent =
+                        "Please accept the Terms & Conditions to continue.";
+
+                    errorMessage.style.display =
+                        "block";
+
+                    return;
+                }
+
+
+                /* =================================================
+                   DISABLE BUTTON
+                ================================================== */
+
+                registerBtn.disabled =
+                    true;
+
+
+                registerBtn.textContent =
+                    "Creating Account...";
+
+
+                /* =================================================
+                   API REQUEST
+                ================================================== */
+
+                try {
+
+
+                    const response =
+                        await fetch(
+                            "/api/auth/register",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        name:
+                                            name,
+
+                                        phone:
+                                            phone,
+
+                                        password:
+                                            password,
+
+                                        confirmPassword:
+                                            confirmPassword
+
+                                    })
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    /* =================================================
+                       CHECK RESPONSE
+                    ================================================== */
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            "Registration failed"
+                        );
+
+                    }
+
+
+                    /* =================================================
+                       SAVE TOKEN
+                    ================================================== */
+
+                    if (data.token) {
+
+                        localStorage.setItem(
+                            "authToken",
+                            data.token
+                        );
+
+                    }
+
+
+                    /* =================================================
+                       SUCCESS
+                    ================================================== */
+
+                    successMessage.textContent =
+                        "Registration successful. Redirecting...";
+
+
+                    successMessage.style.display =
+                        "block";
+
+
+                    /* =================================================
+                       REDIRECT
+                    ================================================== */
+
+                    setTimeout(
+                        function() {
+
+                            window.location.href =
+                                "food-index.html";
+
+                        },
+                        700
+                    );
+
+
+                } catch (error) {
+
+
+                    console.error(
+                        "Customer Registration Error:",
+                        error
+                    );
+
+
+                    errorMessage.textContent =
+                        error.message ||
+                        "Registration failed. Please try again.";
+
+
+                    errorMessage.style.display =
+                        "block";
+
+
+                } finally {
+
+
+                    registerBtn.disabled =
+                        false;
+
+
+                    registerBtn.textContent =
+                        "Create Account →";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

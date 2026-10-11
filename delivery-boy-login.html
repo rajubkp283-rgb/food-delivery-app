@@ -1,0 +1,779 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Delivery Boy Login</title>
+
+
+<style>
+
+/* =========================================================
+   RESET + SCROLLBAR
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+html,
+body{
+
+    width:100%;
+    min-height:100%;
+
+    background:#090d20;
+
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar{
+
+    display:none;
+    width:0;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body{
+
+    min-height:100vh;
+    min-height:100dvh;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:14px;
+
+    color:#fff;
+
+    background:
+        radial-gradient(
+            circle at 50% -5%,
+            rgba(54,87,143,.30),
+            transparent 38%
+        ),
+        linear-gradient(
+            180deg,
+            #080c1b 0%,
+            #0b1122 100%
+        );
+}
+
+
+/* =========================================================
+   LOGIN CARD
+========================================================= */
+
+.login-card{
+
+    width:100%;
+
+    max-width:430px;
+
+    padding:27px 18px 23px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #101a30 0%,
+            #0b1224 100%
+        );
+
+    border:1px solid rgba(54,87,143,.65);
+
+    border-radius:22px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.45),
+        0 0 35px rgba(54,87,143,.10);
+}
+
+
+/* top shine */
+
+.login-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:12%;
+
+    width:76%;
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(130,170,230,.75),
+            transparent
+        );
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo{
+
+    width:70px;
+    height:70px;
+
+    margin:0 auto 17px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1a2c4d,
+            #10192e
+        );
+
+    border:1px solid #36578f;
+
+    color:#fff;
+
+    font-size:33px;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+h2{
+
+    text-align:center;
+
+    color:#ffffff;
+
+    font-size:25px;
+
+    font-weight:800;
+
+    line-height:1.25;
+
+    letter-spacing:-.3px;
+
+    margin-bottom:7px;
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#8799b8;
+
+    font-size:12.5px;
+
+    line-height:1.5;
+
+    margin-bottom:25px;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.message{
+
+    display:none;
+
+    margin-bottom:15px;
+
+    padding:11px 12px;
+
+    border-radius:10px;
+
+    font-size:12px;
+
+    line-height:1.45;
+
+    text-align:center;
+
+    border:1px solid transparent;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-group{
+
+    margin-bottom:17px;
+}
+
+label{
+
+    display:block;
+
+    color:#d9e2f1;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    margin-bottom:7px;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+input{
+
+    width:100%;
+
+    height:50px;
+
+    padding:0 13px;
+
+    background:#142039;
+
+    border:1px solid #2d4167;
+
+    border-radius:11px;
+
+    outline:none;
+
+    color:#fff;
+
+    font-size:14px;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+input::placeholder{
+
+    color:#71829f;
+}
+
+input:focus{
+
+    background:#172744;
+
+    border-color:#557bb8;
+
+    box-shadow:
+        0 0 0 3px rgba(72,119,190,.11);
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
+
+button{
+
+    width:100%;
+
+    height:52px;
+
+    margin-top:3px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff4652 0%,
+            #e92f3d 100%
+        );
+
+    color:#fff;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    letter-spacing:.1px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 9px 22px rgba(255,63,74,.20);
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+}
+
+button:active{
+
+    transform:scale(.985);
+}
+
+button:disabled{
+
+    opacity:.55;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+
+/* =========================================================
+   REGISTER LINK
+========================================================= */
+
+.register-link{
+
+    margin-top:21px;
+
+    padding-top:17px;
+
+    border-top:1px solid rgba(61,82,118,.45);
+
+    text-align:center;
+
+    color:#7f91ae;
+
+    font-size:12.5px;
+
+    line-height:1.6;
+}
+
+.register-link span{
+
+    color:#ff4652;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    margin-left:3px;
+}
+
+.register-link span:active{
+
+    opacity:.7;
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:360px){
+
+    body{
+
+        padding:9px;
+    }
+
+    .login-card{
+
+        padding:
+            23px
+            14px
+            20px;
+
+        border-radius:19px;
+    }
+
+    .logo{
+
+        width:62px;
+        height:62px;
+
+        font-size:29px;
+
+        border-radius:18px;
+
+        margin-bottom:15px;
+    }
+
+    h2{
+
+        font-size:22px;
+    }
+
+    .subtitle{
+
+        font-size:12px;
+
+        margin-bottom:22px;
+    }
+
+    input{
+
+        height:47px;
+
+        font-size:13.5px;
+    }
+
+    button{
+
+        height:49px;
+
+        font-size:13.5px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media(max-width:330px){
+
+    .login-card{
+
+        padding-left:12px;
+        padding-right:12px;
+    }
+
+    h2{
+
+        font-size:21px;
+    }
+
+    .form-group{
+
+        margin-bottom:14px;
+    }
+}
+
+
+/* Remove blue tap highlight and click flash */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+button:focus,
+button:focus-visible,
+button:active,
+[role="button"],
+[role="button"]:focus,
+[role="button"]:active {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Remove default focus ring from clickable controls */
+button:focus-visible {
+    box-shadow: none !important;
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-card">
+
+
+    <div class="logo">
+        🚴
+    </div>
+
+
+    <h2>
+        Welcome Back
+    </h2>
+
+
+    <div class="subtitle">
+        Login to your delivery partner account
+    </div>
+
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <form
+        id="loginForm"
+        onsubmit="loginDeliveryBoy(event)"
+    >
+
+
+        <div class="form-group">
+
+            <label for="phone">
+                Mobile Number
+            </label>
+
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Enter mobile number"
+                maxlength="10"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter password"
+                required
+            >
+
+        </div>
+
+
+        <button
+            type="submit"
+            id="loginButton"
+        >
+            Login to Dashboard
+        </button>
+
+
+    </form>
+
+
+    <div class="register-link">
+
+        New Delivery Partner?
+
+        <span onclick="goToRegister()">
+            Register
+        </span>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+async function loginDeliveryBoy(event){
+
+    event.preventDefault();
+
+
+    const phone =
+        document
+        .getElementById("phone")
+        .value
+        .trim();
+
+
+    const password =
+        document
+        .getElementById("password")
+        .value;
+
+
+    const button =
+        document
+        .getElementById("loginButton");
+
+
+    const message =
+        document
+        .getElementById("message");
+
+
+    button.disabled=true;
+
+    button.textContent=
+        "Logging in...";
+
+
+    try{
+
+
+        const response =
+            await fetch(
+                "/api/delivery-boys/login",
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        phone,
+                        password
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            !response.ok ||
+            !data.success
+        ){
+
+            throw new Error(
+                data.message ||
+                "Login failed."
+            );
+
+        }
+
+
+        if(!data.token){
+
+            throw new Error(
+                "Server did not return a login token."
+            );
+
+        }
+
+
+        /* Save Delivery Boy JWT */
+
+        localStorage.setItem(
+            "deliveryBoyToken",
+            data.token
+        );
+
+
+        message.textContent=
+            "Login successful. Redirecting...";
+
+
+        message.style.display=
+            "block";
+
+
+        message.style.background=
+            "rgba(34,197,94,.12)";
+
+
+        message.style.color=
+            "#4ade80";
+
+
+        message.style.borderColor=
+            "rgba(74,222,128,.20)";
+
+
+        setTimeout(()=>{
+
+            window.location.href=
+                "delivery-boy.html";
+
+        },500);
+
+
+    }
+    catch(error){
+
+
+        console.error(
+            "Delivery Boy Login Error:",
+            error
+        );
+
+
+        message.textContent=
+            error.message;
+
+
+        message.style.display=
+            "block";
+
+
+        message.style.background=
+            "rgba(255,63,74,.10)";
+
+
+        message.style.color=
+            "#ff6972";
+
+
+        message.style.borderColor=
+            "rgba(255,63,74,.20)";
+
+
+    }
+    finally{
+
+
+        button.disabled=false;
+
+        button.textContent=
+            "Login to Dashboard";
+
+    }
+
+}
+
+
+function goToRegister(){
+
+    window.location.href = "delivery-boy-register.html";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

@@ -2,15 +2,40 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
     phone: {
-        type: String,
-        required: true,
-        unique: true
+    type: String,
+    required: false,
+    unique: true,
+    sparse: true
+},
+    name: {
+      type: String,
+      trim: true,
+      default: ""
     },
 
-    password: {
+    
+    email: {
         type: String,
-        required: true
+        lowercase: true,
+        trim: true,
+        unique: true,
+        sparse: true,
+        default: undefined
     },
+
+    facebookUid: {
+    type: String,
+    unique: true,
+    sparse: true,
+    default: undefined
+},
+
+
+   password: {
+    type: String,
+    required: false,
+    default: undefined
+},
 
     promoCode: {
         type: String,

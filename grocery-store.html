@@ -545,10 +545,388 @@ button:focus-visible {
     box-shadow: none !important;
 }
 
+/* GROCERY PRODUCT DETAILS POPUP */
+.product-details-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    background: rgba(2, 6, 18, 0.85);
+    backdrop-filter: blur(6px);
+}
+
+.product-details-popup.active {
+    display: flex;
+}
+
+.product-details-box {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    background: #101b31;
+    border: 1px solid #2d4167;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.product-details-box::-webkit-scrollbar {
+    display: none;
+}
+
+.product-details-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 50%;
+    background: rgba(5,10,25,.85);
+    color: #fff;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.product-details-image {
+    width: 100%;
+    height: 230px;
+    background: #202d49;
+}
+
+.product-details-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.product-details-content {
+    padding: 17px;
+}
+
+.product-details-name {
+    padding-right: 35px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.product-details-price {
+    margin-top: 7px;
+    color: #71e6a5;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.product-details-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 12px 0;
+}
+
+.product-details-badges span {
+    padding: 6px 9px;
+    border-radius: 18px;
+    background: #0b1224;
+    border: 1px solid #2d4167;
+    color: #dbe4f5;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.product-details-section {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #263858;
+}
+
+.product-details-label {
+    margin-bottom: 5px;
+    color: #91a0bb;
+    font-size: 11px;
+}
+
+.product-details-value {
+    color: #f2f5fb;
+    font-size: 13px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.product-details-add {
+    width: 100%;
+    margin-top: 17px;
+    padding: 13px;
+    border: 0;
+    border-radius: 11px;
+    background: #36578f;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+
+/* GROCERY STORE CARD - MATCH RESTAURANT CARD */
+
+.store-profile {
+    margin-top: 0;
+    padding: 12px;
+    background: #142039;
+    border: 1px solid #2d4167;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.20);
+}
+
+.store-top {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding-right: 42px;
+}
+
+.store-image {
+    width: 92px;
+    height: 92px;
+    flex: 0 0 92px;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #202d49;
+}
+
+.store-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.store-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.store-name {
+    font-size: 18px;
+    line-height: 1.25;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    overflow-wrap: anywhere;
+}
+
+.store-owner {
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: #aebbd1;
+    overflow-wrap: anywhere;
+}
+
+.store-location {
+    font-size: 11px;
+    color: #91a0bb;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.store-profile .status-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+}
+
+.store-profile .status {
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 20px;
+}
+
+.store-profile .category-badge {
+    font-size: 10px;
+    padding: 4px 7px;
+    background: #0e172b;
+    border: 1px solid #263858;
+    border-radius: 20px;
+}
+
+.store-profile .store-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-top: 12px;
+}
+
+.store-profile .detail-box {
+    min-width: 0;
+    background: #0e172b;
+    border: 1px solid #263858;
+    border-radius: 10px;
+    padding: 8px 5px;
+    text-align: center;
+}
+
+.store-profile .detail-label {
+    font-size: 9px;
+    color: #71809b;
+    margin-bottom: 3px;
+}
+
+.store-profile .detail-value {
+    font-size: 11px;
+    font-weight: 700;
+    color: #dbe4f5;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.store-profile .store-description {
+    margin-top: 11px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #9eabc1;
+}
+
+.store-call-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #36578f;
+    border-radius: 50%;
+    background: #0e172b;
+    color: #71e6a5;
+    font-size: 21px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media (max-width: 360px) {
+    .store-image {
+        width: 78px;
+        height: 78px;
+        flex-basis: 78px;
+    }
+
+    .store-name {
+        font-size: 16px;
+    }
+}
+
+
     </style>
 </head>
 
 <body>
+<!-- GROCERY PRODUCT DETAILS POPUP -->
+<div id="productDetailsPopup"
+     class="product-details-popup"
+     aria-hidden="true">
+
+    <div class="product-details-box"
+         role="dialog"
+         aria-modal="true">
+
+        <button type="button"
+                class="product-details-close"
+                onclick="closeProductDetails()"
+                aria-label="Close">
+            ×
+        </button>
+
+        <div class="product-details-image">
+            <img id="detailsProductImage"
+                 src="images/groceries.jpg"
+                 alt="Grocery product"
+                 onerror="this.onerror=null;this.src='images/groceries.jpg'">
+        </div>
+
+        <div class="product-details-content">
+
+            <div id="detailsProductName"
+                 class="product-details-name">
+                Product
+            </div>
+
+            <div id="detailsProductPrice"
+                 class="product-details-price">
+                ₹0
+            </div>
+
+            <div class="product-details-badges">
+                <span id="detailsProductCategory">Category</span>
+                <span id="detailsProductStock">Availability</span>
+            </div>
+
+            <div class="product-details-section">
+                <div class="product-details-label">Product Description</div>
+                <div id="detailsProductDescription"
+                     class="product-details-value">
+                    No description available.
+                </div>
+            </div>
+
+            <div class="product-details-section">
+                <div class="product-details-label">Brand</div>
+                <div id="detailsProductBrand"
+                     class="product-details-value">
+                    Not provided by shop.
+                </div>
+            </div>
+
+            <div class="product-details-section">
+                <div class="product-details-label">Quantity / Unit</div>
+                <div id="detailsProductQuantity"
+                     class="product-details-value">
+                    Not provided by shop.
+                </div>
+            </div>
+
+            <div class="product-details-section">
+                <div class="product-details-label">Expiry / Best Before</div>
+                <div id="detailsProductExpiry"
+                     class="product-details-value">
+                    Not provided by shop.
+                </div>
+            </div>
+
+            <div class="product-details-section">
+                <div class="product-details-label">Grocery Store</div>
+                <div id="detailsShopName"
+                     class="product-details-value">
+                    Grocery Store
+                </div>
+                <div id="detailsShopAddress"
+                     class="product-details-value">
+                </div>
+            </div>
+
+            <button type="button"
+                    id="detailsAddToCartBtn"
+                    class="product-details-add">
+                🛒 Add to Cart
+            </button>
+
+        </div>
+    </div>
+</div>
+
 
 <div class="app-container">
 
@@ -560,7 +938,7 @@ button:focus-visible {
 
             <button
                 class="back-button"
-                onclick="window.location.href='grocery.html'"
+                onclick="closeGroceryShopView()"
             >
                 ←
             </button>
@@ -800,32 +1178,131 @@ function filterProducts(category) {
 }
 
 
+
+let selectedGroceryProduct = null;
+
+/* OPEN PRODUCT DETAILS */
+function openGroceryProductDetails(product) {
+    if (!product) return;
+
+    selectedGroceryProduct = product;
+
+    const popup = document.getElementById("productDetailsPopup");
+    if (!popup) return;
+
+    document.getElementById("detailsProductImage").src =
+        product.image || "images/groceries.jpg";
+
+    document.getElementById("detailsProductName").textContent =
+        product.name || "Grocery Product";
+
+    document.getElementById("detailsProductPrice").textContent =
+        "₹" + Number(product.price || 0).toFixed(0);
+
+    document.getElementById("detailsProductCategory").textContent =
+        product.category || "Other";
+
+    document.getElementById("detailsProductStock").textContent =
+        product.isAvailable === false ? "Currently unavailable" : "Available";
+
+    document.getElementById("detailsProductDescription").textContent =
+        product.description || "No description available.";
+
+    document.getElementById("detailsProductBrand").textContent =
+        product.brand || "Not provided by shop.";
+
+    document.getElementById("detailsProductQuantity").textContent =
+        product.quantity ||
+        product.unit ||
+        product.weight ||
+        "Not provided by shop.";
+
+    document.getElementById("detailsProductExpiry").textContent =
+        product.expiryDate ||
+        product.expiry ||
+        product.bestBefore ||
+        "Not provided by shop.";
+
+    document.getElementById("detailsShopName").textContent =
+        document.getElementById("headerTitle").textContent ||
+        "Grocery Store";
+
+    const storeLocation = document.querySelector(".store-location");
+
+    document.getElementById("detailsShopAddress").textContent =
+        storeLocation ? storeLocation.textContent.trim() : "";
+
+    const addButton = document.getElementById("detailsAddToCartBtn");
+
+    addButton.disabled = product.isAvailable === false;
+    addButton.textContent =
+        product.isAvailable === false
+            ? "Currently Unavailable"
+            : "🛒 Add to Cart";
+
+    popup.classList.add("active");
+    popup.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+/* CLOSE PRODUCT DETAILS */
+function closeProductDetails() {
+    const popup = document.getElementById("productDetailsPopup");
+
+    if (popup) {
+        popup.classList.remove("active");
+        popup.setAttribute("aria-hidden", "true");
+    }
+
+    document.body.style.overflow = "";
+}
+
+/* CLOSE BY CLICKING OUTSIDE */
+document.getElementById("productDetailsPopup").addEventListener(
+    "click",
+    function (event) {
+        if (event.target === this) {
+            closeProductDetails();
+        }
+    }
+);
+
+/* CLOSE WITH ESC KEY */
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        closeProductDetails();
+    }
+});
+
+/* ADD TO CART FROM DETAILS POPUP */
+document.getElementById("detailsAddToCartBtn").addEventListener(
+    "click",
+    function () {
+        if (
+            selectedGroceryProduct &&
+            selectedGroceryProduct._id &&
+            selectedGroceryProduct.isAvailable !== false
+        ) {
+            addToCart(selectedGroceryProduct._id);
+        }
+    }
+);
+
 /* RENDER PRODUCTS */
-
 function renderProducts() {
-
     const productsContainer =
         document.getElementById("productsContainer");
 
     let products = allProducts;
 
     if (currentCategory !== "All") {
-
-        products = allProducts.filter(
-            product =>
-                String(product.category || "")
-                    .trim()
-                    .toLowerCase() ===
-                currentCategory
-                    .trim()
-                    .toLowerCase()
+        products = allProducts.filter(product =>
+            String(product.category || "").trim().toLowerCase() ===
+            currentCategory.trim().toLowerCase()
         );
-
     }
 
-
     if (!products.length) {
-
         productsContainer.innerHTML = `
             <div class="products-empty">
                 🛍️ No products found
@@ -833,90 +1310,69 @@ function renderProducts() {
                 in ${escapeHtml(currentCategory)}
             </div>
         `;
-
         return;
     }
 
+    productsContainer.innerHTML = products.map((product, index) => {
+        const image =
+              typeof product.image === "string" && product.image.trim()
+              ? product.image.trim()
+              : "images/groceries.jpg";
+        return `
+            <div class="product-card"
+                 data-product-index="${index}"
+                 style="cursor:pointer;">
 
-    productsContainer.innerHTML =
-        products.map(product => {
-
-            const image =
-                product.image &&
-                product.image.trim()
-                    ? product.image
-                    : "images/groceries.jpg";
-
-
-            return `
-
-                <div class="product-card">
-
-                    <div class="product-image">
-
-                        <img
-                            src="${escapeHtml(image)}"
-                            alt="${escapeHtml(
-                                product.name ||
-                                "Product"
-                            )}"
-                            onerror="
-                                this.src='images/groceries.jpg'
-                            "
-                        >
-
-                    </div>
-
-
-                    <div class="product-info">
-
-                        <div class="product-name">
-                            ${escapeHtml(
-                                product.name ||
-                                "Unnamed Product"
-                            )}
-                        </div>
-
-
-                        <div class="product-category">
-                            ${escapeHtml(
-                                product.category ||
-                                "Other"
-                            )}
-                        </div>
-
-
-                        <div class="product-bottom">
-
-                            <div class="product-price">
-                                ₹${Number(
-                                    product.price || 0
-                                ).toFixed(0)}
-                            </div>
-
-                            <button
-                                class="add-cart-btn"
-                                onclick="
-                                    addToCart(
-                                        '${escapeHtml(
-                                            product._id
-                                        )}'
-                                    )
-                                "
-                            >
-                                ADD
-                            </button>
-
-                        </div>
-
-                    </div>
-
+                <div class="product-image">
+                    <img
+                        src="${escapeHtml(image)}"
+                        alt="${escapeHtml(product.name || "Product")}"
+                        onerror="this.onerror=null;this.src='images/groceries.jpg'"
+                    >
                 </div>
 
-            `;
+                <div class="product-info">
+                    <div class="product-name">
+                        ${escapeHtml(product.name || "Unnamed Product")}
+                    </div>
 
-        }).join("");
+                    <div class="product-category">
+                        ${escapeHtml(product.category || "Other")}
+                    </div>
 
+                    <div class="product-bottom">
+                        <div class="product-price">
+                            ₹${Number(product.price || 0).toFixed(0)}
+                        </div>
+
+                        <button type="button" class="add-cart-btn">
+                            ADD
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    /* PRODUCT CARD CLICK EVENTS */
+    productsContainer.querySelectorAll(".product-card").forEach(card => {
+        card.addEventListener("click", function (event) {
+            const index = Number(this.dataset.productIndex);
+            const product = products[index];
+
+            if (event.target.closest(".add-cart-btn")) {
+                event.stopPropagation();
+
+                if (product && product._id) {
+                    addToCart(product._id);
+                }
+
+                return;
+            }
+
+            openGroceryProductDetails(product);
+        });
+    });
 }
 
 
@@ -1032,175 +1488,88 @@ function renderProducts() {
                       `;
 
 
-            /* PROFILE */
+           
+/* PROFILE - RESTAURANT STYLE GROCERY CARD */
 
-            storeProfile.innerHTML = `
+storeProfile.innerHTML = `
+    <div class="store-profile">
 
-                <div class="store-profile">
+        <div class="store-top">
 
-                    <div class="store-top">
+            <div class="store-image">
+                <img
+                    src="${escapeHtml(image)}"
+                    alt="${escapeHtml(store.name || "Grocery Store")}"
+                    loading="eager"
+                    onerror="this.onerror=null;this.src='images/groceries.jpg'"
+                >
+            </div>
 
-                        <div class="store-image">
+            <a
+                class="store-call-btn"
+                href="${store.phone ? `tel:${escapeHtml(String(store.phone).replace(/[^\d+]/g, ""))}` : 'javascript:void(0)'}"
+                aria-label="Call grocery store"
+                title="Call Store"
+                ${store.phone ? "" : 'onclick="event.preventDefault();alert(\'Store phone number available nahi hai.\')"'}
+            >☎</a>
 
-                            <img
-                                src="${escapeHtml(image)}"
-                                alt="${escapeHtml(
-                                    store.name ||
-                                    "Grocery Store"
-                                )}"
-                                onerror="
-                                    this.src='images/groceries.jpg'
-                                "
-                            >
+            <div class="store-info">
 
-                        </div>
-
-
-                        <div class="store-info">
-
-                            <div class="store-name">
-                                ${escapeHtml(
-                                    store.name ||
-                                    "Grocery Store"
-                                )}
-                            </div>
-
-
-                            <div class="store-owner">
-
-                                👤 Owner:
-                                ${escapeHtml(
-                                    store.ownerName ||
-                                    "Not available"
-                                )}
-
-                            </div>
-
-
-                            <div class="store-location">
-
-                                📍
-                                ${escapeHtml(location)}
-
-                            </div>
-
-
-                            <div class="status-row">
-
-                                ${status}
-
-                                <span class="category-badge">
-                                    🛒 Groceries
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="store-details">
-
-                        <div class="detail-box">
-
-                            <div class="detail-label">
-                                Rating
-                            </div>
-
-                            <div class="detail-value">
-                                ⭐ ${store.rating || "New"}
-                            </div>
-
-                        </div>
-
-
-                        <div class="detail-box">
-
-                            <div class="detail-label">
-                                Delivery
-                            </div>
-
-                            <div class="detail-value">
-                                ${store.deliveryTime || "30"} min
-                            </div>
-
-                        </div>
-
-
-                        <div class="detail-box">
-
-                            <div class="detail-label">
-                                Delivery Fee
-                            </div>
-
-                            <div class="detail-value">
-                                ₹${store.deliveryFee || "30"}
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    ${
-                        store.description
-                            ? `
-                                <div class="store-description">
-
-                                    ${escapeHtml(
-                                        store.description
-                                    )}
-
-                                </div>
-                              `
-                            : ""
-                    }
-
-
-                    <div class="contact-row">
-
-                        ${
-                            store.phone
-                                ? `
-                                    <button
-                                        class="contact-btn"
-                                        onclick="
-                                            window.location.href =
-                                            'tel:${escapeHtml(
-                                                store.phone
-                                            )}'
-                                        "
-                                    >
-                                        📞 Call Store
-                                    </button>
-                                  `
-                                : `
-                                    <button
-                                        class="contact-btn"
-                                        disabled
-                                    >
-                                        📞 Call Store
-                                    </button>
-                                  `
-                        }
-
-
-                        <button
-                            class="contact-btn"
-                            onclick="
-                                window.location.href =
-                                'grocery.html'
-                            "
-                        >
-                            🛒 All Stores
-                        </button>
-
-                    </div>
-
+                <div class="store-name">
+                    ${escapeHtml(store.name || "Grocery Store")}
                 </div>
 
-            `;
+                <div class="store-owner">
+                    👤 Owner: ${escapeHtml(store.ownerName || "Not available")}
+                </div>
+
+                <div class="store-location">
+                    📍 ${escapeHtml(location)}
+                </div>
+
+                <div class="status-row">
+                    ${status}
+                    <span class="category-badge">🛒 Groceries</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="store-details">
+
+            <div class="detail-box">
+                <div class="detail-label">Rating</div>
+                <div class="detail-value">
+                    ⭐ ${escapeHtml(store.rating || "New")}
+                </div>
+            </div>
+
+            <div class="detail-box">
+                <div class="detail-label">Delivery</div>
+                <div class="detail-value">
+                    ${escapeHtml(store.deliveryTime || 30)} min
+                </div>
+            </div>
+
+            <div class="detail-box">
+                <div class="detail-label">Delivery Fee</div>
+                <div class="detail-value">
+                    ₹${escapeHtml(store.deliveryFee ?? 30)}
+                </div>
+            </div>
+
+        </div>
+
+        ${
+            store.description
+                ? `<div class="store-description">
+                       ${escapeHtml(store.description)}
+                   </div>`
+                : ""
+        }
+
+    </div>
+`;
 
         } catch (error) {
 
@@ -1339,7 +1708,19 @@ async function addToCart(productId) {
             );
 
     }
+    
+function closeGroceryShopView() {
+    try {
+        if (window.parent && window.parent !== window) {
+            window.parent.closeShopWindow();
+            return;
+        }
+    } catch (error) {
+        console.warn("Parent shop window close nahi hua:", error);
+    }
 
+    window.location.href = "grocery.html";
+}
 
     /* START */
 

@@ -1,44 +1,69 @@
+
 const {
     registerUser,
-    loginUser
+    loginUser,
+    loginUserByEmail,
+    loginUserWithGoogle,
+    registerUserWithGoogle,
+    loginUserWithFacebook,
+    registerUserWithFacebook
 } = require("../services/authService");
 
 const authenticateToken =
     require("../middleware/authMiddleware");
 
 
+
 async function register(req, res) {
     try {
         const {
+            name,
             phone,
+            email,
             password,
             confirmPassword,
             promoCode
         } = req.body;
 
-        if (!phone || !password || !confirmPassword) {
+        if (
+            !name ||
+            !phone ||
+            !email ||
+            !password ||
+            !confirmPassword
+        ) {
             return res.status(400).json({
-                message:
-                    "Please fill in all required information"
+                message: "Please fill in all required information"
             });
         }
 
         await registerUser({
+            name,
             phone,
+            email,
             password,
             confirmPassword,
             promoCode
         });
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "Registration Successful"
         });
 
     } catch (error) {
         console.error("Registration Error:", error);
 
-        res.status(500).json({
-            message: error.message
+        const message = error.message || "Registration failed.";
+
+        const statusCode =
+            message.includes("already registered") ||
+            message.includes("do not match") ||
+            message.includes("valid email")
+                ? 400
+                : 500;
+
+        return res.status(statusCode).json({
+            message
         });
     }
 }
@@ -96,6 +121,178 @@ async function login(req, res) {
 }
 
 
+
+/* CUSTOMER EMAIL LOGIN */
+async function emailLogin(req, res) {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                message: "Please enter your email and password!"
+            });
+        }
+
+        const result = await loginUserByEmail(email, password);
+        return res.json(result);
+
+    } catch (error) {
+        console.error("Email Login Error:", error);
+        return res.status(400).json({
+            message: error.message
+        });
+    }
+}
+
+
+async function googleLogin(req, res) {
+    try {
+        const { idToken } = req.body;
+
+        if (!idToken) {
+            return res.status(400).json({
+                success: false,
+                message: "Google ID token is required."
+            });
+        }
+
+        const result = await loginUserWithGoogle(idToken);
+
+        return res.json({
+            success: true,
+            ...result
+        });
+    
+    } catch (error) {
+        console.error("Google Login Error:", error.message);
+
+        if (error.code === "USER_NOT_REGISTERED") {
+            return res.status(404).json({
+                success: false,
+                code: "USER_NOT_REGISTERED",
+                message: "Please register first."
+            });
+        }
+
+        return res.status(401).json({
+            success: false,
+            message: error.message || "Google login failed."
+        });
+    }
+
+}
+
+
+async function googleRegister(req, res) {
+    try {
+        const { idToken } = req.body;
+
+        if (!idToken) {
+            return res.status(400).json({
+                success: false,
+                message: "Google ID token is required."
+            });
+        }
+
+        const result = await registerUserWithGoogle(idToken);
+
+        return res.status(201).json({
+            success: true,
+            ...result
+        });
+
+    } catch (error) {
+        console.error(
+            "Google Registration Error:",
+            error.message
+        );
+
+        if (error.code === "USER_ALREADY_REGISTERED") {
+            return res.status(409).json({
+                success: false,
+                code: "USER_ALREADY_REGISTERED",
+                message: error.message
+            });
+        }
+
+        return res.status(400).json({
+            success: false,
+            message: error.message ||
+                "Google registration failed."
+        });
+    }
+}
+
+
+async function facebookLogin(req, res) {
+    try {
+        const { idToken } = req.body;
+
+        if (!idToken) {
+            return res.status(400).json({
+                success: false,
+                message: "Facebook ID token is required."
+            });
+        }
+
+        const result = await loginUserWithFacebook(idToken);
+
+        return res.json({ success: true, ...result });
+    } catch (error) {
+        console.error("Facebook Login Error:", error.message);
+
+        if (error.code === "USER_NOT_REGISTERED") {
+            return res.status(404).json({
+                success: false,
+                code: "USER_NOT_REGISTERED",
+                message: "Please register first."
+            });
+        }
+
+        return res.status(401).json({
+            success: false,
+            message: error.message || "Facebook login failed."
+        });
+    }
+}
+
+
+async function facebookRegister(req, res) {
+    try {
+        const { idToken } = req.body;
+
+        if (!idToken) {
+            return res.status(400).json({
+                success: false,
+                message: "Facebook ID token is required."
+            });
+        }
+
+        const result = await registerUserWithFacebook(idToken);
+
+        return res.status(201).json({
+            success: true,
+            ...result
+        });
+    } catch (error) {
+        console.error("Facebook Registration Error:", error.message);
+
+        if (error.code === "USER_ALREADY_REGISTERED") {
+            return res.status(409).json({
+                success: false,
+                code: "USER_ALREADY_REGISTERED",
+                message: error.message
+            });
+        }
+
+        return res.status(400).json({
+            success: false,
+            message: error.message || "Facebook registration failed."
+        });
+    }
+}
+
+
 /* ==========================================
    CUSTOMER PROFILE
    ========================================== */
@@ -139,5 +336,10 @@ async function profile(req, res) {
 module.exports = {
     register,
     login,
+    emailLogin,
+    googleLogin,
+    googleRegister,
+    facebookLogin,
+    facebookRegister,
     profile
 };

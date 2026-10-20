@@ -26,15 +26,18 @@ const getRestaurantProductsForCustomer = async (req, res) => {
       isAvailable: true,
     }).sort({ category: 1, createdAt: -1 });
 
+    
+
     res.json({
-      success: true,
-      restaurant: {
-        id: restaurant._id,
-        name: restaurant.name,
-      },
-      count: products.length,
-      products,
-    });
+     success: true,
+     restaurant: {
+       id: restaurant._id,
+       name: restaurant.name,
+       phone: restaurant.phone || ""
+     },
+     count: products.length,
+     products,
+   });
   } catch (error) {
     console.error("CUSTOMER PRODUCTS ERROR:", error);
 
@@ -142,34 +145,44 @@ const getNearestProducts = async (req, res) => {
       });
     }
 
-    // -------------------------------
-    // Validate category
-    // -------------------------------
-    if (!category) {
-      return res.status(400).json({
-        success: false,
-        message: "Category is required"
-      });
-    }
-
-    const normalizedCategory =
-      category.toLowerCase().trim();
+    if (!category || typeof category !== "string") {
+  return res.status(400).json({
+    success: false,
+    message: "Category is required"
+  });
+}
+    const normalizedCategory = category.toLowerCase().trim();
 
     let categoryRegex;
 
     if (normalizedCategory === "restaurant") {
       categoryRegex = /^restaurant$/i;
+
     } else if (
       normalizedCategory === "grocery" ||
       normalizedCategory === "groceries"
     ) {
       categoryRegex = /^groceries?$/i;
+
+    } else if (
+      normalizedCategory === "beauty" ||
+      normalizedCategory === "beauty & personal care" ||
+      normalizedCategory === "beauty and personal care"
+    ) {
+      categoryRegex =
+        /^(beauty|beauty & personal care|beauty and personal care)$/i;
+
+    } else if (normalizedCategory === "electronics") {
+      categoryRegex = /^electronics$/i;
+
     } else {
       return res.status(400).json({
         success: false,
-        message: "Category must be Restaurant or Grocery"
+        message:
+          "Category must be Restaurant, Grocery, Beauty & Personal Care, or Electronics"
       });
     }
+
 
     // -------------------------------
     // Find approved shops
@@ -185,6 +198,7 @@ const getNearestProducts = async (req, res) => {
         $ne: null
       }
     }).lean();
+
 
     // -------------------------------
     // Calculate distance

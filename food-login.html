@@ -604,14 +604,30 @@ body{
    SOCIAL
 ================================ */
 
-.social-buttons{
-    display:grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap:10px;
+.social-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
 }
+
+.social-btn {
+    min-width: 0;
+    width: 100%;
+    padding: 10px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 13px;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.social-icon {
+    flex-shrink: 0;
+}
+
 
 .social-btn{
     height:43px;
@@ -649,6 +665,20 @@ body{
 
     border-color:#3287f4;
 }
+
+.email-btn {
+    background: #172b49;
+    border-color: #45658f;
+    color: #ffffff;
+}
+
+.email-btn .social-icon {
+    color: #ff5964;
+}
+
+
+
+
 
 .social-icon{
     font-size:17px;
@@ -1341,6 +1371,63 @@ button:focus-visible {
 }
 
 
+
+
+/* Compact Premium Registration Popup */
+#signupSuccessMessage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+
+    width: 250px;
+    max-width: calc(100vw - 40px);
+    box-sizing: border-box;
+
+    padding: 16px 14px;
+    margin: 0;
+
+    display: none;
+    background: rgba(255, 255, 255, 0.98);
+    color: #202938;
+
+    border: 1px solid rgba(34, 197, 94, 0.18);
+    border-radius: 16px;
+
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.15);
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.45;
+    text-align: center;
+
+    z-index: 999999;
+    animation: premiumSuccessIn 0.3s ease forwards;
+}
+
+@keyframes premiumSuccessIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -46%) scale(0.94);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    #signupSuccessMessage {
+        width: 230px;
+        padding: 14px 12px;
+        border-radius: 14px;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+}
+
+
 </style>
 </head>
 
@@ -1516,7 +1603,7 @@ button:focus-visible {
 
             <!-- WELCOME -->
 
-            <div class="welcome">
+            <div class="welcome" id="welcomeSection">
 
                 <h2>
                     Welcome Back
@@ -1531,6 +1618,148 @@ button:focus-visible {
 
 
 
+        
+<div id="signupContainer" style="display: none;">
+
+    <div class="welcome" id="signupWelcome">
+        <h2>Create Account</h2>
+        <p>Sign up to start ordering delicious food</p>
+    </div>
+
+    <form id="signupForm">
+
+        <div class="input-group">
+            <span class="input-icon">👤</span>
+            <input
+                type="text"
+                id="signupName"
+                placeholder="Enter full name"
+                autocomplete="name"
+                required
+            >
+        </div>
+
+        <div class="input-group">
+            <span class="input-icon">📱</span>
+            <input
+                type="tel"
+                id="signupPhone"
+                placeholder="Enter mobile number"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+                pattern="[0-9]{10}"
+                required
+            >
+        </div>
+
+        <div class="input-group">
+            <span class="input-icon">✉️</span>
+            <input
+                type="email"
+                id="signupEmail"
+                placeholder="Enter email address"
+                autocomplete="email"
+                required
+            >
+        </div>
+
+        <div class="input-group">
+            <span class="input-icon">🔒</span>
+            <input
+                type="password"
+                id="signupPassword"
+                placeholder="Create password"
+                autocomplete="new-password"
+                minlength="8"
+                required
+            >
+        </div>
+
+        <div class="input-group">
+            <span class="input-icon">🔐</span>
+            <input
+                type="password"
+                id="signupConfirmPassword"
+                placeholder="Confirm password"
+                autocomplete="new-password"
+                minlength="8"
+                required
+            >
+        </div>
+
+        <button
+            type="submit"
+            class="login-btn"
+            id="signupBtn"
+        >
+            Create Account →
+        </button>
+
+        
+
+        <div
+            id="signupErrorMessage"
+            class="message"
+            style="display:none;"
+        ></div>
+
+        
+
+        <div
+            id="signupSuccessMessage"
+            class="message"
+            style="display:none;"
+        ></div>
+
+    </form>
+
+    <div class="signup">
+        Already have an account?
+        <a href="#" id="showLoginBtn">Login</a>
+    </div>
+
+    <br>
+
+    
+<!-- REGISTRATION SOCIAL BUTTONS -->
+<div class="social-buttons">
+
+    <button
+        type="button"
+        class="social-btn google-btn"
+        onclick="googleRegister()"
+    >
+        <span class="social-icon">G</span>
+        Google
+    </button>
+
+    <button
+        type="button"
+        class="social-btn facebook-btn"
+        onclick="facebookRegister()"
+    >
+        <span class="social-icon">f</span>
+        Facebook
+    </button>
+
+    <button
+        type="button"
+        class="social-btn email-btn"
+        onclick="focusSignupEmail()"
+    >
+        <span class="social-icon">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+        </span>
+        Email
+    </button>
+
+</div>
+
+
+</div>
+
+
             <!-- LOGIN FORM -->
 
             <form id="loginForm">
@@ -1538,21 +1767,22 @@ button:focus-visible {
 
                 <!-- MOBILE -->
 
-                <div class="input-group">
+                
+             <div class="input-group">
+                 <span class="input-icon" id="loginInputIcon">
+                     📱
+                 </span>
+             
+                 <input
+                     type="tel"
+                     id="phone"
+                     placeholder="Enter mobile number"
+                     maxlength="10"
+                     autocomplete="tel"
+                     required
+                 >
+             </div>
 
-                    <span class="input-icon">
-                        📱
-                    </span>
-
-                    <input
-                        type="tel"
-                        id="phone"
-                        placeholder="Enter mobile number"
-                        maxlength="10"
-                        autocomplete="tel"
-                    >
-
-                </div>
 
 
 
@@ -1691,6 +1921,21 @@ button:focus-visible {
 
                 </button>
 
+
+                
+                <button
+                    type="button"
+                    class="social-btn email-btn"
+                    id="emailLoginBtn"
+                    onclick="switchToEmailLogin()"
+                >
+                    <span class="social-icon">
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                    </span>
+                    Email
+                </button>
+
+
             </div>
 
 
@@ -1698,13 +1943,10 @@ button:focus-visible {
             <!-- SIGN UP -->
 
             <div class="signup">
-
-                Don't have an account?
-
-                <a href="customer-register.html">
-                    Sign Up
-                </a>
-
+               Don't have an account?
+               <a href="#" id="showSignupBtn">
+                   Sign Up
+               </a>
             </div>
 
 
@@ -1728,6 +1970,156 @@ button:focus-visible {
 
 
 <script>
+
+
+/* =================================
+LOGIN ↔ SIGNUP FORM SWITCH
+================================= */
+
+const signupContainer = document.getElementById("signupContainer");
+const welcomeSection = document.getElementById("welcomeSection");
+const loginFormForSwitch = document.getElementById("loginForm");
+const showSignupBtn = document.getElementById("showSignupBtn");
+const showLoginBtn = document.getElementById("showLoginBtn");
+
+const orDivider = document.querySelector(".or-divider");
+const socialButtons = document.querySelector(".or-divider + .social-buttons");
+const loginSignupSection = showSignupBtn
+? showSignupBtn.closest(".signup")
+: null;
+const backLink = document.querySelector(".back-link");
+
+function showSignupView(event) {
+if (event) event.preventDefault();
+
+signupContainer.style.display = "block";
+welcomeSection.style.display = "none";
+loginFormForSwitch.style.display = "none";
+
+if (orDivider) orDivider.style.display = "none";
+if (socialButtons) socialButtons.style.display = "none";
+if (loginSignupSection) loginSignupSection.style.display = "none";
+if (backLink) backLink.style.display = "none";
+
+}
+
+function showLoginView(event) {
+if (event) event.preventDefault();
+
+signupContainer.style.display = "none";
+welcomeSection.style.display = "";
+loginFormForSwitch.style.display = "";
+
+if (orDivider) orDivider.style.display = "";
+if (socialButtons) socialButtons.style.display = "";
+if (loginSignupSection) loginSignupSection.style.display = "";
+if (backLink) backLink.style.display = "";
+
+}
+
+if (showSignupBtn) {
+showSignupBtn.addEventListener("click", showSignupView);
+}
+
+if (showLoginBtn) {
+showLoginBtn.addEventListener("click", showLoginView);
+}
+
+
+
+/* ==========================================
+   CUSTOMER SIGNUP / REGISTRATION
+========================================== */
+
+const signupForm = document.getElementById("signupForm");
+const signupBtn = document.getElementById("signupBtn");
+const signupErrorMessage = document.getElementById("signupErrorMessage");
+const signupSuccessMessage = document.getElementById("signupSuccessMessage");
+
+if (signupForm) {
+    signupForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        signupErrorMessage.style.display = "none";
+        signupSuccessMessage.style.display = "none";
+
+        const name = document.getElementById("signupName").value.trim();
+        const phone = document.getElementById("signupPhone").value.trim();
+        const email = document.getElementById("signupEmail").value.trim();
+        const password = document.getElementById("signupPassword").value;
+        const confirmPassword = document.getElementById("signupConfirmPassword").value;
+
+        if (password !== confirmPassword) {
+            signupErrorMessage.textContent = "Passwords do not match.";
+            signupErrorMessage.style.display = "block";
+            return;
+        }
+
+        signupBtn.disabled = true;
+        signupBtn.textContent = "Creating Account...";
+
+        try {
+            const response = await fetch("/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name,
+                    phone,
+                    email,
+                    password,
+                    confirmPassword
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Registration failed.");
+            }
+
+            signupSuccessMessage.textContent =
+                data.message || "Registration Successful! You can now log in.";
+
+            
+signupSuccessMessage.textContent =
+    data.message || "Registration Successful! Please login.";
+
+signupSuccessMessage.style.display = "block";
+signupForm.reset();
+
+// 2 seconds baad Login Page par redirect
+setTimeout(() => {
+    if (typeof showLoginView === "function") {
+        showLoginView();
+    } else {
+        const signupContainer = document.getElementById("signupContainer");
+        const loginContainer = document.getElementById("loginContainer");
+
+        if (signupContainer) signupContainer.style.display = "none";
+        if (loginContainer) loginContainer.style.display = "block";
+    }
+
+    signupSuccessMessage.style.display = "none";
+}, 2000);
+
+
+        } catch (error) {
+            console.error("Customer Registration Error:", error);
+
+            signupErrorMessage.textContent =
+                error.message || "Registration failed. Please try again.";
+
+            signupErrorMessage.style.display = "block";
+
+        } finally {
+            signupBtn.disabled = false;
+            signupBtn.textContent = "Create Account →";
+        }
+    });
+}
+
 
 /* ================================
    PASSWORD SHOW / HIDE
@@ -1757,38 +2149,66 @@ function togglePassword(){
 }
 
 
-/* ================================
-   GOOGLE LOGIN
-================================ */
 
-function googleLogin(){
 
-    alert(
-        "Google Login will be connected later."
-    );
 
+
+
+
+
+
+let loginMode = "phone";
+
+function switchToEmailLogin() {
+    const input = document.getElementById("phone");
+    const icon = document.getElementById("loginInputIcon");
+    const emailButton = document.getElementById("emailLoginBtn");
+
+    if (!input || !icon || !emailButton) {
+        console.error("Login input elements not found.");
+        return;
+    }
+
+    if (loginMode === "phone") {
+        loginMode = "email";
+
+        input.type = "email";
+        input.placeholder = "Enter email address";
+        input.removeAttribute("maxlength");
+        input.autocomplete = "email";
+        input.value = "";
+
+        icon.textContent = "✉️";
+
+        emailButton.innerHTML =
+            '<span class="social-icon"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i></span> Mobile';
+
+        input.focus();
+    } else {
+        loginMode = "phone";
+
+        input.type = "tel";
+        input.placeholder = "Enter mobile number";
+        input.maxLength = 10;
+        input.autocomplete = "tel";
+        input.value = "";
+
+        icon.textContent = "📱";
+
+        emailButton.innerHTML =
+            '<span class="social-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span> Email';
+
+        input.focus();
+    }
 }
 
-
-/* ================================
-   FACEBOOK LOGIN
-================================ */
-
-function facebookLogin(){
-
-    alert(
-        "Facebook Login will be connected later."
-    );
-
-}
 
 
 /* ================================
    LOGIN
 ================================ */
 
-const loginForm =
-    document.getElementById("loginForm");
+const loginForm =document.getElementById("loginForm");
 
 const loginBtn =
     document.getElementById("loginBtn");
@@ -1814,17 +2234,8 @@ loginForm.addEventListener(
             "none";
 
 
-        const phone =
-            document
-                .getElementById("phone")
-                .value
-                .trim();
-
-
-        const password =
-            document
-                .getElementById("password")
-                .value;
+        const loginValue = document.getElementById("phone").value.trim();
+        const password = document.getElementById("password").value;
 
 
         const agreement =
@@ -1835,16 +2246,24 @@ loginForm.addEventListener(
 
         /* VALIDATION */
 
-        if(!phone || !password){
+        if (!loginValue || !password) {
+    errorMessage.textContent =
+        loginMode === "email"
+            ? "Please enter email address and password."
+            : "Please enter mobile number and password.";
 
-            errorMessage.textContent =
-                "Please enter mobile number and password.";
+    errorMessage.style.display = "block";
+    return;
+}
 
-            errorMessage.style.display =
-                "block";
-
-            return;
-        }
+if (
+    loginMode === "email" &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginValue)
+) {
+    errorMessage.textContent = "Please enter a valid email address.";
+    errorMessage.style.display = "block";
+    return;
+}
 
 
         if(!agreement){
@@ -1869,24 +2288,30 @@ loginForm.addEventListener(
 
         try{
 
-            const response =
-                await fetch(
-                    "/api/auth/login",
-                    {
-                        method:"POST",
+            
+const response = await fetch(
+    loginMode === "email"
+        ? "/api/auth/email-login"
+        : "/api/auth/login",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(
+            loginMode === "email"
+                ? {
+                    email: loginValue,
+                    password: password
+                }
+                : {
+                    phone: loginValue,
+                    password: password
+                }
+        )
+    }
+);
 
-                        headers:{
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify({
-                                phone:phone,
-                                password:password
-                            })
-                    }
-                );
 
 
             const data =
@@ -1903,6 +2328,15 @@ loginForm.addEventListener(
                     "Login failed"
                 );
 
+            }
+
+            
+            if (
+                response.status === 404 ||
+                data.code === "USER_NOT_REGISTERED"
+            ) {
+                alert("Please register first.");
+                return;
             }
 
 
@@ -2080,6 +2514,208 @@ document.addEventListener(
 
 
 </script>
+
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    FacebookAuthProvider,
+    signInWithPopup,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNgkiUBg4dF-rhl2iFft2K5nWkca84bV4",
+    authDomain: "foodexpress-31f99.firebaseapp.com",
+    projectId: "foodexpress-31f99",
+    storageBucket: "foodexpress-31f99.firebasestorage.app",
+    messagingSenderId: "103957694474",
+    appId: "1:103957694474:web:5afe6e4657b9e898bc37f3",
+    measurementId: "G-0DYRBXYNZF"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+  const facebookProvider = new FacebookAuthProvider();
+  facebookProvider.addScope("email");
+
+  window.googleLogin = async function () {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const idToken = await result.user.getIdToken();
+
+      const response = await fetch("/api/auth/google-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ idToken })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.token) {
+        throw new Error(data.message || "Google login failed.");
+      }
+
+      localStorage.setItem("authToken", data.token);
+      window.location.href = "food-index.html";
+    } catch (error) {
+      console.error("Google Login Error:", error);
+      alert(error.message || "Google login failed. Please try again.");
+    }
+};
+
+
+window.googleRegister = async function () {
+    try {
+        const result = await signInWithPopup(
+            auth,
+            googleProvider
+        );
+
+        const idToken = await result.user.getIdToken();
+
+        const response = await fetch(
+            "/api/auth/google-register",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ idToken })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message || "Google registration failed."
+            );
+        }
+
+        // End the Firebase session so registration
+        // does not automatically count as a login.
+        await signOut(auth);
+
+        alert(
+            "Registration successful! Please log in with Google."
+        );
+
+        if (typeof window.showLoginView === "function") {
+            window.showLoginView();
+        } else {
+            window.location.reload();
+        }
+
+    } catch (error) {
+        console.error(
+            "Google Registration Error:",
+            error
+        );
+
+        alert(
+            error.message || "Google registration failed."
+        );
+    }
+};
+
+
+
+window.facebookLogin = async function () {
+    try {
+        const result = await signInWithPopup(
+            auth,
+            facebookProvider
+        );
+
+        const idToken = await result.user.getIdToken();
+
+        const response = await fetch(
+            "/api/auth/facebook-login",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ idToken })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.token) {
+            throw new Error(
+                data.message || "Facebook login failed."
+            );
+        }
+
+        localStorage.setItem("authToken", data.token);
+
+        await signOut(auth);
+        window.location.href = "food-index.html";
+
+    } catch (error) {
+        console.error("Facebook Login Error:", error);
+        alert(
+            error.message ||
+            "Facebook login failed. Please try again."
+        );
+    }
+};
+
+
+
+window.facebookRegister = async function () {
+    try {
+        const result = await signInWithPopup(
+            auth,
+            facebookProvider
+        );
+
+        const idToken = await result.user.getIdToken();
+
+        const response = await fetch(
+            "/api/auth/facebook-register",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ idToken })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.token) {
+            throw new Error(
+                data.message || "Facebook registration failed."
+            );
+        }
+
+        await signOut(auth);
+
+        alert("Registration successful! Ab Facebook Login karein.");
+
+    } catch (error) {
+        console.error("Facebook Registration Error:", error);
+
+        alert(
+            error.message ||
+            "Facebook registration failed. Please try again."
+        );
+    }
+};
+
+  
+
+</script>
+
 
 </body>
 </html>

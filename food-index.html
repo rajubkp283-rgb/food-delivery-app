@@ -34,7 +34,7 @@ body {
 
     margin: 1px auto;
 
-    background: #0b1224;
+    background: rgb(11, 18, 36);
 
     border: 1px solid rgba(92, 125, 180, 0.75);
     border-radius: 7px;
@@ -73,7 +73,7 @@ body {
         
 
         /* Header */
-        .header {
+    .header {
     background: #0b1224;
 
     padding: 14px 16px;
@@ -86,10 +86,10 @@ body {
     box-shadow:
     0 2px 10px rgba(70, 120, 255, 0.10);
 
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+    position: relative;
+    top: auto;
+    z-index: 10;
+    }
 
        .logo {
     font-size: 23px;
@@ -223,9 +223,9 @@ body {
 
         /* Main */
         .container {
-    max-width: 1100px;
+     max-width: 1100px;
     margin: auto;
-    padding: 25px 15px 95px;
+    padding: 8px 15px 95px;
 }
 
         .section-title {
@@ -237,7 +237,7 @@ body {
         /* Categories */
       .categories {
     display: flex;
-    gap: 8px;
+    gap: 4px;
     overflow-x: auto;
     padding-bottom: 10px;
     scrollbar-width: none;
@@ -251,7 +251,7 @@ body {
     flex: 1;
     min-width: 0;
 
-    height: 60px;
+    height: 45px;
 
     background: #142039;
 
@@ -275,8 +275,8 @@ body {
 }
 
     .category-icon {
-    width: 40px;
-    height: 45px;
+    width: 20px;
+    height: 25px;
 
     border-radius: 50%;
     overflow: hidden;
@@ -292,7 +292,7 @@ body {
 }
 
      .category-name {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     color: #dbe4f5;
     white-space: nowrap;
@@ -1381,17 +1381,11 @@ box-shadow:
 
 .your-nearest-section {
     width: 100%;
-
-    margin-top: 30px;
+    margin-top: 0;
     margin-bottom: 35px;
-
-    /*
-       IMPORTANT:
-       Section page ki vertical scrolling
-       ko block nahi karega.
-    */
     overflow: visible;
 }
+
 
 
 /* Heading */
@@ -1414,22 +1408,24 @@ box-shadow:
 .nearest-category-selector {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 0px;
     background: #f1f3f6;
-    padding: 4px;
+    padding: 2px;
     border-radius: 10px;
+   
 }
 
 .nearest-category-btn {
     border: none;
     background: transparent;
-    padding: 8px 12px;
+    padding: 6px 12px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
     color: #555;
     cursor: pointer;
     white-space: nowrap;
+   
 }
 
 .nearest-category-btn.active {
@@ -1519,7 +1515,7 @@ box-shadow:
 
 .nearest-product-image {
     width: 100%;
-    height: 115px;
+    height: 65px;
 
     background: #f5f5f5;
 
@@ -1539,11 +1535,11 @@ box-shadow:
 /* Product information */
 
 .nearest-product-info {
-    padding: 9px;
+    padding: 4px;
 }
 
 .nearest-product-name {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 700;
 
     color: #222;
@@ -1552,20 +1548,20 @@ box-shadow:
     overflow: hidden;
     text-overflow: ellipsis;
 
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 .nearest-product-price {
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 700;
 
     color: #e23744;
 
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .nearest-shop-name {
-    font-size: 11px;
+    font-size: 9px;
     color: #666;
 
     white-space: nowrap;
@@ -1574,10 +1570,10 @@ box-shadow:
 }
 
 .nearest-distance {
-    font-size: 10px;
+    font-size: 9px;
     color: #777;
 
-    margin-top: 3px;
+    margin-top: 2px;
 }
 
 
@@ -1621,18 +1617,13 @@ box-shadow:
     }
 
     .nearest-products-row {
+    grid-auto-columns: calc((100% - 18px) / 4);
+    gap: 6px;
+}
 
-        grid-auto-columns:
-            calc(
-                (100% - 20px) / 3
-            );
-
-        gap: 10px;
-    }
-
-    .nearest-product-image {
-        height: 100px;
-    }
+.nearest-product-image {
+    height: 76px;
+}
 
     .nearest-product-info {
         padding: 7px;
@@ -2156,15 +2147,29 @@ box-shadow:
    SHOP LIST
 ========================================================= */
 
+/* SHOP NEAR YOU - SHOW 4 CARDS, VERTICAL SCROLL */
 .nearest-shops-list {
     width: 100%;
+    height: 568px;
+    max-height: 568px;
 
     display: flex;
     flex-direction: column;
-
     gap: 13px;
 
-    overflow: visible;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: auto;
+    touch-action: pan-y;
+
+    scrollbar-width: thin;
+}
+
+/* Shop cards ko shrink hone se rokein */
+.nearest-shops-list > .nearest-shop-card {
+    flex-shrink: 0;
 }
 
 
@@ -2605,9 +2610,1035 @@ button:focus-visible {
 }
 
 
+/* =========================================
+   PREMIUM SHOP BOTTOM WINDOW
+========================================= */
+
+.shop-window-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 7vh 10px 0;
+    background: rgba(0, 0, 0, 0.62);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.28s ease,
+        visibility 0.28s ease;
+}
+
+.shop-window-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.shop-window-box {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+
+    height: 90vh;
+    height: 90dvh;
+    max-height: 900px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+    background: #0b1224;
+
+    border: 1px solid rgba(112, 151, 220, 0.45);
+    border-radius: 23px 23px 0 0;
+
+    box-shadow: 0 -12px 45px rgba(0, 0, 0, 0.4);
+
+    transform: translateY(105%);
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.shop-window-overlay.active .shop-window-box {
+    transform: translateY(0);
+}
+
+.shop-window-top {
+    position: relative;
+    flex-shrink: 0;
+
+    height: 42px;
+    min-height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #0b1224;
+}
+
+.shop-window-handle {
+    width: 43px;
+    height: 5px;
+    border-radius: 20px;
+    background: #607494;
+}
+
+.shop-window-close {
+    position: absolute;
+    right: 12px;
+    top: 6px;
+
+    width: 31px;
+    height: 31px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #1b2b47;
+    color: #ffffff;
+
+    font-size: 23px;
+    line-height: 1;
+    cursor: pointer;
+
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.shop-window-close:hover {
+    background: #30476b;
+    transform: scale(1.05);
+}
+
+.shop-window-frame {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+
+    display: block;
+    border: none;
+
+    background: #0b1224;
+}
+
+body.shop-window-open {
+    overflow: hidden;
+}
+
+/* MOBILE DESIGN */
+@media (max-width: 500px) {
+    .shop-window-overlay {
+        padding: 6vh 0 0;
+    }
+
+    .shop-window-box {
+        width: 100%;
+        height: 91vh;
+        height: 91dvh;
+        max-height: none;
+
+        border-radius: 22px 22px 0 0;
+    }
+}
+
+/* SMALL SCREEN HEIGHT */
+@media (max-height: 500px) {
+    .shop-window-overlay {
+        padding-top: 3vh;
+    }
+
+    .shop-window-box {
+        height: 97vh;
+        height: 97dvh;
+    }
+}
+
+
+.nearest-product-categories {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 1px 10px;
+    margin-bottom: 12px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.nearest-product-categories::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+.nearest-product-category-btn {
+    flex: 0 0 auto;
+    padding: 9px 14px;
+    border: 1px solid #2d4167;
+    border-radius: 22px;
+    background: #142039;
+    color: #c5d2e8;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.nearest-product-category-btn.active {
+    background: #36578F;
+    border-color: #4b70ae;
+    color: #fff;
+}
+
+
+/* Category horizontal sliding only */
+.categories {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.categories::-webkit-scrollbar {
+    display: none;
+}
+
+.categories .category {
+    flex: 0 0 calc((100% - 12px) / 4);
+}
+
+
+/* =========================================
+   BEAUTY & PERSONAL CARE
+========================================= */
+
+.beauty-care-section {
+    width: 100%;
+    margin: 28px 0 25px;
+    overflow: hidden;
+}
+
+.beauty-care-title {
+    margin: 0 0 16px 2px;
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+}
+
+/* Horizontal slider */
+.beauty-care-slider {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 3px 2px 10px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    touch-action: pan-x pan-y;
+}
+
+.beauty-care-slider::-webkit-scrollbar {
+    display: none;
+}
+
+/* Five circles visible at a time */
+.beauty-care-item {
+    flex: 0 0 calc((100% - 40px) / 5);
+    min-width: 0;
+    text-align: center;
+    scroll-snap-align: start;
+}
+
+.beauty-care-circle {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #172540;
+    border: 1px solid #344b73;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.beauty-care-circle img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.beauty-care-name {
+    margin-top: 7px;
+    color: #dbe4f5;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 380px) {
+    .beauty-care-slider {
+        gap: 8px;
+    }
+
+    .beauty-care-item {
+        flex-basis: calc((100% - 32px) / 5);
+    }
+
+    .beauty-care-name {
+        font-size: 9px;
+    }
+}
+
+/* FORCE COMPACT SHOP NEAR YOU CARDS */
+.nearest-shops-list .nearest-shop-card {
+    height: 100px !important;
+    min-height: 100px !important;
+    padding: 6px !important;
+    gap: 8px !important;
+    align-items: center !important;
+}
+
+.nearest-shops-list .nearest-shop-image-wrap {
+    height: 99px !important;
+    min-height: 99px !important;
+    flex: 0 0 100px !important;
+    width: 100px !important;
+}
+
+.nearest-shops-list .nearest-shop-content {
+    min-height: 0 !important;
+    padding: 0 42px 0 0 !important;
+}
+
+.nearest-shops-list .nearest-shop-details {
+    gap: 4px !important;
+    padding-top: 3px !important;
+}
+
+.nearest-shops-list .nearest-shop-chip {
+    padding: 3px 5px !important;
+    font-size: 9px !important;
+}
+
+@media (max-width: 600px) {
+    .nearest-shops-list .nearest-shop-card {
+        height: 100px !important;
+        min-height: 100px !important;
+        padding: 5px !important;
+        gap: 7px !important;
+    }
+
+    .nearest-shops-list .nearest-shop-image-wrap {
+        height: 91px !important;
+        min-height: 91px !important;
+        flex-basis: 88px !important;
+        width: 88px !important;
+    }
+}
+
+/* Shop card address ko poora dikhane ke liye */
+.nearest-shops-list .nearest-shop-content {
+    justify-content: flex-start !important;
+    gap: 3px !important;
+    overflow: visible !important;
+}
+
+.nearest-shops-list .nearest-shop-address {
+    margin-top: 3px !important;
+    line-height: 1.25 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+}
+
+.nearest-shops-list .nearest-shop-details {
+    margin-top: 4px !important;
+    padding-top: 0 !important;
+}
+
+.nearest-shops-list .nearest-shop-distance {
+    top: 57px !important;
+}
+
+@media (max-width: 600px) {
+    .nearest-shops-list .nearest-shop-distance {
+        top: 59px !important;
+    }
+
+    .nearest-shops-list .nearest-shop-address {
+        font-size: 9px !important;
+        line-height: 1.2 !important;
+    }
+}
+
+/* SHOP NEAR YOU: Only 4 cards visible */
+#nearestShopsList {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+
+    height: 300px !important;
+    max-height: 300px !important;
+    min-height: 0 !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    overscroll-behavior-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+/* Cards ko shrink hone se rokein */
+#nearestShopsList .nearest-shop-card {
+    flex-shrink: 0 !important;
+}
+
+/* Mobile: compact cards ke liye */
+@media (max-width: 600px) {
+    #nearestShopsList {
+        height: 300px !important;
+        max-height: 300px !important;
+    }
+}
+
+/* Shop Near You: Hide scrollbar but keep scrolling */
+#nearestShopsList {
+    scrollbar-width: none !important;       /* Firefox */
+    -ms-overflow-style: none !important;    /* Old Edge */
+}
+
+#nearestShopsList::-webkit-scrollbar {
+    display: none !important;               /* Chrome, Safari */
+    width: 0 !important;
+    height: 0 !important;
+}
+
+
+/* ===== PREMIUM SHOP NEAR YOU ===== */
+
+.nearest-shops-section {
+    position: relative;
+    padding: 0;
+}
+
+/* Clean, soft container */
+.nearest-shops-list {
+    position: relative;
+    padding: 8px;
+    gap: 12px !important;
+
+    border: 1px solid rgba(160, 185, 230, 0.12);
+    border-radius: 22px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(25, 40, 67, 0.48),
+        rgba(11, 18, 36, 0.22)
+    );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.035),
+        0 8px 24px rgba(0, 0, 0, 0.12);
+
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+.nearest-shops-list::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* Premium floating shop cards */
+.nearest-shops-list .nearest-shop-card {
+    flex-shrink: 0;
+    border: 1px solid rgba(45, 65, 103, 0.08);
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.10),
+        0 1px 2px rgba(0, 0, 0, 0.04);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* Subtle highlight on interaction */
+.nearest-shops-list .nearest-shop-card:active {
+    transform: scale(0.99);
+
+    border-color: rgba(75, 115, 185, 0.30);
+
+    box-shadow:
+        0 5px 16px rgba(0, 0, 0, 0.13),
+        0 0 12px rgba(95, 135, 205, 0.08);
+}
+
+/* Soft blue accent below heading */
+.nearest-shops-title {
+    position: relative;
+    padding-left: 10px;
+}
+
+.nearest-shops-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 3px;
+    bottom: 3px;
+    width: 3px;
+
+    border-radius: 10px;
+    background: linear-gradient(
+        to bottom,
+        #7da8ff,
+        #36578F
+    );
+
+    box-shadow: 0 0 9px rgba(90, 135, 220, 0.25);
+}
+
+
+/* Shop Near You - Lightweight Premium Style */
+.nearest-shops-section {
+    position: relative;
+}
+
+/* Simple container: no blur or heavy shadow */
+.nearest-shops-list {
+    background: rgba(25, 40, 67, 0.25) !important;
+    border: 1px solid rgba(160, 185, 230, 0.10) !important;
+    border-radius: 18px !important;
+    padding: 8px !important;
+
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Remove previous fade overlays */
+.nearest-shops-list::before,
+.nearest-shops-list::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Lightweight shop cards */
+.nearest-shops-list .nearest-shop-card {
+    background: #fff !important;
+    border: 1px solid rgba(54, 87, 143, 0.10) !important;
+    border-radius: 15px !important;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07) !important;
+    transition: none !important;
+}
+
+/* Keep scroll working, hide scrollbar */
+.nearest-shops-list {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+.nearest-shops-list::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* Lightweight heading accent */
+.nearest-shops-title::before {
+    box-shadow: none !important;
+}
+
+/* Beauty category items clickable fix */
+#beautyCareSection .beauty-care-slider {
+    position: relative;
+    z-index: 5;
+    pointer-events: auto;
+}
+
+#beautyCareSection .beauty-care-item {
+    position: relative;
+    z-index: 6;
+    pointer-events: auto;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+#beautyCareSection .beauty-care-item img,
+#beautyCareSection .beauty-care-circle,
+#beautyCareSection .beauty-care-name {
+    pointer-events: none;
+}
+
+
+/* Product subcategory strip - correct stacking */
+#nearestProductCategories {
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 2px 1px 10px;
+    margin: 0 0 12px;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+}
+
+#nearestProductCategories::-webkit-scrollbar {
+    display: none;
+}
+
+#nearestProductCategories .nearest-product-category-btn {
+    position: static;
+    z-index: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+
+
+
+/* Category selector: horizontal scrolling */
+.nearest-category-selector {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1px;
+
+    width: 75%;
+    max-width: 75%;
+    min-width: 0;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 5px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+}
+
+.nearest-category-selector::-webkit-scrollbar {
+    display: none;
+}
+
+/* Buttons apni width maintain karenge */
+.nearest-category-selector .nearest-category-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+
+/* =====================================
+   STICKY SEARCH + CATEGORY BAR
+===================================== */
+
+.sticky-explore-bar {
+    position: sticky;
+    top: 0;
+    z-index: 5000;
+
+    width: 100%;
+    padding: 8px 10px 5px;
+
+    background: #0b1224;
+    border-bottom: none;
+    box-shadow: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+}
+
+/* Search bar */
+.sticky-search-box {
+    position: relative;
+    top: auto;
+
+    width: 100%;
+    max-width: none;
+    margin: 0 0 3px;
+
+    min-height: 43px;
+    border-radius: 11px;
+}
+
+/* Compact search input */
+.sticky-search-box input {
+    min-width: 0;
+    padding: 11px 10px;
+    font-size: 13px;
+}
+
+.sticky-search-box button {
+    padding: 0 12px;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+/* Category slider */
+.sticky-categories {
+    position: relative;
+    top: auto;
+
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+
+    width: 100%;
+    padding: 2px 0;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sticky-categories::-webkit-scrollbar {
+    display: none;
+}
+
+/* Four category buttons */
+.sticky-categories .category {
+    flex: 0 0 calc((100% - 18px) / 4);
+    min-width: 0;
+    height: 40px;
+    padding: 5px 3px;
+    gap: 4px;
+    border-radius: 10px;
+}
+
+.sticky-categories .category-icon {
+    width: 20px;
+    height: 22px;
+}
+
+.sticky-categories .category-name {
+    font-size: 10px;
+}
+
+/* Main content remains normally scrollable */
+.container {
+    position: relative;
+}
+
+/* Mobile adjustment */
+@media (max-width: 500px) {
+    .sticky-explore-bar {
+        padding: 6px 8px 4px;
+    }
+
+    .sticky-search-box {
+        min-height: 40px;
+    }
+
+    .sticky-search-box input {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+
+    .sticky-search-box button {
+        padding: 0 10px;
+        font-size: 11px;
+    }
+
+    .sticky-categories .category {
+        height: 38px;
+    }
+}
+
+
+/* Search/category bar: normal state */
+.sticky-explore-bar {
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Header ko touch karte hi light-blue state */
+.sticky-explore-bar.header-touching {
+
+
+    border-color: #f3f3f4 !important;
+
+    box-shadow:
+        0 3px 14px rgba(20, 46, 70, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Search field in light-blue state */
+.sticky-explore-bar.header-touching .sticky-search-box {
+    background: #f4faff;
+    border-color: #fafbfb;
+    
+}
+
+/* Category buttons: light-blue state */
+.sticky-explore-bar.header-touching .sticky-categories .category {
+    background: #f4faff !important;
+    border-color: #f0f3f6 !important;
+    box-shadow: 0 2px 6px rgba(34, 106, 180, 0.12) !important;
+}
+
+.sticky-explore-bar.header-touching .sticky-categories .category-name {
+    color: #010306 !important;
+}
+
+
+
+/* Sticky state mein search text dark dikhe */
+.sticky-explore-bar.header-touching .sticky-search-box input {
+    color: #17324f !important;
+    caret-color: #17324f !important;
+    -webkit-text-fill-color: #17324f !important;
+}
+
+/* Sticky state mein placeholder bhi dark-blue */
+.sticky-explore-bar.header-touching .sticky-search-box input::placeholder {
+    color: #60758c !important;
+    opacity: 1;
+}
+
+/* Search button ka text readable rahe */
+.sticky-explore-bar.header-touching .sticky-search-box button {
+    color: #ffffff !important;
+}
+
+
+/* PRODUCT SEARCH INTERFACE */
+.product-search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000000;
+    display: none;
+    justify-content: center;
+    background: #f5f7fb;
+}
+
+.product-search-overlay.active {
+    display: flex;
+}
+
+.product-search-panel {
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fb;
+    color: #182235;
+}
+
+.product-search-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 12px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5eaf2;
+}
+
+.product-search-back {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: #edf2f8;
+    color: #263b59;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.product-search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex: 1;
+    min-width: 0;
+    height: 43px;
+    padding: 0 11px;
+    border: 1px solid #dce4ef;
+    border-radius: 12px;
+    background: #f7f9fc;
+    color: #36578f;
+}
+
+.product-search-input-wrap input {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #17243a !important;
+    -webkit-text-fill-color: #17243a;
+    font-size: 14px;
+}
+
+.product-search-input-wrap input::placeholder {
+    color: #8491a5;
+    -webkit-text-fill-color: #8491a5;
+}
+
+#clearProductSearch {
+    border: none;
+    background: transparent;
+    color: #68778d;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.product-search-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 16px 13px 30px;
+}
+
+.product-search-section-title {
+    margin: 4px 0 12px;
+    color: #26364d;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.product-search-recent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 22px;
+}
+
+.product-search-recent-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 3px;
+    color: #59677b;
+    cursor: pointer;
+    border-bottom: 1px solid #e8edf4;
+}
+
+.product-search-recent-item span {
+    flex: 1;
+    overflow-wrap: anywhere;
+}
+
+.product-search-recent-item button {
+    border: none;
+    background: transparent;
+    color: #7a8799;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.product-search-result {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #e5eaf2;
+    border-radius: 13px;
+    background: #ffffff;
+    text-align: left;
+    cursor: pointer;
+}
+
+.product-search-result img {
+    width: 66px;
+    height: 66px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #edf1f6;
+}
+
+.product-search-result-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.product-search-result-name {
+    color: #17243a;
+    font-size: 14px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.product-search-result-shop {
+    margin-top: 5px;
+    color: #69778b;
+    font-size: 11px;
+}
+
+.product-search-result-price {
+    margin-top: 5px;
+    color: #e23744;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.product-search-empty {
+    padding: 28px 12px;
+    color: #78869a;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
 
     </style>
 </head>
+
+
+
+<script>
+
+</script>
+
+
 
 <body>
 
@@ -2727,111 +3758,126 @@ button:focus-visible {
             Discover the best restaurants and delicious food near you.
         </p>
 
-        <div class="search-box">
-
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search restaurant..."
-                oninput="searchRestaurants()"
-            >
-
-            <button>
-                🔍 Search
-            </button>
-
-        </div>
+        
 
     </section>
+
+    <!-- STICKY SEARCH + CATEGORY SECTION -->
+<div class="sticky-explore-bar" id="stickyExploreBar">
+
+    <!-- SEARCH BAR -->
+    <div class="search-box sticky-search-box">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search products or shops..."
+            readonly
+            onclick="openProductSearch()"
+            aria-label="Open product and shop search"
+        >
+    
+        <button
+            type="button"
+            onclick="openProductSearch()"
+        >
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search
+        </button>
+    </div>
+
+    
+<!-- PRODUCT & SHOP SEARCH INTERFACE -->
+<div id="productSearchOverlay" class="product-search-overlay">
+
+    <div class="product-search-panel">
+
+        <div class="product-search-header">
+            <button type="button"
+                    class="product-search-back"
+                    onclick="closeProductSearch()">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <div class="product-search-input-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="search"
+                    id="productSearchQuery"
+                    placeholder="Search products or shops..."
+                    autocomplete="off"
+                >
+                <button type="button"
+                        id="clearProductSearch"
+                        onclick="clearProductSearch()"
+                        aria-label="Clear search">×</button>
+            </div>
+        </div>
+
+        <div class="product-search-body">
+            <div id="productSearchRecent"></div>
+            <div id="productSearchResults"></div>
+        </div>
+
+    </div>
+</div>
+
+
+    <!-- CATEGORY BUTTONS -->
+    <div class="categories sticky-categories">
+
+        <!-- Grocery -->
+        <div
+            class="category"
+            onclick="window.location.href='grocery.html'"
+        >
+            <div class="category-icon">
+                <img src="images/groceries.jpg" alt="Groceries">
+            </div>
+            <div class="category-name">Grocery</div>
+        </div>
+
+        <!-- Restaurant -->
+        <div
+            class="category"
+            onclick="window.location.href='customer-restaurants.html'"
+        >
+            <div class="category-icon">
+                <img src="images/restaurant.jpg" alt="Restaurant">
+            </div>
+            <div class="category-name">Restaurant</div>
+        </div>
+
+        <!-- Electronics -->
+        <div
+            class="category"
+            onclick="window.location.href='electronics.html'"
+        >
+            <div class="category-icon">
+                <img src="images/offer.jpg" alt="Electronics">
+            </div>
+            <div class="category-name">Electronics</div>
+        </div>
+
+        <!-- Beauty -->
+        <div
+            class="category"
+            onclick="window.location.href='beauty.html'"
+        >
+            <div class="category-icon">
+                <img src="images/offer.jpg" alt="Beauty">
+            </div>
+            <div class="category-name">Beauty</div>
+        </div>
+
+    </div>
+
+</div>
 
 
     <!-- Main -->
     <main class="container">
 
-        <!-- Categories -->
-        <section>
-
-            <h2 class="section-title">
-                What's on your mind?
-            </h2>
-
-            <div class="categories">
-
-
-
-    <!-- RESTAURANT -->
-    <div
-        class="category"
-        onclick="window.location.href='customer-restaurants.html'"
-    >
-        <div class="category-icon">
-            <img
-                src="images/restaurant.jpg"
-                alt="Restaurant"
-            >
-        </div>
-
-        <div class="category-name">
-            Restaurant
-        </div>
-    </div>
-
-
-     <!-- GROCERIES -->
-    <div
-        class="category"
-        onclick="window.location.href='grocery.html'"
-    >
-        <div class="category-icon">
-            <img
-                src="images/groceries.jpg"
-                alt="Groceries"
-            >
-        </div>
-
-        <div class="category-name">
-            Groceries
-        </div>
-    </div>
-
-
-     <!-- HOME -->
-    <div
-        class="category"
-        onclick="window.location.href='food-index.html'"
-    >
-        <div class="category-icon">
-            <img
-                src="images/offer.jpg"
-                alt="Home"
-            >
-        </div>
-
-        <div class="category-name">
-            Offer
-        </div>
-    </div>
-
-<!-- </div>
-
-            <div style="margin-top:15px;">
-    <button
-        onclick="window.location.href='customer-restaurants.html'"
-        style="
-            border:none;
-            background:#e23744;
-            color:white;
-            padding:10px 18px;
-            border-radius:8px;
-            font-weight:600;
-            cursor:pointer;
-        "
-    >
-        🏪 All Restaurants
-    </button>
-</div> -->
-
-        </section>
+        
 
 
        <!-- ==========================================
@@ -2853,27 +3899,56 @@ button:focus-visible {
 
         <div class="nearest-category-selector">
 
-            <button
-                type="button"
-                class="nearest-category-btn active"
-                data-category="Restaurant"
-                onclick="selectNearestCategory('Restaurant')"
-            >
-                Restaurant
-            </button>
+           
 
             <button
                 type="button"
-                class="nearest-category-btn"
+                class="nearest-category-btn active"
                 data-category="Groceries"
                 onclick="selectNearestCategory('Groceries')"
             >
                 Grocery
             </button>
 
+             <button
+                type="button"
+                class="nearest-category-btn"
+                data-category="Restaurant"
+                onclick="selectNearestCategory('Restaurant')"
+            >
+                Restaurant
+            </button>
+
+               <button
+                type="button"
+                class="nearest-category-btn"
+                data-category="Electronics"
+                onclick="selectNearestCategory('Electronics')"
+            >
+                Electronics
+            </button>
+
+            <button
+              type="button"
+              class="nearest-category-btn"
+              data-category="Beauty & Personal Care"
+              onclick="selectNearestCategory('Beauty & Personal Care')"
+            >
+              Beauty
+            </button>
+
+         
+
         </div>
 
     </div>
+
+    
+<!-- PRODUCT CATEGORY FILTER -->
+<div
+    id="nearestProductCategories"
+    class="nearest-product-categories"
+></div>
 
 
     <!-- FIRST PRODUCT BLOCK -->
@@ -2899,6 +3974,14 @@ button:focus-visible {
 
     </div>
 
+    <!-- THIRD PRODUCT BLOCK -->
+<div class="nearest-product-block">
+    <div
+        class="nearest-products-row"
+        id="nearestProductsRow3"
+    ></div>
+</div>
+
         <!-- ==========================================
          NEARBY SHOPS
     ========================================== -->
@@ -2915,6 +3998,8 @@ button:focus-visible {
         ></div>
 
     </div>
+
+
     <!-- Loading -->
 
     <div
@@ -2936,9 +4021,669 @@ button:focus-visible {
     </div>
 
 </section>
+
+
+<!-- =========================================
+     GROCERY CATEGORIES
+========================================= -->
+<section class="beauty-care-section nearest-extra-care"
+         id="groceryCareSection"
+         style="display:none;">
+
+    <h3 class="beauty-care-title">Vegetables</h3>
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Leafy Greens')">
+            <div class="beauty-care-circle">
+                <img src="./images/leafy.avif" alt="Leafy Greens">
+            </div>
+            <div class="beauty-care-name">Leafy Greens</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Daily Staples')">
+            <div class="beauty-care-circle">
+                <img src="./images/daily.jpg" alt="Daily Staples">
+            </div>
+            <div class="beauty-care-name">Daily Staples</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Seasonal veggies')">
+            <div class="beauty-care-circle">
+                <img src="./images/Seasonal.avif" alt="Seasonal veggies">
+            </div>
+            <div class="beauty-care-name">Seasonal</div>
+        </div>
+
+         <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Local veggies')">
+            <div class="beauty-care-circle">
+                <img src="./images/Local.png" alt="Local veggies">
+            </div>
+            <div class="beauty-care-name">Local veggies</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Exotic Vegetables')">
+            <div class="beauty-care-circle">
+                <img src="./images/Exotic.png" alt="Exotic">
+            </div>
+            <div class="beauty-care-name">Exotic</div>
+        </div>
+
+     
+    </div>
+
+    <!-- GROCERY CATEGORY PRODUCTS -->
+<div id="groceryCategoryProducts"
+     style="display:none; margin-top:16px;">
+
+    <h3 id="groceryCategoryTitle"
+        class="beauty-care-title"></h3>
+
+    <div id="groceryCategoryProductsRow"
+         class="nearest-products-row"></div>
+
+    <div id="groceryCategoryEmpty"
+         class="nearest-empty"
+         style="display:none; margin-top:10px;">
+        Is Grocery category mein abhi product nahi hai.
+    </div>
+</div>
+</section>
+
+
+<!-- =========================================
+     RESTAURANT CATEGORIES
+========================================= -->
+<section class="beauty-care-section nearest-extra-care"
+         id="restaurantCareSection"
+         style="display:none;">
+
+    <h3 class="beauty-care-title">Restaurant</h3>
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Pizza')">
+            <div class="beauty-care-circle">
+                <img src="./images/Pizza.jpg" alt="Pizza">
+            </div>
+            <div class="beauty-care-name">Pizza</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Quick Bites')">
+            <div class="beauty-care-circle">
+                <img src="./images/Quick Bites.jpg" alt="Quick Bites">
+            </div>
+            <div class="beauty-care-name">Quick Bites</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Biryani')">
+            <div class="beauty-care-circle">
+                <img src="./images/Briyani.jpg" alt="Biryani">
+            </div>
+            <div class="beauty-care-name">Biryani</div>
+        </div>
+
+
+         <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Chicken')">
+            <div class="beauty-care-circle">
+                <img src="./images/Chicken.png" alt="Chicken">
+            </div>
+            <div class="beauty-care-name">Chicken</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Chinese')">
+            <div class="beauty-care-circle">
+                <img src="./images/Chinese.jpeg" alt="Chinese">
+            </div>
+            <div class="beauty-care-name">Chinese</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Paneer')">
+            <div class="beauty-care-circle">
+                <img src="./images/Paneer.jpg" alt="Paneer">
+            </div>
+            <div class="beauty-care-name">Paneer</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Tandoor & Tawa')">
+            <div class="beauty-care-circle">
+                <img src="./images/Tandoor.jpeg" alt="Tandoor & Tawa">
+            </div>
+            <div class="beauty-care-name">Tandoor & Tawa</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Main Course')">
+            <div class="beauty-care-circle">
+                <img src="./images/Main Course.jpg" alt="Main Course">
+            </div>
+            <div class="beauty-care-name">Main Course</div>
+        </div>
+    </div>
+
+    <!-- RESTAURANT CATEGORY PRODUCTS -->
+<div id="restaurantCategoryProducts"
+     style="display:none; margin-top:16px;">
+
+    <h3 id="restaurantCategoryTitle"
+        class="beauty-care-title"></h3>
+
+    <div id="restaurantCategoryProductsRow"
+         class="nearest-products-row"></div>
+
+    <div id="restaurantCategoryEmpty"
+         class="nearest-empty"
+         style="display:none; margin-top:10px;">
+        Is Restaurant category mein abhi product nahi hai.
+    </div>
+</div>
+</section>
+
+
+<!-- =========================================
+     ELECTRONICS CATEGORIES
+========================================= -->
+<section class="beauty-care-section nearest-extra-care"
+         id="electronicsCareSection"
+         style="display:none;">
+
+    <h3 class="beauty-care-title">Mobile</h3>
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Samsung')">
+            <div class="beauty-care-circle">
+                <img src="./images/samsung.jpg" alt="Samsung">
+            </div>
+            <div class="beauty-care-name">Samsung</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Vivo')">
+            <div class="beauty-care-circle">
+                <img src="./images/vivi.jpg" alt="Vivo">
+            </div>
+            <div class="beauty-care-name">Vivo</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Oppo')">
+            <div class="beauty-care-circle">
+                <img src="./images/oppo.jpg" alt="Oppo">
+            </div>
+            <div class="beauty-care-name">Oppo</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Realme')">
+            <div class="beauty-care-circle">
+                <img src="./images/realme.jpg" alt="Realme">
+            </div>
+            <div class="beauty-care-name">Realme</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Redmi')">
+            <div class="beauty-care-circle">
+                <img src="./images/redmi.png" alt="Redmi">
+            </div>
+            <div class="beauty-care-name">Redmi</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Lava')">
+            <div class="beauty-care-circle">
+                <img src="./images/lava.jpg" alt="Lava">
+            </div>
+            <div class="beauty-care-name">Lava</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Motorola')">
+            <div class="beauty-care-circle">
+                <img src="./images/motorola.jpg" alt="Motorola">
+            </div>
+            <div class="beauty-care-name">Motorola</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Infinix')">
+            <div class="beauty-care-circle">
+                <img src="./images/infinix.jpg" alt="Infinix">
+            </div>
+            <div class="beauty-care-name">Infinix</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Nothing')">
+            <div class="beauty-care-circle">
+                <img src="./images/nothing.jpg" alt="Nothing">
+            </div>
+            <div class="beauty-care-name">Nothing</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('MIVI')">
+            <div class="beauty-care-circle">
+                <img src="./images/mivi.jpg" alt="MIVI">
+            </div>
+            <div class="beauty-care-name">MIVI</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Nokia/HMD')">
+            <div class="beauty-care-circle">
+                <img src="./images/hmd.jpg" alt="HMD">
+            </div>
+            <div class="beauty-care-name">Nokia/HMD</div>
+        </div>
+    </div>
+
+    <!-- ELECTRONICS CATEGORY PRODUCTS -->
+<div id="electronicsCategoryProducts"
+     style="display:none; margin-top:16px;">
+
+    <h3 id="electronicsCategoryTitle"
+        class="beauty-care-title"></h3>
+
+    <div id="electronicsCategoryProductsRow"
+         class="nearest-products-row"></div>
+
+    <div id="electronicsCategoryEmpty"
+         class="nearest-empty"
+         style="display:none; margin-top:10px;">
+        Is Electronics category mein abhi product nahi hai.
+    </div>
+</div>
+
+<!-- =========================================
+     ELECTRONICS: MOBILE ACCESSORIES
+========================================= -->
+<div class="nearest-extra-care" id="mobileAccessoriesSection"
+     style="margin-top: 24px;">
+
+    <h3 class="beauty-care-title">Mobile Accessories</h3>
+
+    <div class="beauty-care-slider">
+
+     
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Earphones')">
+            <div class="beauty-care-circle">
+                <img src="./images/headphone.jpg" alt="Earphones">
+            </div>
+            <div class="beauty-care-name">Earphones</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Chargers')">
+            <div class="beauty-care-circle">
+                <img src="./images/charger.jpg" alt="Chargers">
+            </div>
+            <div class="beauty-care-name">Chargers</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Covers')">
+            <div class="beauty-care-circle">
+                <img src="./images/cover.jpg" alt="Covers">
+            </div>
+            <div class="beauty-care-name">Covers</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Power Banks')">
+            <div class="beauty-care-circle">
+                <img src="./images/Power Banks.jpg" alt="Power Banks">
+            </div>
+            <div class="beauty-care-name">Power Banks</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('USB Cables')">
+            <div class="beauty-care-circle">
+                <img src="./images/cable.jpg" alt="USB Cables">
+            </div>
+            <div class="beauty-care-name">USB Cables</div>
+        </div>
+
+        
+         <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('OTG Adapters')">
+            <div class="beauty-care-circle">
+                <img src="./images/otg.jpg" alt="OTG Adapters">
+            </div>
+            <div class="beauty-care-name">OTG Adapters</div>
+        </div>
+
+         <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Screen Protectors')">
+            <div class="beauty-care-circle">
+                <img src="./images/screen.jpg" alt="Screen Protectors">
+            </div>
+            <div class="beauty-care-name">Screen Protectors</div>
+        </div>
+
+         <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Mobile Holders')">
+            <div class="beauty-care-circle">
+                <img src="./images/stand.jpg" alt="Mobile Holders">
+            </div>
+            <div class="beauty-care-name">Mobile Holders</div>
+        </div>
+
+
+    </div>
+    <!-- MOBILE ACCESSORIES PRODUCTS -->
+    <div id="mobileAccessoriesCategoryProducts"
+         style="display:none; margin-top:16px;">
+    
+        <h3 id="mobileAccessoriesCategoryTitle"
+            class="beauty-care-title"></h3>
+    
+        <div id="mobileAccessoriesCategoryProductsRow"
+             class="nearest-products-row"></div>
+    
+        <div id="mobileAccessoriesCategoryEmpty"
+             class="nearest-empty"
+             style="display:none; margin-top:10px;">
+            Is category mein abhi koi product available nahi hai.
+        </div>
+    
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     ELECTRONICS: APPLIANCES
+========================================= -->
+<div class="nearest-extra-care" id="appliancesSection"
+     style="margin-top:24px;">
+
+    <h3 class="beauty-care-title">Appliances</h3>
+
+    <div class="beauty-care-slider">
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Fans')">
+            <div class="beauty-care-circle">
+                <img src="./images/fan.jpg" alt="Fans">
+            </div>
+            <div class="beauty-care-name">Fans</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Inverter')">
+            <div class="beauty-care-circle">
+                <img src="./images/inverter.jpg" alt="Inverter">
+            </div>
+            <div class="beauty-care-name">Inverter</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Fridges')">
+            <div class="beauty-care-circle">
+                <img src="./images/fridge.jpg" alt="Fridges">
+            </div>
+            <div class="beauty-care-name">Fridges</div>
+        </div>
+
+    
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Televisions')">
+            <div class="beauty-care-circle">
+                <img src="./images/telivision.jpg" alt="Televisions">
+            </div>
+            <div class="beauty-care-name">Televisions</div>
+        </div>
+
+           <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Air Coolers')">
+            <div class="beauty-care-circle">
+                <img src="./images/air-cooler.jpg" alt="Air Coolers">
+            </div>
+            <div class="beauty-care-name">Air Coolers</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Microwaves')">
+            <div class="beauty-care-circle">
+                <img src="./images/microwaves.jpg" alt="Microwaves">
+            </div>
+            <div class="beauty-care-name">Microwaves</div>
+        </div>
+
+          <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Irons')">
+            <div class="beauty-care-circle">
+                <img src="./images/iron.jpg" alt="Irons">
+            </div>
+            <div class="beauty-care-name">Irons</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Geysers')">
+            <div class="beauty-care-circle">
+                <img src="./images/gysers.jpg" alt="Geysers">
+            </div>
+            <div class="beauty-care-name">Geysers</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Washing Machines')">
+            <div class="beauty-care-circle">
+                <img src="./images/washing machine.jpg" alt="Washing Machines">
+            </div>
+            <div class="beauty-care-name">Washing Machines</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Water Purifiers')">
+            <div class="beauty-care-circle">
+                <img src="./images/water-purifier.jpg" alt="Water Purifiers">
+            </div>
+            <div class="beauty-care-name">Water Purifiers</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Mixer Grinders')">
+            <div class="beauty-care-circle">
+                <img src="./images/mixer-grinder.jpg" alt="Mixer Grinders">
+            </div>
+            <div class="beauty-care-name">Mixer Grinders</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Electric Kettles')">
+            <div class="beauty-care-circle">
+                <img src="./images/electric-kettle.jpg" alt="Electric Kettles">
+            </div>
+            <div class="beauty-care-name">Electric Kettles</div>
+        </div>
+
+
+     
+
+    </div>
+
+    <!-- Appliances products will appear here -->
+    <div id="appliancesCategoryProducts"
+         style="display:none; margin-top:16px;">
+
+        <h3 id="appliancesCategoryTitle"
+            class="beauty-care-title"></h3>
+
+        <div id="appliancesCategoryProductsRow"
+             class="nearest-products-row"></div>
+
+        <div id="appliancesCategoryEmpty"
+             class="nearest-empty"
+             style="display:none; margin-top:10px;">
+            Is category mein abhi koi product available nahi hai.
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+
+
+
+
+
+<!-- =========================================
+     BEAUTY & PERSONAL CARE
+========================================= -->
+
+<section
+    class="beauty-care-section"
+    id="beautyCareSection"
+    style="display: none;"
+>
+
+    <h3 class="beauty-care-title">
+        Beauty &amp; Personal Care
+    </h3>
+
+    <div class="beauty-care-slider">
+
+        <div
+    class="beauty-care-item"
+    onclick="filterNearestProductsByCategory('Skincare')"
+    role="button"
+    tabindex="0"
+>
+            <div class="beauty-care-circle">
+                <img src="./images/skin care.jpg" alt="Skincare">
+            </div>
+            <div class="beauty-care-name">Skincare</div>
+        </div>
+
+        <div
+    class="beauty-care-item"
+    onclick="filterNearestProductsByCategory('Makeup')"
+    role="button"
+    tabindex="0"
+>
+            <div class="beauty-care-circle">
+                <img src="./images/makeup.jpg" alt="Makeup">
+            </div>
+            <div class="beauty-care-name">Makeup</div>
+        </div>
+
+        <div
+    class="beauty-care-item"
+    onclick="filterNearestProductsByCategory('Haircare')"
+    role="button"
+    tabindex="0"
+>
+            <div class="beauty-care-circle">
+                <img src="./images/hair care.jpeg" alt="Hair Care">
+            </div>
+            <div class="beauty-care-name">Hair Care</div>
+        </div>
+
+        <div
+    class="beauty-care-item"
+    onclick="filterNearestProductsByCategory('Fragrances')"
+    role="button"
+    tabindex="0"
+>
+            <div class="beauty-care-circle">
+                <img src="./images/perfume.jpeg" alt="Perfume">
+            </div>
+            <div class="beauty-care-name">Fragrances</div>
+        </div>
+
+        <div
+    class="beauty-care-item"
+    onclick="filterNearestProductsByCategory('Baby Care')"
+    role="button"
+    tabindex="0"
+>
+            <div class="beauty-care-circle">
+                <img src="./images/baby care.jpeg" alt="Baby Care">
+            </div>
+            <div class="beauty-care-name">Baby Care</div>
+        </div>
+
+        <div
+    class="beauty-care-item"
+    onclick="filterNearestProductsByCategory('Beauty Tools')"
+    role="button"
+    tabindex="0"
+>
+            <div class="beauty-care-circle">
+                <img src="./images/beauty tools.jpg" alt="Beauty Tools">
+            </div>
+            <div class="beauty-care-name">Beauty Tools</div>
+        </div>
+
+        <div
+    class="beauty-care-item"
+    onclick="filterNearestProductsByCategory('Bath & Body')"
+    role="button"
+    tabindex="0"
+>
+            <div class="beauty-care-circle">
+                <img src="./images/bath & body.avif" alt="Bath & Body">
+            </div>
+            <div class="beauty-care-name">Bath &amp; Body</div>
+        </div>
+
+    
+
+    
+    </div>
+
+    <!-- BEAUTY CATEGORY PRODUCTS -->
+    <div
+        id="beautyCategoryProducts"
+        style="display:none; margin-top:16px;"
+    >
+        <h3
+            id="beautyCategoryTitle"
+            class="beauty-care-title"
+        ></h3>
+
+        <div
+            id="beautyCategoryProductsRow"
+            class="nearest-products-row"
+        ></div>
+
+        <div
+            id="beautyCategoryEmpty"
+            class="nearest-empty"
+            style="display:none; margin-top:10px;"
+        >
+            Is category mein abhi koi product available nahi hai.
+        </div>
+    </div>
+
+</section>
+
     
 
     </main>
+
+    
 
 
     
@@ -2946,16 +4691,766 @@ button:focus-visible {
 
 <script>
 
+
+const PRODUCT_SEARCH_HISTORY_KEY = "ors_recent_product_searches";
+
+
+/* Search open hone par browser history handle karein */
+let productSearchHistoryEntryOpen = false;
+let closingProductSearchFromPopstate = false;
+
+function openProductSearch() {
+    const overlay = document.getElementById("productSearchOverlay");
+    const input = document.getElementById("productSearchQuery");
+
+    if (!overlay || !input) return;
+
+    // Search pehle se open hai to duplicate entry na banayein
+    if (!overlay.classList.contains("active")) {
+        try {
+            history.pushState(
+                {
+                    ...(history.state || {}),
+                    productSearchOverlay: true
+                },
+                "",
+                window.location.href
+            );
+
+            productSearchHistoryEntryOpen = true;
+        } catch (error) {
+            console.warn("Search history entry could not be added.", error);
+        }
+    }
+
+    overlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+
+    renderProductSearchRecent();
+    renderProductSearchResults("");
+
+    input.value = "";
+    setTimeout(() => input.focus(), 50);
+}
+
+function closeProductSearch(fromPopstate = false) {
+    const overlay = document.getElementById("productSearchOverlay");
+    const wasOpen = !!overlay && overlay.classList.contains("active");
+
+    if (overlay) {
+        overlay.classList.remove("active");
+    }
+
+    document.body.style.overflow = "";
+
+    // Search manually close karne par uski history entry hata dein
+    if (
+        wasOpen &&
+        productSearchHistoryEntryOpen &&
+        !fromPopstate &&
+        !closingProductSearchFromPopstate
+    ) {
+        productSearchHistoryEntryOpen = false;
+        history.back();
+    } else if (fromPopstate) {
+        productSearchHistoryEntryOpen = false;
+    }
+}
+
+// Mobile/browser Back button par pehle Search band karein
+// Initial page ko bhi category history entry mark karein
+history.replaceState(
+    {
+        ...(history.state || {}),
+        nearestCategoryEntry: true
+    },
+    "",
+    location.href
+);
+
+// Mobile/browser Back button handling
+
+window.addEventListener("popstate", function (event) {
+    const popup = document.getElementById(
+        "nearestProductDetailsPopup"
+    );
+
+    // Shop Near You popup khula ho to pehle use band karein
+    const shopOverlay = document.getElementById("shopWindowOverlay");
+
+    if (shopOverlay && shopOverlay.classList.contains("active")) {
+        closeShopWindow(true);
+        return;
+    }
+
+    // 1. Product popup khula hai to pehle sirf popup band karein
+    if (popup && popup.classList.contains("active")) {
+        closeNearestProductDetails(true);
+        return;
+    }
+
+    // 2. Popup manually close hua tha aur history.back() chal raha hai
+    if (nearestProductPopupHistoryOpen) {
+        nearestProductPopupHistoryOpen = false;
+        return;
+    }
+
+    const overlay = document.getElementById("productSearchOverlay");
+
+    // 3. Product Search khula hai to pehle Search band karein
+    if (overlay && overlay.classList.contains("active")) {
+        closingProductSearchFromPopstate = true;
+        closeProductSearch(true);
+        closingProductSearchFromPopstate = false;
+        return;
+    }
+
+    productSearchHistoryEntryOpen = false;
+
+    // 4. Ab zarurat hone par pichhli category restore karein
+    if (
+        event.state &&
+        event.state.nearestCategoryEntry === true &&
+        nearestCategoryHistory.length > 0
+    ) {
+        const previousCategory = nearestCategoryHistory.pop();
+
+        isRestoringNearestCategory = true;
+
+        try {
+            selectNearestCategory(previousCategory);
+        } finally {
+            isRestoringNearestCategory = false;
+        }
+    }
+});
+
+
+
+function clearProductSearch() {
+    const input = document.getElementById("productSearchQuery");
+    if (!input) return;
+
+    input.value = "";
+    input.focus();
+    renderProductSearchResults("");
+    renderProductSearchRecent();
+}
+
+function getProductSearchHistory() {
+    try {
+        const saved = JSON.parse(
+            localStorage.getItem(PRODUCT_SEARCH_HISTORY_KEY) || "[]"
+        );
+        return Array.isArray(saved) ? saved : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveProductSearchHistory(query) {
+    const cleaned = query.trim();
+    if (!cleaned) return;
+
+    const history = getProductSearchHistory()
+        .filter(item => item.toLowerCase() !== cleaned.toLowerCase());
+
+    history.unshift(cleaned);
+
+    try {
+        localStorage.setItem(
+            PRODUCT_SEARCH_HISTORY_KEY,
+            JSON.stringify(history.slice(0, 8))
+        );
+    } catch (error) {
+        console.warn("Recent search could not be saved.", error);
+    }
+}
+
+function escapeProductSearchText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function renderProductSearchRecent() {
+    const container = document.getElementById("productSearchRecent");
+    if (!container) return;
+
+    const history = getProductSearchHistory();
+
+    if (!history.length) {
+        container.innerHTML = "";
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="product-search-section-title">Recent searches</div>
+        <div class="product-search-recent-list">
+            ${history.map(item => `
+                <div class="product-search-recent-item">
+                    <i class="fa-regular fa-clock"></i>
+                    <span onclick="useRecentProductSearch('${escapeProductSearchText(item).replace(/'/g, '&#39;')}')">
+                        ${escapeProductSearchText(item)}
+                    </span>
+                    <button type="button"
+                        aria-label="Remove recent search"
+                        onclick="event.stopPropagation(); removeProductSearchHistory('${escapeProductSearchText(item).replace(/'/g, '&#39;')}')">×</button>
+                </div>
+            `).join("")}
+        </div>
+    `;
+}
+
+function useRecentProductSearch(query) {
+    const input = document.getElementById("productSearchQuery");
+    if (!input) return;
+
+    input.value = query;
+    renderProductSearchResults(query);
+    renderProductSearchRecent();
+}
+
+function removeProductSearchHistory(query) {
+    const history = getProductSearchHistory()
+        .filter(item => item.toLowerCase() !== query.toLowerCase());
+
+    try {
+        localStorage.setItem(PRODUCT_SEARCH_HISTORY_KEY, JSON.stringify(history));
+    } catch (error) {
+        console.warn("Recent search could not be updated.", error);
+    }
+
+    renderProductSearchRecent();
+}
+
+function renderProductSearchResults(query) {
+    const results = document.getElementById("productSearchResults");
+    if (!results) return;
+
+    const term = String(query || "").trim().toLowerCase();
+
+    if (!term) {
+        results.innerHTML = `
+            <div class="product-search-empty">
+                Product ya shop ka naam type karke search karein.
+            </div>
+        `;
+        return;
+    }
+
+    
+const products = Array.isArray(nearestProducts)
+    ? nearestProducts
+    : [];
+
+const restaurantList = Array.isArray(nearestRestaurants)
+    ? nearestRestaurants
+    : [];
+
+/* Products ke andar maujood shops ko bhi search mein jodein */
+const allShops = [
+    ...restaurantList,
+    ...products.map(product => product.shop).filter(Boolean)
+];
+
+/* Duplicate shops ko hatayein */
+const uniqueShops = [];
+const seenShops = new Set();
+
+allShops.forEach(shop => {
+    const shopName = String(
+        shop.name ||
+        shop.restaurantName ||
+        shop.shopName ||
+        shop.businessName ||
+        shop.storeName ||
+        ""
+    ).trim();
+
+    if (!shopName) return;
+
+    const shopId = String(
+        shop._id ||
+        shop.id ||
+        shop.restaurantId ||
+        shopName
+    ).toLowerCase();
+
+    if (!seenShops.has(shopId)) {
+        seenShops.add(shopId);
+        uniqueShops.push({
+            ...shop,
+            name: shopName
+        });
+    }
+});
+
+const matchingProducts = products.filter(product => {
+    const shopName = product.shop?.name ||
+                     product.shop?.restaurantName ||
+                     product.shop?.shopName ||
+                     "";
+
+    return String(product.name || "").toLowerCase().includes(term) ||
+           String(product.category || "").toLowerCase().includes(term) ||
+           String(shopName).toLowerCase().includes(term);
+});
+
+const matchingShops = uniqueShops.filter(shop => {
+    const searchableText = [
+        shop.name,
+        shop.restaurantName,
+        shop.shopName,
+        shop.businessName,
+        shop.storeName,
+        shop.category,
+        shop.address,
+        shop.shopAddress
+    ].filter(Boolean).join(" ").toLowerCase();
+
+    return searchableText.includes(term);
+});
+
+
+    if (!matchingProducts.length && !matchingShops.length) {
+        results.innerHTML = `
+            <div class="product-search-empty">
+                <i class="fa-solid fa-magnifying-glass"></i><br>
+                Is search se matching product ya shop nahi mila.<br>
+                Nearby products load hone aur selected category ko check karein.
+            </div>
+        `;
+        return;
+    }
+
+    let html = "";
+
+    if (matchingProducts.length) {
+        html += `<div class="product-search-section-title">Products</div>`;
+
+        html += matchingProducts.map((product, index) => {
+            const shop = product.shop || {};
+            const name = product.name || "Product";
+            const shopName = shop.name || "Nearby Shop";
+            const image = product.image || "images/food-placeholder.jpg";
+            const price = Number(product.price || 0);
+
+            return `
+                <button type="button"
+                    class="product-search-result"
+                    onclick="openSearchedProduct(${index}, '${escapeProductSearchText(name).replace(/'/g, '&#39;')}')">
+                    <img src="${escapeProductSearchText(image)}"
+                         alt="${escapeProductSearchText(name)}"
+                         onerror="this.onerror=null;this.src='images/food-placeholder.jpg'">
+                    <span class="product-search-result-info">
+                        <span class="product-search-result-name">${escapeProductSearchText(name)}</span>
+                        <span class="product-search-result-shop">Shop: ${escapeProductSearchText(shopName)}</span>
+                        <span class="product-search-result-price">₹${price}</span>
+                    </span>
+                </button>
+            `;
+        }).join("");
+    }
+
+    if (matchingShops.length) {
+        html += `<div class="product-search-section-title">Shops</div>`;
+
+        html += matchingShops.map(shop => `
+            <button type="button" class="product-search-result"
+                onclick="openSearchedShop('${escapeProductSearchText(shop._id || shop.id || shop.restaurantId || "").replace(/'/g, '&#39;')}')">
+                <img src="${escapeProductSearchText(shop.image || shop.shopImage || shop.logo || 'images/food-placeholder.jpg')}"
+                     alt="${escapeProductSearchText(shop.name || 'Shop')}"
+                     onerror="this.onerror=null;this.src='images/food-placeholder.jpg'">
+                <span class="product-search-result-info">
+                    <span class="product-search-result-name">${escapeProductSearchText(shop.name || "Shop")}</span>
+                    <span class="product-search-result-shop">${escapeProductSearchText(shop.address || shop.category || "Nearby shop")}</span>
+                </span>
+            </button>
+        `).join("");
+    }
+
+    results.innerHTML = html;
+}
+
+function openSearchedProduct(index, name) {
+    const input = document.getElementById("productSearchQuery");
+    const query = input ? input.value.trim() : name;
+
+    saveProductSearchHistory(query);
+    renderProductSearchRecent();
+    closeProductSearch();
+
+    const term = String(query || "").trim().toLowerCase();
+    const products = (Array.isArray(nearestProducts) ? nearestProducts : [])
+        .filter(product => {
+            const shopName = product.shop?.name || "";
+            return String(product.name || "").toLowerCase().includes(term) ||
+                   String(product.category || "").toLowerCase().includes(term) ||
+                   String(shopName).toLowerCase().includes(term);
+        });
+
+    const product = products[index];
+    if (product && typeof openNearestProductDetails === "function") {
+        openNearestProductDetails(product);
+    }
+}
+
+function openSearchedShop(shopId) {
+    const shop = (Array.isArray(nearestRestaurants) ? nearestRestaurants : [])
+        .find(item => String(item._id || item.id || item.restaurantId || "") === String(shopId));
+
+    const input = document.getElementById("productSearchQuery");
+    if (input) saveProductSearchHistory(input.value);
+
+    closeProductSearch();
+
+    if (shop && typeof openShopWindow === "function") {
+        openShopWindow(shop);
+    } else {
+        alert("Shop details abhi available nahi hain.");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("productSearchQuery");
+    if (!input) return;
+
+    input.addEventListener("input", function () {
+        renderProductSearchResults(this.value);
+        renderProductSearchRecent();
+    });
+
+    input.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            const query = this.value.trim();
+            if (query) saveProductSearchHistory(query);
+            renderProductSearchRecent();
+            renderProductSearchResults(query);
+        }
+
+        if (event.key === "Escape") {
+            closeProductSearch();
+        }
+    });
+});
+
+    
+
+function renderNearestProductCategories(products) {
+    const container = document.getElementById("nearestProductCategories");
+    if (!container) return;
+
+    const categories = [
+        ...new Set(
+            (Array.isArray(products) ? products : [])
+                .map(product => String(product.category || "").trim())
+                .filter(Boolean)
+        )
+    ];
+
+    const allCategories = ["All", ...categories];
+
+    container.innerHTML = allCategories.map(category => {
+        const active =
+            category.toLowerCase() ===
+            String(selectedNearestProductCategory || "All").toLowerCase();
+
+        return `
+            <button
+                type="button"
+                class="nearest-product-category-btn ${active ? "active" : ""}"
+                data-product-category="${escapeNearestHtml(category)}"
+            >${escapeNearestHtml(category)}</button>
+        `;
+    }).join("");
+}
+
+
+// Click handling: category strip ke liye
+
+document.addEventListener("click", function (event) {
+    const button = event.target.closest(
+        "#nearestProductCategories .nearest-product-category-btn"
+    );
+
+    if (!button) return;
+
+    event.preventDefault();
+
+    const category = button.getAttribute("data-product-category");
+    if (!category) return;
+
+    selectedNearestProductCategory = category;
+
+    // Sirf upar wale category buttons ka active status
+    document.querySelectorAll(
+        "#nearestProductCategories .nearest-product-category-btn"
+    ).forEach(function (item) {
+        item.classList.toggle(
+            "active",
+            item.getAttribute("data-product-category").toLowerCase() ===
+            category.toLowerCase()
+        );
+    });
+
+    // Category name ko spaces/case ke saath compare karo
+    function normalizeCategory(value) {
+        return String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, " ");
+    }
+
+    const filteredProducts =
+        normalizeCategory(category) === "all"
+            ? nearestProducts
+            : nearestProducts.filter(function (product) {
+                return normalizeCategory(product.category) ===
+                    normalizeCategory(category);
+            });
+
+    const empty = document.getElementById("nearestEmpty");
+
+    if (empty) {
+        empty.style.display = filteredProducts.length ? "none" : "block";
+        empty.textContent = filteredProducts.length
+            ? ""
+            : "Is category mein abhi koi product available nahi hai.";
+    }
+
+    // Products ko main product area mein dikhayein
+    renderYourNearestProducts(filteredProducts);
+}, true);
+
+
+
+
+
+
+function filterNearestProductsByCategory(category) {
+    selectedNearestProductCategory = category;
+
+    const normalizeCategory = value =>
+        String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, " ");
+
+    const clickedCategory = normalizeCategory(category);
+    const currentCategory = normalizeCategory(selectedNearestCategory);
+
+    const vegetableSubcategories = [
+        "leafy greens",
+        "daily staples",
+        "seasonal veggies",
+        "local veggies",
+        "exotic vegetables"
+    ];
+
+    const accessoryCategories = [
+        "earphones",
+        "chargers",
+        "covers",
+        "power banks",
+        "usb cables",
+        "otg adapters",
+        "screen protectors",
+        "mobile holders"
+    ];
+
+    
+    const applianceCategories = [
+     "fans",
+     "inverter",
+     "fridges",
+     "televisions",
+     "air coolers",
+     "microwaves",
+     "irons",
+     "geysers",
+     "washing machines",
+     "water purifiers",
+     "mixer grinders",
+     "electric kettles"  
+    ];
+
+const isAppliance =
+    currentCategory === "electronics" &&
+    applianceCategories.includes(clickedCategory);
+
+
+    const isVegetableSubcategory =
+        currentCategory === "groceries" &&
+        vegetableSubcategories.includes(clickedCategory);
+
+    const isMobileAccessory =
+        currentCategory === "electronics" &&
+        accessoryCategories.includes(clickedCategory);
+
+    const filteredProducts = nearestProducts.filter(function (product) {
+        const productCategory = normalizeCategory(product.category);
+        const productSubcategory = normalizeCategory(product.subcategory);
+        const productBrand = normalizeCategory(product.brand);
+
+        if (isVegetableSubcategory) {
+            return productSubcategory === clickedCategory;
+        }
+
+        // Mobile Accessories aur Appliances ke products filter
+        if (isMobileAccessory || isAppliance) {
+            return (
+                productCategory === clickedCategory ||
+                productSubcategory === clickedCategory
+            );
+        }
+
+        // Electronics ke mobile brand circles
+        if (currentCategory === "electronics") {
+            return productBrand === clickedCategory;
+        }
+
+        if (clickedCategory === "all") {
+            return true;
+        }
+
+        return productCategory === clickedCategory;
+    });
+
+    
+    // Mobile Accessories aur Appliances ke alag product panels
+    if (isMobileAccessory || isAppliance) {
+        const prefix = isAppliance
+            ? "appliancesCategory"
+            : "mobileAccessoriesCategory";
+
+        const panel = document.getElementById(prefix + "Products");
+        const title = document.getElementById(prefix + "Title");
+        const row = document.getElementById(prefix + "ProductsRow");
+        const empty = document.getElementById(prefix + "Empty");
+
+        if (!panel || !title || !row || !empty) {
+            console.error("Category product panel nahi mila:", category);
+            return;
+        }
+
+        panel.style.display = "block";
+        title.textContent = category;
+        row.innerHTML = "";
+
+        if (filteredProducts.length === 0) {
+            empty.style.display = "block";
+            return;
+        }
+
+        empty.style.display = "none";
+
+        filteredProducts.forEach(function (product) {
+            row.appendChild(createNearestProductCard(product));
+        });
+
+        return;
+    }
+
+
+    // Baaki categories ke existing product panels
+    const panelMap = {
+        "beauty & personal care": {
+            panel: "beautyCategoryProducts",
+            title: "beautyCategoryTitle",
+            row: "beautyCategoryProductsRow",
+            empty: "beautyCategoryEmpty"
+        },
+        "groceries": {
+            panel: "groceryCategoryProducts",
+            title: "groceryCategoryTitle",
+            row: "groceryCategoryProductsRow",
+            empty: "groceryCategoryEmpty"
+        },
+        "restaurant": {
+            panel: "restaurantCategoryProducts",
+            title: "restaurantCategoryTitle",
+            row: "restaurantCategoryProductsRow",
+            empty: "restaurantCategoryEmpty"
+        },
+        "electronics": {
+            panel: "electronicsCategoryProducts",
+            title: "electronicsCategoryTitle",
+            row: "electronicsCategoryProductsRow",
+            empty: "electronicsCategoryEmpty"
+        }
+    };
+
+    const ids = panelMap[currentCategory];
+
+    if (!ids) {
+        const empty = document.getElementById("nearestEmpty");
+
+        if (empty) {
+            empty.style.display = filteredProducts.length ? "none" : "block";
+            empty.textContent = filteredProducts.length
+                ? ""
+                : "Is category mein koi product available nahi hai.";
+        }
+
+        renderYourNearestProducts(filteredProducts);
+        return;
+    }
+
+    const panel = document.getElementById(ids.panel);
+    const title = document.getElementById(ids.title);
+    const row = document.getElementById(ids.row);
+    const empty = document.getElementById(ids.empty);
+
+    if (!panel || !title || !row || !empty) {
+        console.error("Category product panel nahi mila:", currentCategory);
+        return;
+    }
+
+    panel.style.display = "block";
+    title.textContent = category;
+    row.innerHTML = "";
+
+    if (filteredProducts.length === 0) {
+        empty.style.display = "block";
+        return;
+    }
+
+    empty.style.display = "none";
+
+    filteredProducts.forEach(function (product) {
+        row.appendChild(createNearestProductCard(product));
+    });
+}
+
+
+
+
+
+
 /* =========================================================
    YOUR NEAREST - RESTAURANT / GROCERY
 ========================================================= */
 
-let selectedNearestCategory = "Restaurant";
+let selectedNearestCategory = "Groceries";
 
 let nearestProducts = [];
+let selectedNearestProductCategory = "All";
 
 let nearestRestaurants = [];
 
+/* Prevent stale category results */
+let nearestLoadRequestId = 0;
+let nearestRequestController = null;
+
+
+/* YOUR NEAREST CATEGORY HISTORY */
+let nearestCategoryHistory = [];
+let isRestoringNearestCategory = false;
 
 /* =========================================================
    SELECT RESTAURANT / GROCERY
@@ -2963,11 +5458,83 @@ let nearestRestaurants = [];
 
 function selectNearestCategory(category) {
 
+    // Reset Beauty category content on every switch
+const beautyPanel = document.getElementById("beautyCategoryProducts");
+const beautyRow = document.getElementById("beautyCategoryProductsRow");
+const beautyEmpty = document.getElementById("beautyCategoryEmpty");
+const beautyTitle = document.getElementById("beautyCategoryTitle");
+
+if (beautyPanel) beautyPanel.style.display = "none";
+if (beautyRow) beautyRow.innerHTML = "";
+if (beautyEmpty) beautyEmpty.style.display = "none";
+if (beautyTitle) beautyTitle.textContent = "";
+
+
+
+["grocery", "restaurant", "electronics"].forEach(function(type) {
+    const panel = document.getElementById(type + "CategoryProducts");
+    const row = document.getElementById(type + "CategoryProductsRow");
+    const empty = document.getElementById(type + "CategoryEmpty");
+    const title = document.getElementById(type + "CategoryTitle");
+
+    if (panel) panel.style.display = "none";
+    if (row) row.innerHTML = "";
+    if (empty) empty.style.display = "none";
+    if (title) title.textContent = "";
+});
+
     /* =========================================
        CHANGE CATEGORY
     ========================================= */
 
+        if (
+        !isRestoringNearestCategory &&
+        selectedNearestCategory !== category
+    ) {
+        nearestCategoryHistory.push(selectedNearestCategory);
+    
+        history.pushState(
+            {
+                ...(history.state || {}),
+                nearestCategoryEntry: true
+            },
+            "",
+            location.href
+        );
+    }
+
     selectedNearestCategory = category;
+    selectedNearestProductCategory = "All";
+
+    // Beauty section sirf Beauty button par show hoga
+
+const categorySections = [
+    {
+        category: "Groceries",
+        id: "groceryCareSection"
+    },
+    {
+        category: "Restaurant",
+        id: "restaurantCareSection"
+    },
+    {
+        category: "Electronics",
+        id: "electronicsCareSection"
+    },
+    {
+        category: "Beauty & Personal Care",
+        id: "beautyCareSection"
+    }
+];
+
+categorySections.forEach(function (item) {
+    const section = document.getElementById(item.id);
+
+    if (section) {
+        section.style.display =
+            item.category === category ? "block" : "none";
+    }
+});
 
 
     /* =========================================
@@ -3008,23 +5575,46 @@ function selectNearestCategory(category) {
        CLEAR OLD PRODUCTS IMMEDIATELY
     ========================================= */
 
-    const row1 =
-        document.getElementById(
-            "nearestProductsRow1"
-        );
+    const row1 = document.getElementById("nearestProductsRow1");
 
-    const row2 =
-        document.getElementById(
-            "nearestProductsRow2"
-        );
+    const row2 = document.getElementById("nearestProductsRow2");
 
-    if (row1) {
-        row1.innerHTML = "";
+    const row3 = document.getElementById("nearestProductsRow3");
+
+
+    if (row1) {row1.innerHTML = "";}
+
+    if (row2) {row2.innerHTML = "";}
+
+    if (row3) {row3.innerHTML = "";row3.scrollLeft = 0;}
+
+    
+    // Clear previous category data immediately
+    nearestProducts = [];
+    nearestRestaurants = [];
+
+    const categoryContainer =
+        document.getElementById("nearestProductCategories");
+
+    if (categoryContainer) {
+        categoryContainer.innerHTML = "";
     }
 
-    if (row2) {
-        row2.innerHTML = "";
+    const loading =
+        document.getElementById("nearestLoading");
+
+    const empty =
+        document.getElementById("nearestEmpty");
+
+    if (loading) {
+        loading.textContent = "Loading " + category + "...";
+        loading.style.display = "block";
     }
+
+    if (empty) {
+        empty.style.display = "none";
+    }
+
 
 
     /* =========================================
@@ -3186,6 +5776,18 @@ function getNearestUserLocation() {
 
 async function loadYourNearestProducts() {
 
+    const requestId = ++nearestLoadRequestId;
+
+    // Cancel the previous category request
+    if (nearestRequestController) {
+        nearestRequestController.abort();
+    }
+
+    nearestRequestController = new AbortController();
+
+    const requestSignal = nearestRequestController.signal;
+    const requestedCategory = selectedNearestCategory;
+
     const loading =
         document.getElementById(
             "nearestLoading"
@@ -3230,7 +5832,12 @@ async function loadYourNearestProducts() {
     );
 
 if (shopContainer) {
-    shopContainer.innerHTML = "";
+    shopContainer.innerHTML = `
+        <div class="nearest-loading"
+             style="color:#c5d2e8; padding:20px; text-align:center;">
+            Loading nearby shops...
+        </div>
+    `;
 }
 
     if (loading) {
@@ -3254,33 +5861,34 @@ if (shopContainer) {
 
     /* Get user location */
 
-    const location =
-        getNearestUserLocation();
+    const location = getNearestUserLocation();
 
 
-    if (!location) {
-
-        if (loading) {
-
-            loading.style.display =
-                "none";
-
+    
+        if (!location) {
+            if (loading) {
+                loading.style.display = "none";
+            }
+        
+            if (empty) {
+                empty.style.display = "block";
+                empty.textContent =
+                    "Please select a delivery address with location.";
+            }
+        
+            const shopContainer = document.getElementById("nearestShopsList");
+        
+            if (shopContainer) {
+                shopContainer.innerHTML = `
+                    <div class="nearest-empty">
+                        Please select a delivery address with location.
+                    </div>
+                `;
+            }
+        
+            return;
         }
 
-
-        if (empty) {
-
-            empty.style.display =
-                "block";
-
-            empty.textContent =
-                "Please select a delivery address with location.";
-
-        }
-
-        return;
-
-    }
 
 
     try {
@@ -3307,13 +5915,21 @@ if (shopContainer) {
         );
 
 
-        const response =
-            await fetch(url);
+        const response = await fetch(url, {
+         signal: requestSignal
+        });
 
 
         const data =
             await response.json();
 
+            /* Ignore outdated category responses */
+           if (
+             requestId !== nearestLoadRequestId ||
+             requestedCategory !== selectedNearestCategory
+            ) {
+           return;
+            }
 
         console.log(
             "YOUR NEAREST RESPONSE:",
@@ -3376,12 +5992,26 @@ if (shopContainer) {
 
             }
 
+            const categoryContainer = document.getElementById(
+              "nearestProductCategories"
+                );
+                
+                if (categoryContainer) {
+                    categoryContainer.innerHTML = "";
+                }
+                
+                renderYourNearestProducts([]);
+                
+                renderYourNearestShops(nearestRestaurants);
+
             return;
 
         }
 
 
         /* Render products */
+
+        renderNearestProductCategories(nearestProducts);
 
         renderYourNearestProducts(
             nearestProducts
@@ -3393,6 +6023,14 @@ if (shopContainer) {
 
 
     } catch (error) {
+
+         if (
+            error.name === "AbortError" ||
+            requestId !== nearestLoadRequestId ||
+            requestedCategory !== selectedNearestCategory
+        ) {
+            return;
+        }
 
         console.error(
             "YOUR NEAREST ERROR:",
@@ -3433,134 +6071,52 @@ if (shopContainer) {
    - 3 cards visible at a time
 ========================================================= */
 
+
 function renderYourNearestProducts(products) {
+    const rows = [
+        document.getElementById("nearestProductsRow1"),
+        document.getElementById("nearestProductsRow2"),
+        document.getElementById("nearestProductsRow3")
+    ];
 
-    const row1 = document.getElementById(
-        "nearestProductsRow1"
-    );
-
-    const row2 = document.getElementById(
-        "nearestProductsRow2"
-    );
-
-    if (!row1 || !row2) {
+    if (rows.some(row => !row)) {
+        console.error("Your Nearest: product block missing.");
         return;
     }
 
-    /* Clear old cards */
-    row1.innerHTML = "";
-    row2.innerHTML = "";
+    rows.forEach(row => {
+        row.innerHTML = "";
+        row.scrollLeft = 0;
+    });
 
-    /* Safety check */
     if (!Array.isArray(products) || products.length === 0) {
         return;
     }
 
-    /*
-       Automatically divide the products
-       between the two blocks.
+    const blockSize = Math.ceil(products.length / 3);
 
-       Example:
+    const blocks = [
+        products.slice(0, blockSize),
+        products.slice(blockSize, blockSize * 2),
+        products.slice(blockSize * 2)
+    ];
 
-       10 products
-       Block 1 → 1-5
-       Block 2 → 6-10
+    blocks.forEach((blockProducts, index) => {
+        blockProducts.forEach(product => {
+            rows[index].appendChild(
+                createNearestProductCard(product)
+            );
+        });
+    });
 
-       20 products
-       Block 1 → 1-10
-       Block 2 → 11-20
-
-       50 products
-       Block 1 → 1-25
-       Block 2 → 26-50
-    */
-
-    const middle = Math.ceil(
-        products.length / 2
-    );
-
-    const block1Products =
-        products.slice(
-            0,
-            middle
-        );
-
-    const block2Products =
-        products.slice(
-            middle
-        );
-
-
-    /* =====================================================
-       BLOCK 1
-    ===================================================== */
-
-    block1Products.forEach(
-        function (product) {
-
-            const card =
-                createNearestProductCard(
-                    product
-                );
-
-            row1.appendChild(card);
-        }
-    );
-
-
-    /* =====================================================
-       BLOCK 2
-    ===================================================== */
-
-    block2Products.forEach(
-        function (product) {
-
-            const card =
-                createNearestProductCard(
-                    product
-                );
-
-            row2.appendChild(card);
-        }
-    );
-
-
-    /* =====================================================
-       HORIZONTAL SCROLL
-    ===================================================== */
-
-    [row1, row2].forEach(
-    function (row) {
-
-        /* Horizontal product scrolling */
-        row.style.overflowX = "auto";
-
-        /*
-           IMPORTANT:
-           Vertical page scrolling ko block
-           nahi karna hai.
-        */
-        row.style.overflowY = "visible";
-
-        row.style.display = "grid";
-        row.style.gridAutoFlow = "column";
-
-        /*
-           Mobile par horizontal + vertical
-           dono touch gestures allow.
-        */
-        row.style.touchAction =
-            "pan-x pan-y";
-
-        row.style.webkitOverflowScrolling =
-            "touch";
-
+    // Existing horizontal scrolling; show 4 cards
+    rows.forEach(row => {
         row.style.gridAutoColumns =
-            "calc((100% - 20px) / 3)";
-    }
-);
-
+            "calc((100% - 18px) / 4)";
+        row.style.gap = "6px";
+    });
 }
+
 
 
 /* =========================================================
@@ -3946,33 +6502,162 @@ function renderYourNearestShops(restaurants) {
             }
 
 
-            /* =================================================
-               SHOP CARD CLICK
-            ================================================= */
-
-            card.addEventListener(
-                "click",
-                function () {
-
-                    console.log(
-                        "Nearest shop clicked:",
-                        restaurant
-                    );
-
-                    /*
-                     * Future:
-                     * Open restaurant/shop page
-                     */
-
-                }
-            );
-
-
+   
+                
+                            
+                /* SHOP CARD CLICK - OPEN PREMIUM WINDOW */
+                
+                card.addEventListener("click", function () {
+                console.log("Nearest shop clicked:", restaurant);
+                openShopWindow(restaurant);
+                });
+                
+                
+                
             container.appendChild(card);
 
         }
     );
 }
+
+
+/* =========================================
+   OPEN SHOP INSIDE FOOD INDEX PAGE
+========================================= */
+
+
+/* =========================================
+   OPEN SHOP INSIDE FOOD INDEX PAGE
+   Browser Back support
+========================================= */
+
+let shopWindowHistoryOpen = false;
+
+function openShopWindow(restaurant) {
+    if (!restaurant) return;
+
+    const overlay = document.getElementById("shopWindowOverlay");
+    const frame = document.getElementById("shopWindowFrame");
+
+    if (!overlay || !frame) {
+        console.error("Shop window elements not found.");
+        return;
+    }
+
+    const shopId =
+        restaurant._id ||
+        restaurant.id ||
+        restaurant.restaurantId;
+
+    if (!shopId) {
+        alert("Shop details nahi mile. Please try again.");
+        return;
+    }
+
+    const category = String(
+        restaurant.category ||
+        restaurant.shopType ||
+        restaurant.type ||
+        selectedNearestCategory ||
+        ""
+    ).trim().toLowerCase();
+
+    const isGrocery = category.includes("groc");
+
+    const pageUrl = isGrocery
+        ? "grocery-store.html?id=" + encodeURIComponent(shopId)
+        : "customer-restaurant.html?id=" + encodeURIComponent(shopId);
+
+    // Shop window ke liye alag history entry
+    if (!shopWindowHistoryOpen) {
+        history.pushState(
+            {
+                ...(history.state || {}),
+                nearestShopWindow: true
+            },
+            "",
+            location.href
+        );
+
+        shopWindowHistoryOpen = true;
+    }
+
+    frame.src = pageUrl;
+
+    overlay.classList.add("active");
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.classList.add("shop-window-open");
+}
+
+
+/* CLOSE SHOP WINDOW */
+
+function closeShopWindow(fromPopstate = false) {
+    const overlay = document.getElementById("shopWindowOverlay");
+    const frame = document.getElementById("shopWindowFrame");
+
+    if (!overlay) return;
+
+    overlay.classList.remove("active");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("shop-window-open");
+
+    // Back button se close hua hai
+    if (fromPopstate) {
+        shopWindowHistoryOpen = false;
+    } else if (shopWindowHistoryOpen) {
+        // Close button se close karne par history entry bhi hatao
+        shopWindowHistoryOpen = false;
+        history.back();
+    }
+
+    window.setTimeout(function () {
+        if (!overlay.classList.contains("active") && frame) {
+            frame.src = "about:blank";
+        }
+    }, 400);
+}
+
+
+
+/* CLOSE BUTTON AND BACKDROP */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const overlay = document.getElementById("shopWindowOverlay");
+    const closeButton = document.getElementById("shopWindowClose");
+
+    if (closeButton) {
+        closeButton.addEventListener("click", closeShopWindow);
+    }
+
+    if (overlay) {
+        overlay.addEventListener("click", function (event) {
+            if (event.target === overlay) {
+                closeShopWindow();
+            }
+        });
+    }
+
+});
+
+
+/* ESCAPE KEY CLOSE */
+
+document.addEventListener("keydown", function (event) {
+
+    const overlay = document.getElementById("shopWindowOverlay");
+
+    if (
+        event.key === "Escape" &&
+        overlay &&
+        overlay.classList.contains("active")
+    ) {
+        closeShopWindow();
+    }
+
+});
+
 
 
 /* =========================================================
@@ -4152,10 +6837,9 @@ function escapeNearestHtml(
 
 let selectedNearestProduct = null;
 
+let nearestProductPopupHistoryOpen = false;
 
-function openNearestProductDetails(
-    product
-) {
+function openNearestProductDetails(product) {
 
     if (!product) {
         return;
@@ -4404,15 +7088,23 @@ function openNearestProductDetails(
     }
 
 
-    /* Open popup */
-
-    popup.classList.add(
-        "active"
-    );
-
-
-    document.body.style.overflow =
-        "hidden";
+    // Popup ke liye alag browser history entry
+    if (!nearestProductPopupHistoryOpen) {
+        history.pushState(
+            {
+                ...(history.state || {}),
+                nearestProductPopup: true
+            },
+            "",
+            location.href
+        );
+    
+        nearestProductPopupHistoryOpen = true;
+    }
+    
+    popup.classList.add("active");
+    
+    document.body.style.overflow = "hidden";
 
 }
 
@@ -4421,30 +7113,25 @@ function openNearestProductDetails(
    CLOSE PRODUCT DETAILS
 ========================================================= */
 
-function closeNearestProductDetails() {
+function closeNearestProductDetails(fromPopstate = false) {
+    const popup = document.getElementById(
+        "nearestProductDetailsPopup"
+    );
 
-    const popup =
-        document.getElementById(
-            "nearestProductDetailsPopup"
-        );
+    if (!popup) return;
 
+    popup.classList.remove("active");
+    document.body.style.overflow = "";
+    selectedNearestProduct = null;
 
-    if (!popup) {
+    if (fromPopstate) {
+        nearestProductPopupHistoryOpen = false;
         return;
     }
 
-
-    popup.classList.remove(
-        "active"
-    );
-
-
-    document.body.style.overflow =
-        "";
-
-    selectedNearestProduct =
-        null;
-
+    if (nearestProductPopupHistoryOpen) {
+        history.back();
+    }
 }
 
 
@@ -4681,7 +7368,8 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        loadYourNearestProducts();
+        // Login ke baad Grocery circles default mein dikhayein
+        selectNearestCategory("Groceries");
 
     }
 );
@@ -6165,7 +8853,67 @@ function updateLocationButtons() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    const app = document.querySelector('.app-container');
+    const bar = document.querySelector('.sticky-explore-bar');
+
+    if (!app || !bar) {
+        console.error('Sticky bar: app-container ya sticky-explore-bar nahi mila.');
+        return;
+    }
+
+    function updateStickyBarColor() {
+        const barTop = bar.getBoundingClientRect().top;
+        const appTop = app.getBoundingClientRect().top;
+
+        // Bar app ke top ko touch kare ya us par chipak jaye
+        const touching = barTop <= appTop + 3;
+
+        bar.classList.toggle('header-touching', touching);
+    }
+
+    app.addEventListener('scroll', updateStickyBarColor, { passive: true });
+    window.addEventListener('scroll', updateStickyBarColor, { passive: true });
+    window.addEventListener('resize', updateStickyBarColor);
+
+    updateStickyBarColor();
+});
+
 </script>
+
+
+
+<!-- PREMIUM SHOP WINDOW -->
+<div class="shop-window-overlay" id="shopWindowOverlay" aria-hidden="true">
+
+    <div class="shop-window-box"
+         id="shopWindowBox"
+         role="dialog"
+         aria-modal="true"
+         aria-label="Shop details">
+
+        <div class="shop-window-top">
+            <div class="shop-window-handle"></div>
+
+            <button
+                type="button"
+                class="shop-window-close"
+                id="shopWindowClose"
+                aria-label="Close shop window">
+                &times;
+            </button>
+        </div>
+
+        <iframe
+            class="shop-window-frame"
+            id="shopWindowFrame"
+            title="Selected shop"
+            src="about:blank">
+        </iframe>
+
+    </div>
+
+</div>
 
 
 
@@ -6572,33 +9320,56 @@ function updateLocationButtons() {
 /* Close Button */
 
 .nearest-popup-close {
-
     position: absolute;
-
     top: 12px;
     right: 12px;
 
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
 
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    padding: 0;
+    border: 2px solid #ffffff;
     border-radius: 50%;
 
-    background: rgba(0, 0, 0, 0.65);
-
+    background: #142039;
     color: #ffffff;
 
-    font-size: 28px;
-
-    line-height: 38px;
-
-    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1;
 
     cursor: pointer;
+    z-index: 100;
 
-    z-index: 10;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+    -webkit-tap-highlight-color: transparent;
+}
 
+.nearest-popup-close:hover {
+    background: #36578F;
+}
+
+.nearest-popup-close:active {
+    transform: scale(0.94);
+}
+
+@media (max-width: 480px) {
+    .nearest-popup-close {
+        top: 10px;
+        right: 10px;
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        min-height: 42px;
+        font-size: 29px;
+    }
 }
 
 

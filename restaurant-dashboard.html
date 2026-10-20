@@ -4736,27 +4736,6 @@ input,
 }
 
 
-/* Remove blue tap highlight and click flash */
-* {
-    -webkit-tap-highlight-color: transparent;
-}
-
-button,
-button:focus,
-button:focus-visible,
-button:active,
-[role="button"],
-[role="button"]:focus,
-[role="button"]:active {
-    outline: none !important;
-    -webkit-tap-highlight-color: transparent !important;
-}
-
-/* Remove default focus ring from clickable controls */
-button:focus-visible {
-    box-shadow: none !important;
-}
-
 
     </style>
 </head>
@@ -5184,6 +5163,57 @@ button:focus-visible {
 </select>
 
 
+<!-- Fruits & Vegetables Subcategory -->
+<div id="fruitVegetableSubcategoryGroup" style="display:none; margin-top:14px;">
+
+    <label for="fruitVegetableSubcategory"
+           style="display:block; margin-bottom:8px; font-size:14px; font-weight:bold; color:#d5dfef;">
+        🥬 Vegetable Type
+    </label>
+
+    <select id="fruitVegetableSubcategory">
+        <option value="">Select Vegetable Type</option>
+        <option value="Leafy Greens">🥬 Leafy Greens</option>
+        <option value="Daily Staples">🥔 Daily Staples</option>
+        <option value="Seasonal Veggies">🌱 Seasonal Veggies</option>
+        <option value="Local Veggies">🥕 Local Veggies</option>
+        <option value="Exotic Vegetables">🥦 Exotic Vegetables</option>
+    </select>
+
+</div>
+
+
+<!-- ELECTRONICS SUBCATEGORY -->
+<div id="electronicsSubcategoryGroup"
+     style="display:none; margin-top:14px;">
+
+    <label for="electronicsSubcategory">
+        Electronics Subcategory
+    </label>
+
+    <select id="electronicsSubcategory"
+            style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;">
+        <option value="">Select Subcategory</option>
+    </select>
+</div>
+
+<!-- ELECTRONICS BRAND -->
+<div id="electronicsBrandGroup"
+     style="display:none; margin-top:14px;">
+
+    <label for="electronicsBrand">
+        Select Brand
+    </label>
+
+    <select id="electronicsBrand"
+            style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;">
+        <option value="">Select Brand</option>
+    </select>
+</div>
+
+
+
+
 <label
     id="productPriceLabel"
     style="
@@ -5483,24 +5513,22 @@ let currentStoreCategory = "Restaurant";
 
 
 
+
+
 function setProductCategories(storeCategory) {
+    const categorySelect = document.getElementById("productCategory");
 
-    const categorySelect =
-        document.getElementById("productCategory");
+    if (!categorySelect) return;
 
-    if (!categorySelect) {
-        return;
-    }
-
-    categorySelect.innerHTML = "";
+    const categoryName = String(storeCategory || "Restaurant")
+        .trim()
+        .toLowerCase();
 
     let categories = [];
+    let placeholder = "Select Menu Category";
 
-    if (
-        String(storeCategory || "")
-            .trim()
-            .toLowerCase() === "groceries"
-    ) {
+    if (["grocery", "groceries"].includes(categoryName)) {
+        placeholder = "Select Grocery Category";
 
         categories = [
             { value: "Breakfast Cereal", text: "🥣 Breakfast Cereal" },
@@ -5516,53 +5544,388 @@ function setProductCategories(storeCategory) {
             { value: "Other", text: "📦 Other" }
         ];
 
-    } else {
+    } else if (categoryName === "beauty & personal care") {
+        placeholder = "Select Beauty Category";
 
         categories = [
-            { value: "Pizza", text: "🍕 Pizza" },
-            { value: "Burger", text: "🍔 Burger" },
-            { value: "Biryani", text: "🍛 Biryani" },
-            { value: "Chinese", text: "🍜 Chinese" },
-            { value: "North Indian", text: "🍲 North Indian" },
-            { value: "South Indian", text: "🥘 South Indian" },
-            { value: "Thali", text: "🍱 Thali" },
-            { value: "Rolls", text: "🌯 Rolls" },
-            { value: "Snacks", text: "🥪 Snacks" },
-            { value: "Sweets", text: "🍰 Sweets" },
-            { value: "Bakery", text: "🧁 Bakery" },
-            { value: "Rice", text: "🍚 Rice" },
-            { value: "Beverages", text: "🥤 Beverages" },
-            { value: "Other", text: "🍽️ Other" }
+            { value: "Skincare", text: "🧴 Skincare" },
+            { value: "Haircare", text: "💇 Haircare" },
+            { value: "Makeup", text: "💄 Makeup" },
+            { value: "Fragrances", text: "🌸 Fragrances" },
+            { value: "Personal Care", text: "🧼 Personal Care" },
+            { value: "Bath & Body", text: "🛁 Bath & Body" },
+            { value: "Men's Grooming", text: "🪒 Men's Grooming" },
+            { value: "Beauty Tools", text: "🪮 Beauty Tools" },
+            { value: "Other", text: "📦 Other" }
         ];
 
+    } else if (categoryName === "electronics") {
+        placeholder = "Select Electronics Category";
+
+        categories = [
+            { value: "Mobile Phones", text: "📱 Mobile Phones" },
+            { value: "Mobile Accessories", text: "🔌 Mobile Accessories" },
+            { value: "Appliances", text: "⚡ Appliances" },
+            { value: "Other", text: "📦 Other" }
+        ];
+
+    } else {
+       categories = [
+          { value: "Quick Bites", text: "🍟 Quick Bites" },
+          { value: "Chicken", text: "🍗 Chicken" },
+          { value: "Paneer", text: "🧀 Paneer" },
+          { value: "Tandoor & Tawa", text: "🔥 Tandoor & Tawa" },
+          { value: "Main Course", text: "🍛 Main Course" },
+          { value: "Pizza", text: "🍕 Pizza" },
+          { value: "Burger", text: "🍔 Burger" },
+          { value: "Biryani", text: "🍚 Biryani" },
+          { value: "Chinese", text: "🍜 Chinese" },
+          { value: "Sweets", text: "🍰 Sweets" },
+          { value: "Bakery", text: "🧁 Bakery" },
+          { value: "Beverages", text: "🥤 Beverages" },
+          { value: "Other", text: "🍽️ Other" }
+        ];
     }
 
-    const firstOption =
-        document.createElement("option");
+    categorySelect.innerHTML = "";
 
+    const firstOption = document.createElement("option");
     firstOption.value = "";
-    firstOption.textContent =
-        String(storeCategory || "")
-            .trim()
-            .toLowerCase() === "groceries"
-            ? "Select Grocery Category"
-            : "Select Menu Category";
-
+    firstOption.textContent = placeholder;
     categorySelect.appendChild(firstOption);
 
     categories.forEach(category => {
-
-        const option =
-            document.createElement("option");
-
+        const option = document.createElement("option");
         option.value = category.value;
         option.textContent = category.text;
-
         categorySelect.appendChild(option);
+    });
+}
 
+
+/* =========================================
+   FRUITS & VEGETABLES SUBCATEGORY
+========================================= */
+
+function updateFruitVegetableSubcategory() {
+
+    const mainCategory =
+        document.getElementById("productCategory");
+
+    const group =
+        document.getElementById("fruitVegetableSubcategoryGroup");
+
+    const subcategory =
+        document.getElementById("fruitVegetableSubcategory");
+
+    if (!mainCategory || !group || !subcategory) return;
+
+    const storeCategory = String(currentStoreCategory || "")
+        .trim()
+        .toLowerCase();
+
+    const selectedCategory = String(mainCategory.value || "")
+        .trim()
+        .toLowerCase();
+
+    const shouldShow =
+        ["grocery", "groceries"].includes(storeCategory) &&
+        selectedCategory === "fruits & vegetables";
+
+    group.style.display = shouldShow ? "block" : "none";
+    subcategory.required = shouldShow;
+
+    if (!shouldShow) {
+        subcategory.value = "";
+    }
+}
+
+/* Update when the main category changes */
+document.getElementById("productCategory")
+    ?.addEventListener("change", updateFruitVegetableSubcategory);
+
+    
+/* ==========================================
+   ALL ELECTRONICS SUBCATEGORIES + BRANDS
+========================================== */
+
+const electronicsOptions = {
+    "Mobile Phones": {
+        subcategories: [
+            "Smartphones", "Keypad Phones", "5G Phones",
+            "4G Phones", "Foldable Phones", "Refurbished Phones"
+        ],
+        brands: [
+            "Apple", "Samsung", "Vivo", "Oppo", "Xiaomi",
+            "Redmi", "Realme", "OnePlus", "iQOO","Mivi", "Poco",
+            "Motorola", "Nothing", "Lava", "Tecno", "Infinix",
+            "Google Pixel", "Nokia/HMD", "Asus", "Honor", "Other Brand"
+        ]
+    },
+
+    "Laptops & Computers": {
+        subcategories: [
+            "Student Laptops", "Business Laptops", "Gaming Laptops",
+            "Desktop Computers", "All-in-One PCs", "Mini PCs",
+            "Workstations", "Custom-Built PCs"
+        ],
+        brands: [
+            "HP", "Dell", "Lenovo", "Asus", "Acer", "Apple",
+            "MSI", "Microsoft Surface", "Samsung", "LG",
+            "Gigabyte", "Razer", "Alienware", "Xiaomi",
+            "Huawei", "Infinix", "Other Brand"
+        ]
+    },
+
+    "TVs & Accessories": {
+        subcategories: [
+            "Smart TVs", "LED TVs", "OLED TVs", "QLED TVs",
+            "4K TVs", "TV Stands", "Wall Mounts",
+            "Streaming Devices", "Set-Top Boxes"
+        ],
+        brands: [
+            "Samsung", "LG", "Sony", "Xiaomi", "TCL", "Hisense",
+            "Panasonic", "Philips", "Haier", "Vu", "Kodak",
+            "Acer", "Other Brand"
+        ]
+    },
+
+    "Audio & Earphones": {
+        subcategories: [
+            "Wireless Earbuds", "Wired Earphones", "Earphones",
+            "Bluetooth Speakers", "Soundbars", "Home Theatre",
+            "Microphones"
+        ],
+        brands: [
+            "boAt", "JBL", "Sony", "Sennheiser", "Bose", "Noise",
+            "OnePlus", "Realme", "Apple", "Samsung", "Zebronics",
+            "Portronics", "Marshall", "Other Brand"
+        ]
+    },
+
+    "Cameras": {
+        subcategories: [
+            "DSLR Cameras", "Mirrorless Cameras",
+            "Point-and-Shoot Cameras", "Action Cameras",
+            "CCTV Cameras", "Webcams", "Camera Lenses",
+            "Camera Accessories"
+        ],
+        brands: [
+            "Canon", "Nikon", "Sony", "Fujifilm", "Panasonic",
+            "GoPro", "DJI", "Insta360", "TP-Link", "Hikvision",
+            "CP Plus", "Other Brand"
+        ]
+    },
+
+    "Gaming": {
+        subcategories: [
+            "Gaming Consoles", "Gaming Controllers",
+            "Gaming Keyboards", "Gaming Mice", "Gaming Headsets",
+            "Gaming Chairs", "Gaming Monitors", "Gaming Accessories"
+        ],
+        brands: [
+            "Sony PlayStation", "Microsoft Xbox", "Nintendo",
+            "Asus ROG", "MSI", "Acer Predator", "Lenovo Legion",
+            "Logitech G", "Razer", "Corsair", "SteelSeries",
+            "Other Brand"
+        ]
+    },
+
+    "Mobile Accessories": {
+        subcategories: [
+            "Earphones","Chargers","Covers","Power banks","USB Cables","OTG Adapters","Screen Protectors","Mobile Holders"],
+        brands: [
+            "boAt", "Anker", "Ambrane", "Portronics", "Stuffcool",
+            "Spigen", "UGREEN", "Belkin", "Apple", "Samsung",
+            "Xiaomi", "OnePlus", "Other Brand"
+        ]
+    },
+
+    "Home Electronics": {
+        subcategories: [
+            "Wi-Fi Routers", "Smart Home Devices", "Security Systems",
+            "Smart Plugs", "Smart Lighting", "Video Doorbells",
+            "UPS", "Networking Devices"
+        ],
+        brands: [
+            "TP-Link", "D-Link", "Netgear", "Amazon Echo",
+            "Google Nest", "Philips Hue", "Hikvision", "CP Plus",
+            "Tenda", "Asus", "Other Brand"
+        ]
+    },
+
+    "Appliances": {
+        subcategories: [
+            "Fridges", "Washing Machines",
+            "Microwaves", "Air Coolers", "Water Purifiers",
+            "Mixer Grinders", "Electric Kettles",
+            "Irons", "Fans","Inverter","Televisions","Water Purifiers","Geysers"
+        ],
+        brands: [
+            "LG", "Samsung", "Whirlpool", "Godrej", "Haier",
+            "IFB", "Bosch", "Voltas", "Daikin", "Blue Star",
+            "Havells", "Crompton", "Bajaj", "Philips", "Prestige",
+            "Kent", "Other Brand"
+        ]
+    },
+
+    "Other": {
+        subcategories: [
+            "Printers", "Scanners", "Projectors", "RAM",
+            "SSD", "Hard Drives", "Graphics Cards", "Keyboards",
+            "Computer Mice", "Cables", "Adapters", "Calculators",
+            "Electronic Spare Parts", "Other Electronics"
+        ],
+        brands: [
+            "HP", "Canon", "Epson", "Brother", "Kingston",
+            "Western Digital", "Seagate", "SanDisk", "Crucial",
+            "NVIDIA", "AMD", "Logitech", "Other Brand"
+        ]
+    }
+};
+
+
+/* Fill a dropdown safely */
+function fillElectronicsDropdown(select, values, placeholder) {
+    select.innerHTML = "";
+
+    const first = document.createElement("option");
+    first.value = "";
+    first.textContent = placeholder;
+    select.appendChild(first);
+
+    values.forEach(function(value) {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        select.appendChild(option);
+    });
+}
+
+
+/* ADD PRODUCT: update both dropdowns */
+function updateElectronicsFields() {
+    const category = document.getElementById("productCategory");
+    const subGroup = document.getElementById("electronicsSubcategoryGroup");
+    const brandGroup = document.getElementById("electronicsBrandGroup");
+    const subcategory = document.getElementById("electronicsSubcategory");
+    const brand = document.getElementById("electronicsBrand");
+
+    if (!category || !subGroup || !brandGroup || !subcategory || !brand) return;
+
+    const isElectronics =
+        String(currentStoreCategory || "").trim().toLowerCase() === "electronics";
+
+    const config = isElectronics ? electronicsOptions[category.value] : null;
+
+    subGroup.style.display = config ? "block" : "none";
+    brandGroup.style.display = config ? "block" : "none";
+
+    subcategory.required = Boolean(config);
+    brand.required = Boolean(config);
+
+    fillElectronicsDropdown(
+        subcategory,
+        config ? config.subcategories : [],
+        "Select Subcategory"
+    );
+
+    fillElectronicsDropdown(
+        brand,
+        config ? config.brands : [],
+        "Select Brand"
+    );
+}
+
+
+/* Update when main Electronics category changes */
+document.getElementById("productCategory")
+    ?.addEventListener("change", updateElectronicsFields);
+
+
+    
+/* ==========================================
+   EDIT PRODUCT: ELECTRONICS DROPDOWNS
+========================================== */
+
+function updateEditElectronicsFields(
+    savedSubcategory = "",
+    savedBrand = ""
+) {
+    const category = document.getElementById("editProductCategory");
+    const subGroup = document.getElementById("editElectronicsSubcategoryGroup");
+    const brandGroup = document.getElementById("editElectronicsBrandGroup");
+    const subcategory = document.getElementById("editElectronicsSubcategory");
+    const brand = document.getElementById("editElectronicsBrand");
+
+    if (!category || !subGroup || !brandGroup || !subcategory || !brand) {
+        return;
+    }
+
+    const isElectronics =
+        String(currentStoreCategory || "")
+            .trim()
+            .toLowerCase() === "electronics";
+
+    const config = isElectronics
+        ? electronicsOptions[category.value]
+        : null;
+
+    subGroup.style.display = config ? "block" : "none";
+    brandGroup.style.display = config ? "block" : "none";
+
+    subcategory.required = Boolean(config);
+    brand.required = Boolean(config);
+
+    fillElectronicsDropdown(
+        subcategory,
+        config ? config.subcategories : [],
+        "Select Subcategory"
+    );
+
+    fillElectronicsDropdown(
+        brand,
+        config ? config.brands : [],
+        "Select Brand"
+    );
+
+    if (!config) {
+        return;
+    }
+
+    // Preserve previously saved values, including older custom values.
+    if (
+        savedSubcategory &&
+        !config.subcategories.includes(savedSubcategory)
+    ) {
+        const option = document.createElement("option");
+        option.value = savedSubcategory;
+        option.textContent = savedSubcategory;
+        subcategory.appendChild(option);
+    }
+
+    if (
+        savedBrand &&
+        !config.brands.includes(savedBrand)
+    ) {
+        const option = document.createElement("option");
+        option.value = savedBrand;
+        option.textContent = savedBrand;
+        brand.appendChild(option);
+    }
+
+    subcategory.value = savedSubcategory;
+    brand.value = savedBrand;
+}
+
+
+/* Reset selections when edit category changes */
+document.getElementById("editProductCategory")
+    ?.addEventListener("change", function () {
+        updateEditElectronicsFields("", "");
     });
 
-}
+
 
         async function loadRestaurantProfile() {
 
@@ -5596,106 +5959,161 @@ currentStoreCategory =
 
 setProductCategories(currentStoreCategory);
 
+updateFruitVegetableSubcategory();
 
-                const isGrocery =
-    currentStoreCategory.trim().toLowerCase() === "groceries";
 
-    // Dynamic Add Product Form
+               const categoryName = (currentStoreCategory || "Restaurant") .trim() .toLowerCase();
+
+const isGrocery = ["grocery", "groceries"].includes(categoryName);
+
+const isBeauty =
+    categoryName === "beauty & personal care";
+
+const isElectronics =
+    categoryName === "electronics";
+
+const isRestaurant =
+    !isGrocery && !isBeauty && !isElectronics;
+
+   // Dynamic Add Product Form
+
+const productType = isElectronics
+    ? "Electronics Product"
+    : isBeauty
+        ? "Beauty Product"
+        : isGrocery
+            ? "Grocery Product"
+            : "Food";
 
 document.getElementById("productNameLabel").textContent =
-    isGrocery
-        ? "🛒 Product Name"
-        : "🍔 Food Name";
+    isElectronics
+        ? "📱 Electronics Product Name"
+        : isBeauty
+            ? "🧴 Beauty Product Name"
+            : isGrocery
+                ? "🛒 Product Name"
+                : "🍔 Food Name";
 
 document.getElementById("productName").placeholder =
-    isGrocery
-        ? "Product Name (e.g. Rice, Milk, Apple)"
-        : "Food Name (e.g. Chicken Biryani)";
-
+    isElectronics
+        ? "e.g. Mobile Phone, Laptop, Earphones"
+        : isBeauty
+            ? "e.g. Face Wash, Shampoo, Lipstick"
+            : isGrocery
+                ? "e.g. Rice, Milk, Apple"
+                : "e.g. Chicken Biryani";
 
 document.getElementById("productDescriptionLabel").textContent =
-    isGrocery
-        ? "📝 Product Description"
-        : "📝 Food Description";
+    "📝 Product Description";
 
 document.getElementById("productDescription").placeholder =
-    isGrocery
-        ? "Product Description"
-        : "Food Description";
-
+    isElectronics
+        ? "Enter brand, model and product details"
+        : isBeauty
+            ? "Enter product details, brand and benefits"
+            : isGrocery
+                ? "Product Description"
+                : "Food Description";
 
 document.getElementById("productCategoryLabel").textContent =
-    isGrocery
-        ? "🛒 Grocery Category"
-        : "🍽️ Menu Category";
-
+    isElectronics
+        ? "📱 Electronics Category"
+        : isBeauty
+            ? "💄 Beauty Category"
+            : isGrocery
+                ? "🛒 Grocery Category"
+                : "🍽️ Menu Category";
 
 document.getElementById("productPriceLabel").textContent =
-    isGrocery
-        ? "💰 Product Price"
-        : "💰 Food Price";
-
+    isElectronics
+        ? "💰 Electronics Price"
+        : isBeauty || isGrocery
+            ? "💰 Product Price"
+            : "💰 Food Price";
 
 document.getElementById("productImageLabel").textContent =
-    isGrocery
-        ? "🖼️ Product Photo"
-        : "🖼️ Food Photo";
+    isElectronics
+        ? "🖼️ Electronics Product Photo"
+        : isBeauty || isGrocery
+            ? "🖼️ Product Photo"
+            : "🖼️ Food Photo";
 
-
-// Grocery में Preparation Time और Veg/Non-Veg नहीं चाहिए
+// Restaurant-only fields
 document.getElementById("productPreparationGroup").style.display =
-    isGrocery ? "none" : "block";
+    isRestaurant ? "block" : "none";
 
 document.getElementById("productVegGroup").style.display =
-    isGrocery ? "none" : "block";
+    isRestaurant ? "block" : "none";
 
-    document.getElementById("productsTitle").textContent =
-    isGrocery
-        ? "🛒 My Grocery Products"
-        : "🍔 My Food Products";
+// Product section title
+document.getElementById("productsTitle").textContent =
+    isElectronics
+        ? "📱 My Electronics Products"
+        : isBeauty
+            ? "💄 My Beauty Products"
+            : isGrocery
+                ? "🛒 My Grocery Products"
+                : "🍔 My Food Products";
 
+// Add product title
 document.getElementById("addProductTitle").textContent =
-    isGrocery
-        ? "🛒 Add Grocery Product"
-        : "🍔 Add Food / Product";
+    isElectronics
+        ? "📱 Add Electronics Product"
+        : isBeauty
+            ? "💄 Add Beauty Product"
+            : isGrocery
+                ? "🛒 Add Grocery Product"
+                : "🍔 Add Food Product";
 
+// Orders title
+document.getElementById("ordersTitle").textContent =
+    isElectronics
+        ? "📱 Electronics Orders"
+        : isBeauty
+            ? "💄 Beauty Orders"
+            : isGrocery
+                ? "🛒 Grocery Orders"
+                : "📦 Restaurant Orders";
 
-        document.getElementById("ordersTitle").textContent =
-    isGrocery
-        ? "🛒 Grocery Orders"
-        : "📦 Restaurant Orders";
-
-
-    document.getElementById("informationTitle").textContent =
-    isGrocery
-        ? "Grocery Information"
-        : "Restaurant Information";
+// Shop information
+document.getElementById("informationTitle").textContent =
+    isElectronics
+        ? "Electronics Store Information"
+        : isBeauty
+            ? "Beauty Store Information"
+            : isGrocery
+                ? "Grocery Information"
+                : "Restaurant Information";
 
 document.getElementById("storeNameLabel").textContent =
-    isGrocery
-        ? "Grocery Store Name"
-        : "Restaurant Name";
+    isElectronics
+        ? "Electronics Store Name"
+        : isBeauty
+            ? "Beauty Store Name"
+            : isGrocery
+                ? "Grocery Store Name"
+                : "Restaurant Name";
 
-
-
+// Dashboard title
 document.getElementById("dashboardTitle").textContent =
-    isGrocery
-        ? "🛒 Grocery Dashboard"
-        : "🍽️ Restaurant Dashboard";
+    isElectronics
+        ? "📱 Electronics Store Dashboard"
+        : isBeauty
+            ? "💄 Beauty Store Dashboard"
+            : isGrocery
+                ? "🛒 Grocery Dashboard"
+                : "🍽️ Restaurant Dashboard";
 
 document.getElementById("dashboardSubtitle").textContent =
-    isGrocery
-        ? "Manage your grocery store from here."
-        : "Manage your restaurant from here.";
+    isElectronics
+        ? "Manage your electronics store and products."
+        : isBeauty
+            ? "Manage your beauty and personal care store."
+            : isGrocery
+                ? "Manage your grocery store from here."
+                : "Manage your restaurant from here.";
 
-                document.getElementById("restaurantName").textContent =
-                    restaurant.name || "-";
-
-                document.getElementById("ownerName").textContent =
-                    restaurant.ownerName || "-";
-
-
-                    // ===============================
+// ===============================
 // PREMIUM PROFILE HEADER DATA
 // ===============================
 
@@ -6058,8 +6476,22 @@ async function addFoodProduct() {
 
 
         // Check Store Type
-        const isGrocery =
-    currentStoreCategory.trim().toLowerCase() === "groceries";
+const categoryName = String(currentStoreCategory || "Restaurant")
+    .trim()
+    .toLowerCase();
+
+const isGrocery = ["grocery", "groceries"].includes(categoryName);
+
+const isBeauty =
+    categoryName === "beauty & personal care";
+
+const isElectronics =
+    categoryName === "electronics";
+
+const isRestaurant =
+    !isGrocery &&
+    !isBeauty &&
+    !isElectronics;
 
 
         // Get Form Values
@@ -6072,6 +6504,40 @@ async function addFoodProduct() {
         const category =
             document.getElementById("productCategory").value.trim();
 
+        
+        let subcategory =
+            document.getElementById("fruitVegetableSubcategory")?.value || "";
+        
+        let brand = "";
+        
+        if (isElectronics) {
+            subcategory =
+                document.getElementById("electronicsSubcategory")?.value || "";
+        
+            brand =
+                document.getElementById("electronicsBrand")?.value || "";
+        }
+        
+        const electronicsCategoryConfig =
+            isElectronics ? electronicsOptions[category] : null;
+        
+        if (electronicsCategoryConfig && !subcategory) {
+            alert("Please select an Electronics subcategory.");
+            document.getElementById("electronicsSubcategory").focus();
+            return;
+        }
+        
+        if (electronicsCategoryConfig && !brand) {
+            alert("Please select an Electronics brand.");
+            document.getElementById("electronicsBrand").focus();
+            return;
+        }
+        
+        
+        const isFruitVegetable =
+           isGrocery &&
+           category.trim().toLowerCase() === "fruits & vegetables";
+
         const price =
             Number(
                 document.getElementById("productPrice").value
@@ -6083,48 +6549,63 @@ async function addFoodProduct() {
     const imageBase64 = await productImageToBase64(image);
 
 
-        // Food Only Fields
-        const preparationTime =
-            isGrocery
-                ? 20
-                : Number(
-                    document.getElementById(
-                        "productPreparationTime"
-                    ).value
-                );
+        // Food-only fields
+const preparationTime = isRestaurant
+    ? Number(document.getElementById("productPreparationTime").value)
+    : 20;
 
-        const isVeg =
-            isGrocery
-                ? true
-                : document.getElementById(
-                    "productIsVeg"
-                ).checked;
-
+const isVeg = isRestaurant
+    ? document.getElementById("productIsVeg").checked
+    : true;
 
         // Validation
 
-        if (!name) {
+       if (!name) {
+         alert(
+             isElectronics
+                 ? "Please enter electronics product name."
+                 : isBeauty
+                     ? "Please enter beauty product name."
+                     : isGrocery
+                         ? "Please enter product name."
+                         : "Please enter food name."
+         );
 
-            alert(
-                isGrocery
-                    ? "Please enter product name."
-                    : "Please enter food name."
-            );
-
-            return;
-        }
+       return;
+}
 
 
         if (!category) {
-
             alert(
-                isGrocery
-                    ? "Please select grocery category."
-                    : "Please select food category."
+                isElectronics
+                    ? "Please select an electronics category."
+                    : isBeauty
+                        ? "Please select a beauty category."
+                        : isGrocery
+                            ? "Please select grocery category."
+                            : "Please select food category."
             );
 
-            return;
+          return;
+
         }
+
+        
+         /* Require subcategory for Fruits & Vegetables */
+         if (isFruitVegetable && !subcategory.trim()) {
+             alert("Please select a Vegetable Type before adding this product.");
+         
+             const subcategoryField = document.getElementById(
+                 "fruitVegetableSubcategory"
+             );
+         
+             if (subcategoryField) {
+                 subcategoryField.focus();
+             }
+         
+             return;
+         }
+
 
 
         if (!price || price <= 0) {
@@ -6147,24 +6628,30 @@ async function addFoodProduct() {
                     "Authorization": "Bearer " + token
                 },
 
-                body: JSON.stringify({
+               
+                   body: JSON.stringify({
+                   
+                       name: name,
+                   
+                       description: description,
+                   
+                       category: category,
+                   
+                       subcategory: subcategory,
 
-                    name: name,
+                       brand: brand,
+                   
+                       price: price,
+                   
+                       image: imageBase64,
+                   
+                       preparationTime:
+                           preparationTime || 20,
+                   
+                       isVeg: isVeg
+                   
+                   })
 
-                    description: description,
-
-                    category: category,
-
-                    price: price,
-
-                    image: imageBase64,
-
-                    preparationTime:
-                        preparationTime || 20,
-
-                    isVeg: isVeg
-
-                })
             }
         );
 
@@ -6199,6 +6686,17 @@ async function addFoodProduct() {
         document.getElementById(
             "productCategory"
         ).value = "";
+
+        const subcategoryField =
+          document.getElementById("fruitVegetableSubcategory");
+
+          if (subcategoryField) {
+              subcategoryField.value = "";
+          }
+
+        updateFruitVegetableSubcategory();
+
+        updateElectronicsFields();
 
         document.getElementById(
             "productPrice"
@@ -6236,13 +6734,21 @@ await loadRestaurantProducts();
 setTimeout(() => {
 
     showProductSuccessToast(
-        isGrocery
-            ? "Grocery Product Added"
-            : "Food Product Added",
+        isElectronics
+            ? "Electronics Product Added"
+            : isBeauty
+                ? "Beauty Product Added"
+                : isGrocery
+                    ? "Grocery Product Added"
+                    : "Food Product Added",
 
-        isGrocery
-            ? "Your grocery product was added successfully."
-            : "Your food product was added successfully."
+        isElectronics
+            ? "Your electronics product was added successfully."
+            : isBeauty
+                ? "Your beauty product was added successfully."
+                : isGrocery
+                    ? "Your grocery product was added successfully."
+                    : "Your food product was added successfully."
     );
 
 }, 150);
@@ -6267,19 +6773,28 @@ async function deleteProduct(productId) {
     try {
 
        // Store Type
-const isGrocery =
-    currentStoreCategory.trim().toLowerCase() === "groceries";
+const categoryName = String(currentStoreCategory || "Restaurant")
+    .trim()
+    .toLowerCase();
 
-        // Confirmation
-        const confirmDelete = confirm(
-            isGrocery
+const isGrocery = ["grocery", "groceries"].includes(categoryName);
+const isBeauty = categoryName === "beauty & personal care";
+const isElectronics = categoryName === "electronics";
+
+// Confirmation
+const confirmDelete = confirm(
+    isElectronics
+        ? "⚠️ Kya aap is electronics product ko delete karna chahte hain?"
+        : isBeauty
+            ? "⚠️ Kya aap is beauty product ko delete karna chahte hain?"
+            : isGrocery
                 ? "⚠️ Kya aap is grocery product ko delete karna chahte hain?"
                 : "⚠️ Kya aap is food product ko delete karna chahte hain?"
-        );
+);
 
-        if (!confirmDelete) {
-            return;
-        }
+if (!confirmDelete) {
+    return;
+}
 
 
         // Token
@@ -6316,14 +6831,16 @@ const isGrocery =
         }
 
 
-        // Success Message
-        alert(
-            isGrocery
-                ? "🗑️ Grocery product deleted successfully."
-                : "🗑️ Food product deleted successfully."
+       // Success Message
+         alert(
+            isElectronics
+                ? "🗑️ Electronics product deleted successfully."
+                : isBeauty
+                    ? "🗑️ Beauty product deleted successfully."
+                    : isGrocery
+                        ? "🗑️ Grocery product deleted successfully."
+                        : "🗑️ Food product deleted successfully."
         );
-
-
         // Reload Products
         loadRestaurantProducts();
 
@@ -6452,9 +6969,7 @@ async function editProduct(productId) {
    OPEN EDIT PAGE WITH PRODUCT DATA
 ========================================================= */
 
-function openEditProductWithData(
-    product
-) {
+function openEditProductWithData(product) {
 
     editingProductId =
         product._id;
@@ -6467,12 +6982,17 @@ function openEditProductWithData(
        Store type
     */
 
-    const isGrocery =
-        currentStoreCategory
-            .trim()
-            .toLowerCase() ===
-        "groceries";
+    const categoryName = String(currentStoreCategory || "Restaurant")
+    .trim()
+    .toLowerCase();
 
+const isGrocery = ["grocery", "groceries"].includes(categoryName);
+
+const isBeauty = categoryName === "beauty & personal care";
+
+const isElectronics = categoryName === "electronics";
+
+const isRestaurant = !isGrocery && !isBeauty && !isElectronics;
 
     /*
        Product name
@@ -6505,12 +7025,14 @@ function openEditProductWithData(
     if (subtitle) {
 
         subtitle.textContent =
-            product.name ||
+           product.name ||
             (
-                isGrocery
-                    ? "Grocery Product"
-                    : "Food Product"
-            );
+                isBeauty
+                    ? "Beauty Product"
+                    : isGrocery
+                        ? "Grocery Product"
+                        : "Food Product"
+            )
 
     }
 
@@ -6570,9 +7092,7 @@ function openEditProductWithData(
     }
 
 
-    /*
-       Category
-    */
+    /*Category*/
 
     const categorySelect =
         document.getElementById(
@@ -6582,78 +7102,93 @@ function openEditProductWithData(
 
     if (categorySelect) {
 
-        const categoryOptions =
-            isGrocery
+       
+const categoryOptions = isElectronics
+    ? [
+        "Mobile Phones",
+        "Laptops & Computers",
+        "TVs & Accessories",
+        "Audio & Earphones",
+        "Cameras",
+        "Gaming",
+        "Mobile Accessories",
+        "Home Electronics",
+        "Appliances",
+        "Other"
+    ]
+    : isBeauty
+        ? [
+            "Skincare",
+            "Haircare",
+            "Makeup",
+            "Fragrances",
+            "Personal Care",
+            "Bath & Body",
+            "Men's Grooming",
+            "Beauty Tools",
+            "Other"
+        ]
+        : isGrocery
+            ? [
+                "Breakfast Cereal",
+                "Fruits & Vegetables",
+                "Dry Fruits and Nuts",
+                "Dairy & Milk",
+                "Grocery & Staples",
+                "Snacks",
+                "Beverages",
+                "Personal Care",
+                "Household",
+                "Bakery",
+                "Other"
+            ]
+            : [
+                "Quick Bites",
+                "Chicken",
+                "Paneer",
+                "Tandoor & Tawa",
+                "Main Course",
+                "Pizza",
+                "Burger",
+                "Biryani",
+                "Chinese",
+                "Sweets",
+                "Bakery",
+                "Beverages",
+                "Other"
+            ];
 
-                ? [
-                    "Fruits & Vegetables",
-                    "Dairy & Milk",
-                    "Grocery & Staples",
-                    "Snacks",
-                    "Beverages",
-                    "Personal Care",
-                    "Household",
-                    "Bakery",
-                    "Other"
-                ]
+// Purani category wale products ki category bhi preserve rahegi
+if (
+    product.category &&
+    !categoryOptions.includes(product.category)
+) {
+    categoryOptions.push(product.category);
+}
 
-                : [
-                    "Pizza",
-                    "Burger",
-                    "Biryani",
-                    "Chinese",
-                    "North Indian",
-                    "South Indian",
-                    "Thali",
-                    "Rolls",
-                    "Snacks",
-                    "Sweets",
-                    "Bakery",
-                    "Beverages",
-                    "Other"
-                ];
+categorySelect.innerHTML = "";
 
+categoryOptions.forEach(category => {
+    const option = document.createElement("option");
 
-        categorySelect.innerHTML = "";
+    option.value = category;
+    option.textContent = category;
 
-
-        categoryOptions.forEach(
-            category => {
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-
-                option.value =
-                    category;
-
-
-                option.textContent =
-                    category;
-
-
-                if (
-                    category ===
-                    product.category
-                ) {
-
-                    option.selected =
-                        true;
-
-                }
-
-
-                categorySelect.appendChild(
-                    option
-                );
-
-            }
-        );
-
+    if (category === product.category) {
+        option.selected = true;
     }
 
+    categorySelect.appendChild(option);
+});
+
+}
+
+
+/* Load saved Electronics subcategory and brand */
+updateEditElectronicsFields(
+    product.subcategory || "",
+    product.brand || ""
+);
 
     /*
        Grocery fields
@@ -6671,7 +7206,7 @@ function openEditProductWithData(
         );
 
 
-    if (isGrocery) {
+    if (!isRestaurant) {
 
         if (preparationField) {
 
@@ -7050,11 +7585,16 @@ async function saveEditedProduct() {
            Store type
         */
 
-        const isGrocery =
-            currentStoreCategory
-                .trim()
-                .toLowerCase() ===
-            "groceries";
+       const categoryName = String(currentStoreCategory || "Restaurant")
+    .trim()
+    .toLowerCase();
+
+const isGrocery = ["grocery", "groceries"].includes(categoryName);
+const isBeauty = categoryName === "beauty & personal care";
+const isElectronics = categoryName === "electronics";
+
+const isRestaurant =
+    !isGrocery && !isBeauty && !isElectronics;
 
 
         /*
@@ -7084,6 +7624,34 @@ async function saveEditedProduct() {
                 .value
                 .trim();
 
+                
+/* Read Electronics subcategory and brand */
+let subcategory = editingProductData?.subcategory || "";
+let brand = editingProductData?.brand || "";
+
+if (isElectronics) {
+    subcategory =
+        document.getElementById("editElectronicsSubcategory")?.value || "";
+
+    brand =
+        document.getElementById("editElectronicsBrand")?.value || "";
+
+    const config = electronicsOptions[category];
+
+    if (config && !subcategory) {
+        alert("Please select an Electronics subcategory.");
+        document.getElementById("editElectronicsSubcategory").focus();
+        return;
+    }
+
+    if (config && !brand) {
+        alert("Please select an Electronics brand.");
+        document.getElementById("editElectronicsBrand").focus();
+        return;
+    }
+}
+
+
 
         const price =
             Number(
@@ -7099,14 +7667,13 @@ async function saveEditedProduct() {
             );
 
 
-        const preparationTime =
-            isGrocery
-                ? 20
-                : Number(
-                    preparationInput
-                        ? preparationInput.value
-                        : 20
-                );
+        const preparationTime = isRestaurant
+    ? Number(
+        preparationInput
+            ? preparationInput.value
+            : 20
+      )
+    : 20;
 
 
         const availableCheckbox =
@@ -7128,7 +7695,7 @@ async function saveEditedProduct() {
         let isVeg = true;
 
 
-        if (!isGrocery) {
+       if (isRestaurant) {
 
             const nonVegRadio =
                 document.getElementById(
@@ -7187,10 +7754,14 @@ async function saveEditedProduct() {
 
         if (!name) {
 
-            alert(
-                isGrocery
-                    ? "Please enter product name."
-                    : "Please enter food name."
+           alert(
+                isElectronics
+                    ? "Please enter electronics product name."
+                    : isBeauty
+                        ? "Please enter beauty product name."
+                        : isGrocery
+                            ? "Please enter product name."
+                            : "Please enter food name."
             );
 
             return;
@@ -7224,7 +7795,7 @@ async function saveEditedProduct() {
 
 
         if (
-            !isGrocery &&
+            isRestaurant &&
             (
                 !preparationTime ||
                 preparationTime <= 0
@@ -7238,6 +7809,8 @@ async function saveEditedProduct() {
             return;
 
         }
+
+     
 
 
         /*
@@ -7298,6 +7871,8 @@ async function saveEditedProduct() {
                             category:
                                 category,
 
+                            subcategory: subcategory,brand: brand,
+
                             price:
                                 price,
 
@@ -7356,18 +7931,25 @@ async function saveEditedProduct() {
 
         setTimeout(() => {
 
-    showProductSuccessToast(
-        isGrocery
-            ? "Grocery Product Updated"
-            : "Food Product Updated",
+                showProductSuccessToast(
+                isElectronics
+                    ? "Electronics Product Updated"
+                    : isBeauty
+                        ? "Beauty Product Updated"
+                        : isGrocery
+                            ? "Grocery Product Updated"
+                            : "Food Product Updated",
+            
+                isElectronics
+                    ? "Your electronics product was updated successfully."
+                    : isBeauty
+                        ? "Your beauty product was updated successfully."
+                        : isGrocery
+                            ? "Your grocery product was updated successfully."
+                            : "Your food product was updated successfully."
+            );
 
-        isGrocery
-            ? "Your grocery product was updated successfully."
-            : "Your food product was updated successfully."
-
-    );
-
-    }, 250);
+        }, 250);
 
 
     } catch (error) {
@@ -7587,153 +8169,95 @@ let restaurantProductsCache = [];
    CREATE PRODUCT CATEGORY TABS
 ========================================================= */
 
+
 function renderProductCategoryTabs(products = []) {
-
     const tabs = document.getElementById("productCategoryTabs");
-
-    if (!tabs) {
-        return;
-    }
+    if (!tabs) return;
 
     tabs.innerHTML = "";
 
-    const categorySelect =
-        document.getElementById("productCategory");
-
+    const categorySelect = document.getElementById("productCategory");
     const categories = [];
 
-    /*
-       Use the same categories already used by
-       the Add Product category dropdown.
-    */
     if (categorySelect) {
-
         Array.from(categorySelect.options).forEach(option => {
+            const value = String(option.value || "").trim();
+            const text = String(option.textContent || "").trim();
 
-            const value =
-                String(option.value || "").trim();
+            if (!value) return;
 
-            const text =
-                String(option.textContent || "").trim();
-
-            /* Skip "Select Category" option */
-            if (!value) {
-                return;
+            if (!categories.some(c =>
+                c.value.toLowerCase() === value.toLowerCase()
+            )) {
+                categories.push({ value, text });
             }
-
-            if (
-                !categories.some(
-                    category =>
-                        category.value.toLowerCase() ===
-                        value.toLowerCase()
-                )
-            ) {
-                categories.push({
-                    value,
-                    text
-                });
-            }
-
         });
     }
 
-    /*
-       Fallback:
-       If the Add Product dropdown is not available yet,
-       build categories from the products returned by API.
-    */
     if (categories.length === 0) {
+        (products || []).forEach(product => {
+            const value = String(product.category || "").trim();
+            if (!value) return;
 
-        products.forEach(product => {
-
-            const value =
-                String(product.category || "").trim();
-
-            if (!value) {
-                return;
+            if (!categories.some(c =>
+                c.value.toLowerCase() === value.toLowerCase()
+            )) {
+                categories.push({ value, text: value });
             }
-
-            if (
-                !categories.some(
-                    category =>
-                        category.value.toLowerCase() ===
-                        value.toLowerCase()
-                )
-            ) {
-                categories.push({
-                    value,
-                    text: value
-                });
-            }
-
         });
     }
 
-
-    /* -----------------------------------------------------
-       ALL BUTTON
-    ----------------------------------------------------- */
-
-    const allButton =
-        document.createElement("button");
-
+    const allButton = document.createElement("button");
     allButton.type = "button";
     allButton.className = "product-category-btn";
+    allButton.textContent = "✨ All";
 
-    if (selectedProductCategory === "ALL") {
+    if (
+        !selectedProductCategory ||
+        String(selectedProductCategory).toLowerCase() === "all"
+    ) {
+        selectedProductCategory = "ALL";
         allButton.classList.add("active");
     }
 
-    allButton.textContent = "✨ All";
-
     allButton.onclick = function () {
-
         selectedProductCategory = "ALL";
-
         renderProductCategoryTabs(products);
-        renderFilteredProducts(products);
-
+        renderFilteredProducts(restaurantProductsCache || products || []);
     };
 
     tabs.appendChild(allButton);
 
-
-    /* -----------------------------------------------------
-       CATEGORY BUTTONS
-    ----------------------------------------------------- */
-
     categories.forEach(category => {
-
-        const button =
-            document.createElement("button");
-
+        const button = document.createElement("button");
         button.type = "button";
         button.className = "product-category-btn";
+        button.textContent = category.text;
 
         if (
-            selectedProductCategory.toLowerCase() ===
+            String(selectedProductCategory || "").trim().toLowerCase() ===
             category.value.toLowerCase()
         ) {
             button.classList.add("active");
         }
 
-        button.textContent = category.text;
+        button.onclick = function (event) {
+            event.preventDefault();
 
-        button.onclick = function () {
+            selectedProductCategory = category.value;
 
-            selectedProductCategory =
-                category.value;
+            tabs.querySelectorAll(".product-category-btn")
+                .forEach(tab => tab.classList.remove("active"));
 
-            renderProductCategoryTabs(products);
-            renderFilteredProducts(products);
+            button.classList.add("active");
 
+            renderFilteredProducts(restaurantProductsCache || products || []);
         };
 
         tabs.appendChild(button);
-
     });
-
 }
+
 
 
 /* =========================================================
@@ -7751,46 +8275,61 @@ function renderFilteredProducts(products) {
     }
 
 
-    const isGrocery =
-        String(currentStoreCategory || "")
-            .trim()
-            .toLowerCase() === "groceries";
+   const categoryName = String(currentStoreCategory || "Restaurant")
+    .trim()
+    .toLowerCase();
 
+const isGrocery = ["grocery", "groceries"].includes(categoryName);
+const isBeauty = categoryName === "beauty & personal care";
+const isRestaurant = !isGrocery && !isBeauty;
+
+console.log("=== MENU CATEGORY DEBUG ===");
+
+console.log(
+    "Selected category:",
+    JSON.stringify(selectedProductCategory)
+);
+
+console.table(
+    (products || []).map(product => ({
+        name: product.name,
+        category: product.category,
+        subcategory: product.subcategory
+    }))
+);
 
     /* =====================================================
        FILTER PRODUCTS BY CATEGORY
     ===================================================== */
 
-    let filteredProducts;
+    let filteredProducts = [];
 
+const normalizeMenuCategory = value =>
+    String(value ?? "")
+        .normalize("NFKC")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
 
-    if (selectedProductCategory === "ALL") {
+const selectedCategory =
+    normalizeMenuCategory(selectedProductCategory);
 
-        filteredProducts = products;
+if (!selectedCategory || selectedCategory === "all") {
+    filteredProducts = Array.isArray(products) ? products : [];
+} else {
+    filteredProducts = (Array.isArray(products) ? products : []).filter(product => {
+        const productCategory =
+            normalizeMenuCategory(product.category);
 
-    } else {
+        const productSubcategory =
+            normalizeMenuCategory(product.subcategory);
 
-        filteredProducts =
-            products.filter(product => {
-
-                const productCategory =
-                    String(product.category || "")
-                        .trim()
-                        .toLowerCase();
-
-                const selectedCategory =
-                    String(selectedProductCategory || "")
-                        .trim()
-                        .toLowerCase();
-
-                return (
-                    productCategory ===
-                    selectedCategory
-                );
-
-            });
-
-    }
+        return (
+            productCategory === selectedCategory ||
+            productSubcategory === selectedCategory
+        );
+    });
+}
 
 
     /* =====================================================
@@ -7800,17 +8339,21 @@ function renderFilteredProducts(products) {
     if (filteredProducts.length === 0) {
 
         const message =
-            products.length === 0
-                ? (
-                    isGrocery
-                        ? "🛒 No grocery products added yet."
-                        : "🍔 No food products added yet."
-                )
-                : (
-                    isGrocery
-                        ? "🛒 No grocery product in this category."
-                        : "🍔 No food product in this category."
-                );
+    products.length === 0
+        ? (
+            isBeauty
+                ? "🧴 No beauty products added yet."
+                : isGrocery
+                    ? "🛒 No grocery products added yet."
+                    : "🍔 No food products added yet."
+        )
+        : (
+            isBeauty
+                ? "🧴 No beauty product in this category."
+                : isGrocery
+                    ? "🛒 No grocery product in this category."
+                    : "🍔 No food product in this category."
+        );
 
 
         box.innerHTML = `
@@ -7896,9 +8439,11 @@ function renderFilteredProducts(products) {
 
                                 <span>
                                     ${
-                                        isGrocery
-                                            ? "🛒"
-                                            : "🍔"
+                                        isBeauty
+                                    ? "🧴"
+                                    : isGrocery
+                                        ? "🛒"
+                                        : "🍔"
                                     }
                                 </span>
 
@@ -7935,7 +8480,7 @@ function renderFilteredProducts(products) {
                             >
 
                                 ${
-                                    !isGrocery
+                                    isRestaurant
                                     ? `
 
                                         <div
@@ -8525,11 +9070,11 @@ if (activeOrders.length === 0) {
 
                             ${
 
-    currentStoreCategory.trim().toLowerCase() === "groceries"
-
-        ? "📦 Start Packing"
-
-        : "👨‍🍳 Start Preparing"
+    (
+    currentStoreCategory || "Restaurant"
+).trim().toLowerCase() !== "restaurant"
+    ? "📦 Start Packing"
+    : "👨‍🍳 Start Preparing"
 
 }
 
@@ -10224,7 +10769,35 @@ document
                 <select id="editProductCategory">
                 </select>
 
-            </div>
+                
+                  <!-- EDIT ELECTRONICS SUBCATEGORY -->
+                  <div id="editElectronicsSubcategoryGroup"
+                       style="display:none; margin-top:14px;">
+                  
+                      <label for="editElectronicsSubcategory">
+                          Electronics Subcategory
+                      </label>
+                  
+                      <select id="editElectronicsSubcategory">
+                          <option value="">Select Subcategory</option>
+                      </select>
+                  </div>
+                  
+                  <!-- EDIT ELECTRONICS BRAND -->
+                  <div id="editElectronicsBrandGroup"
+                       style="display:none; margin-top:14px;">
+                  
+                      <label for="editElectronicsBrand">
+                          Electronics Brand
+                      </label>
+                  
+                      <select id="editElectronicsBrand">
+                          <option value="">Select Brand</option>
+                      </select>
+                  </div>
+
+
+                </div>
 
 
             <!-- Price + Preparation -->

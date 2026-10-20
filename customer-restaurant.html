@@ -261,267 +261,166 @@
         }
 
 
-        /* RESTAURANT INFO */
 
-        .restaurant-card {
+/* RESTAURANT INFO */
+.restaurant-card {
+    margin-top: 12px;
+    padding: 12px;
+    background: #142039;
+    border: 1px solid #2d4167;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.20);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7px;
+}
+
+.info-box {
+    background: #0e172b;
+    border: 1px solid #263858;
+    border-radius: 10px;
+    padding: 8px 6px;
+}
+
+.info-label {
+    font-size: 9px;
+    color: #71809b;
+    margin-bottom: 3px;
+}
+
+.info-value {
+    font-size: 11px;
+    font-weight: 600;
+    color: #dbe4f5;
+    line-height: 1.4;
+}
+
+.description {
+    margin-top: 11px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #9eabc1;
+}
+
+/* MENU */
+.menu-title {
+    margin: 20px 0 12px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* PRODUCTS GRID - SAME AS GROCERY STORE */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+/* PRODUCT CARD */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    background: #142039;
+    border: 1px solid #2d4167;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+
+/* PRODUCT IMAGE */
+.product-image {
+    width: 100%;
+    height: 135px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #202d49;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* PRODUCT DETAILS */
+.product-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    padding: 9px;
+}
+
+
+
+.product-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 4px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.product-description {
+    display: none !important;
+}
+
+.product-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+}
+
+.product-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.food-type {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 4px 7px;
+    border-radius: 15px;
+}
+
+.veg {
+    color: #71e6a5;
+    background: rgba(54,211,130,0.12);
+}
+
+.nonveg {
+    color: #ff8f8f;
+    background: rgba(255,80,80,0.12);
+}
+
+/* ADD TO CART */
+.add-btn {
+    width: 100%;
+    padding: 8px 5px;
+    margin-top: 8px;
+    border: 1px solid #36578f;
+    border-radius: 8px;
+    background: #36578f;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.add-btn:active {
+    transform: scale(0.98);
+}
 
-            margin-top: 12px;
-
-            padding: 14px;
-
-            background: #142039;
-
-            border: 1px solid #2d4167;
-
-            border-radius: 16px;
-        }
-
-
-        .info-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 8px;
-        }
-
-
-        .info-box {
-
-            background: #0e172b;
-
-            border: 1px solid #263858;
-
-            border-radius: 11px;
-
-            padding: 10px;
-        }
-
-
-        .info-label {
-
-            font-size: 9px;
-
-            color: #71809b;
-
-            margin-bottom: 4px;
-        }
-
-
-        .info-value {
-
-            font-size: 12px;
-
-            font-weight: 600;
-
-            color: #dbe4f5;
-
-            line-height: 1.4;
-        }
-
-
-        .description {
-
-            margin-top: 12px;
-
-            font-size: 12px;
-
-            color: #9eabc1;
-
-            line-height: 1.6;
-        }
-
-
-        /* MENU */
-
-        .menu-title {
-
-            margin:
-
-                20px
-                0
-                12px;
-
-            font-size: 18px;
-
-            font-weight: 700;
-        }
-
-
-        .product-list {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 11px;
-        }
-
-
-        .product-card {
-
-            display: flex;
-
-            gap: 12px;
-
-            padding: 12px;
-
-            background: #142039;
-
-            border: 1px solid #2d4167;
-
-            border-radius: 15px;
-
-            box-shadow:
-                0 4px 12px
-                rgba(0,0,0,0.18);
-        }
-
-
-        .product-image {
-
-            width: 82px;
-
-            height: 82px;
-
-            flex-shrink: 0;
-
-            border-radius: 12px;
-
-            overflow: hidden;
-
-            background: #202d49;
-        }
-
-
-        .product-image img {
-
-            width: 100%;
-
-            height: 100%;
-
-            object-fit: cover;
-
-            display: block;
-        }
-
-
-        .product-content {
-
-            min-width: 0;
-
-            flex: 1;
-        }
-
-
-        .product-name {
-
-            font-size: 16px;
-
-            font-weight: 700;
-
-            color: #ffffff;
-
-            margin-bottom: 5px;
-        }
-
-
-        .product-description {
-
-            font-size: 11px;
-
-            color: #91a0bb;
-
-            line-height: 1.4;
-
-            margin-bottom: 7px;
-
-        }
-
-
-        .product-bottom {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            gap: 8px;
-
-        }
-
-
-        .product-price {
-
-            font-size: 15px;
-
-            font-weight: 700;
-
-            color: #71e6a5;
-        }
-
-
-        .food-type {
-
-            font-size: 9px;
-
-            font-weight: 700;
-
-            padding: 4px 7px;
-
-            border-radius: 15px;
-        }
-
-
-        .veg {
-
-            color: #71e6a5;
-
-            background:
-                rgba(54,211,130,0.12);
-        }
-
-
-        .nonveg {
-
-            color: #ff8f8f;
-
-            background:
-                rgba(255,80,80,0.12);
-        }
-
-
-        .add-btn {
-
-            width: 100%;
-
-            padding: 9px;
-
-            margin-top: 8px;
-
-            border: none;
-
-            border-radius: 9px;
-
-            background: #36578F;
-
-            color: #ffffff;
-
-            font-size: 12px;
-
-            font-weight: 700;
-
-            cursor: pointer;
-        }
-
-
-        .add-btn:active {
-
-            transform: scale(0.98);
-        }
 
 
         /* CART */
@@ -647,6 +546,380 @@ button:focus-visible {
     box-shadow: none !important;
 }
 
+
+/* MENU CATEGORY SCROLLER */
+.menu-categories {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 3px 0 10px;
+    margin-bottom: 8px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.menu-categories::-webkit-scrollbar {
+    display: none;
+}
+
+.menu-category-btn {
+    flex: 0 0 auto;
+    padding: 9px 16px;
+    border: 1px solid #2d4167;
+    border-radius: 22px;
+    background: #142039;
+    color: #cbd5e8;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.menu-category-btn.active {
+    background: #36578F;
+    color: #ffffff;
+    border-color: #6389c8;
+}
+
+.menu-category-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* RESTAURANT PAGE HEADER */
+.restaurant-page-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 15px 0;
+    margin-bottom: 15px;
+}
+
+.restaurant-page-header .back-button {
+    position: static;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid #2d4167;
+    border-radius: 12px;
+    background: #142039;
+    color: #fff;
+    z-index: auto;
+}
+
+.restaurant-page-heading {
+    flex: 1;
+    min-width: 0;
+}
+
+.restaurant-page-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.restaurant-page-subtitle {
+    margin-top: 4px;
+    font-size: 11px;
+    color: #91a0bb;
+}
+
+/* GROCERY-STYLE RESTAURANT CARD */
+.restaurant-card {
+    margin-top: 0;
+    padding: 12px;
+    background: #142039;
+    border: 1px solid #2d4167;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.20);
+}
+
+.restaurant-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.restaurant-store-image {
+    width: 92px;
+    height: 92px;
+    flex: 0 0 92px;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #202d49;
+}
+
+.restaurant-store-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.restaurant-store-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.restaurant-store-name {
+    font-size: 18px;
+    line-height: 1.25;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    overflow-wrap: anywhere;
+}
+
+.restaurant-owner-line {
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: #aebbd1;
+    overflow-wrap: anywhere;
+}
+
+.restaurant-store-location {
+    font-size: 11px;
+    color: #91a0bb;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.restaurant-card .status-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+}
+
+.restaurant-card .status {
+    font-size: 10px;
+    padding: 4px 8px;
+}
+
+.restaurant-card .category {
+    font-size: 10px;
+    padding: 4px 7px;
+    background: #0e172b;
+    border: 1px solid #263858;
+    border-radius: 20px;
+}
+
+/* THREE DETAILS BOXES */
+.restaurant-card .info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-top: 12px;
+}
+
+.restaurant-card .info-box {
+    min-width: 0;
+    background: #0e172b;
+    border: 1px solid #263858;
+    border-radius: 10px;
+    padding: 8px 5px;
+    text-align: center;
+}
+
+.restaurant-card .info-label {
+    font-size: 9px;
+    color: #71809b;
+    margin-bottom: 3px;
+}
+
+.restaurant-card .info-value {
+    font-size: 11px;
+    font-weight: 700;
+    color: #dbe4f5;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.restaurant-card .description {
+    margin-top: 11px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #9eabc1;
+}
+
+@media (max-width: 360px) {
+    .restaurant-store-image {
+        width: 78px;
+        height: 78px;
+        flex-basis: 78px;
+    }
+
+    .restaurant-store-name {
+        font-size: 16px;
+    }
+}
+
+
+/* CALL ICON - TOP RIGHT */
+.restaurant-card-top {
+    position: relative;
+    padding-right: 42px;
+}
+
+.restaurant-call-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #36578f;
+    border-radius: 50%;
+    background: #0e172b;
+    color: #71e6a5;
+    font-size: 21px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.restaurant-call-btn:active {
+    transform: scale(0.94);
+}
+
+/* PRODUCT DETAILS POPUP */
+.product-details-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    background: rgba(2, 6, 18, 0.82);
+    backdrop-filter: blur(6px);
+}
+
+.product-details-popup.active {
+    display: flex;
+}
+
+.product-details-box {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    background: #101b31;
+    border: 1px solid #2d4167;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+
+.product-details-box::-webkit-scrollbar {
+    display: none;
+}
+
+.product-details-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 50%;
+    background: rgba(5,10,25,.8);
+    color: white;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.product-details-image {
+    width: 100%;
+    height: 230px;
+    background: #202d49;
+}
+
+.product-details-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.product-details-content {
+    padding: 17px;
+}
+
+.product-details-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: white;
+    padding-right: 38px;
+    overflow-wrap: anywhere;
+}
+
+.product-details-price {
+    margin-top: 7px;
+    font-size: 23px;
+    font-weight: 800;
+    color: #71e6a5;
+}
+
+.product-details-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 12px 0;
+}
+
+.product-details-badges span {
+    padding: 6px 9px;
+    border-radius: 18px;
+    font-size: 11px;
+    font-weight: 700;
+    background: #0b1224;
+    border: 1px solid #2d4167;
+    color: #dbe4f5;
+}
+
+.product-details-section {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #263858;
+}
+
+.product-details-label {
+    color: #91a0bb;
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.product-details-value {
+    color: #f2f5fb;
+    font-size: 13px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.product-details-add {
+    width: 100%;
+    margin-top: 17px;
+    padding: 13px;
+    border: 0;
+    border-radius: 11px;
+    background: #36578f;
+    color: white;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+}
     </style>
 
 </head>
@@ -657,149 +930,97 @@ button:focus-visible {
 
 <div class="app-container">
 
-
-    <!-- RESTAURANT HEADER -->
-
-    <div class="top-header">
-
-
-        <img
-            id="restaurantImage"
-            class="restaurant-cover"
-            src="images/restaurant.jpg"
-            alt="Restaurant"
-        >
-
-
-        <div class="cover-overlay"></div>
-
-
-        <button
-            class="back-button"
-            onclick="history.back()"
-        >
-            ←
-        </button>
-
-
-        <div class="header-content">
-
-
-            <div
-                id="restaurantName"
-                class="restaurant-name"
-            >
-                Loading...
-            </div>
-
-
-            <div
-                id="restaurantLocation"
-                class="restaurant-location"
-            >
-                Loading restaurant information...
-            </div>
-
-
-            <div
-                id="statusRow"
-                class="status-row"
-            >
-            </div>
-
-
+    
+<!-- RESTAURANT PAGE HEADER -->
+<div class="restaurant-page-header">
+<button type="button" class="back-button" onclick="closeRestaurantShopView()" >←</button>
+    <div class="restaurant-page-heading">
+        <div id="pageRestaurantTitle" class="restaurant-page-title">
+            Restaurant
         </div>
-
+        <div class="restaurant-page-subtitle">Restaurant details</div>
     </div>
+</div>
+
 
 
 
     <div class="container">
 
 
-        <!-- RESTAURANT INFORMATION -->
+        
+<!-- RESTAURANT INFORMATION CARD -->
+<div class="restaurant-card">
 
-        <div class="restaurant-card">
+    <div class="restaurant-card-top">
 
-
-            <div class="info-grid">
-
-
-                <div class="info-box">
-
-                    <div class="info-label">
-                        Owner
-                    </div>
-
-                    <div
-                        id="ownerName"
-                        class="info-value"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-label">
-                        Rating
-                    </div>
-
-                    <div
-                        id="rating"
-                        class="info-value"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-label">
-                        Delivery Time
-                    </div>
-
-                    <div
-                        id="deliveryTime"
-                        class="info-value"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-label">
-                        Delivery Fee
-                    </div>
-
-                    <div
-                        id="deliveryFee"
-                        class="info-value"
-                    >
-                        -
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-            <div
-                id="restaurantDescription"
-                class="description"
+        <div class="restaurant-store-image">
+            <img
+                id="restaurantImage"
+                src="images/restaurant.jpg"
+                alt="Restaurant"
+                onerror="this.onerror=null;this.src='images/restaurant.jpg'"
             >
+        </div>
+
+        <a
+    id="restaurantCallBtn"
+    class="restaurant-call-btn"
+    href="tel:"
+    aria-label="Call restaurant"
+    title="Call Restaurant"
+    style="text-decoration:none;"
+>
+    ☎
+</a>
+        
+
+        <div class="restaurant-store-info">
+
+            
+
+            <div id="restaurantName" class="restaurant-store-name">
+                Loading...
             </div>
 
+            
+
+            <div class="restaurant-owner-line">
+                👤 Owner: <span id="ownerName">-</span>
+            </div>
+
+            <div id="restaurantLocation" class="restaurant-store-location">
+                Loading restaurant information...
+            </div>
+
+            <div id="statusRow" class="status-row"></div>
 
         </div>
+    </div>
+
+    <div class="info-grid">
+
+        <div class="info-box">
+            <div class="info-label">Rating</div>
+            <div id="rating" class="info-value">-</div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-label">Delivery</div>
+            <div id="deliveryTime" class="info-value">-</div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-label">Delivery Fee</div>
+            <div id="deliveryFee" class="info-value">-</div>
+        </div>
+
+    </div>
+
+    <div id="restaurantDescription" class="description"></div>
+
+</div>
+
 
 
 
@@ -808,6 +1029,8 @@ button:focus-visible {
         <div class="menu-title">
             🍽️ Menu
         </div>
+
+        <div id="menuCategories" class="menu-categories"></div>
 
 
         <div
@@ -836,12 +1059,92 @@ button:focus-visible {
     </div>
 
 
+<!-- PRODUCT DETAILS POPUP -->
+<div id="productDetailsPopup" class="product-details-popup" aria-hidden="true">
+    <div class="product-details-box" role="dialog" aria-modal="true">
+
+        <button
+            type="button"
+            class="product-details-close"
+            onclick="closeProductDetails()"
+            aria-label="Close"
+        >×</button>
+
+        <div class="product-details-image">
+            <img
+                id="detailsProductImage"
+                src="images/food.jpg"
+                alt="Product"
+                onerror="this.onerror=null;this.src='images/food.jpg'"
+            >
+        </div>
+
+        <div class="product-details-content">
+
+            <div id="detailsProductName" class="product-details-name">
+                Product
+            </div>
+
+            <div id="detailsProductPrice" class="product-details-price">
+                ₹0
+            </div>
+
+            <div class="product-details-badges">
+                <span id="detailsProductCategory">Category</span>
+                <span id="detailsProductType">Food type</span>
+                <span id="detailsProductTime">Preparation time</span>
+            </div>
+
+            <div class="product-details-section">
+                <div class="product-details-label">Product description</div>
+                <div id="detailsProductDescription" class="product-details-value">
+                    No description available.
+                </div>
+            </div>
+
+            <div class="product-details-section">
+                <div class="product-details-label">Ingredients</div>
+                <div id="detailsProductIngredients" class="product-details-value">
+                    Not provided by shop.
+                </div>
+            </div>
+
+            <div class="product-details-section">
+                <div class="product-details-label">Expiry / Best before</div>
+                <div id="detailsProductExpiry" class="product-details-value">
+                    Not provided by shop.
+                </div>
+            </div>
+
+            <div class="product-details-section">
+                <div class="product-details-label">Restaurant</div>
+                <div id="detailsShopName" class="product-details-value"></div>
+                <div id="detailsShopAddress" class="product-details-value"></div>
+            </div>
+
+            <button
+                type="button"
+                class="product-details-add"
+                id="detailsAddToCartBtn"
+            >
+                🛒 Add to Cart
+            </button>
+
+        </div>
+    </div>
+</div>
+
+
+
 </div>
 
 
 
 <script>
 
+/* RESTAURANT MENU CATEGORY STATE */
+let restaurantProducts = [];
+let selectedRestaurantProductCategory = "All";
 
 /* GET RESTAURANT ID */
 
@@ -929,6 +1232,30 @@ async function loadRestaurantProducts() {
         const restaurant =
             data.restaurant;
 
+            
+/* RESTAURANT CALL BUTTON */
+const callButton = document.getElementById("restaurantCallBtn");
+
+const phone = String(
+    restaurant?.phone || ""
+).trim();
+
+console.log("Restaurant phone from API:", phone);
+console.log("Restaurant API object:", restaurant);
+
+if (callButton) {
+    if (phone) {
+        callButton.href = "tel:" + phone.replace(/[^\d+]/g, "");
+    } else {
+        callButton.href = "javascript:void(0)";
+        callButton.onclick = function (event) {
+            event.preventDefault();
+            alert("Restaurant phone number API response mein nahi mila. Console check karein.");
+        };
+    }
+}
+
+
 
         const products =
             data.products || [];
@@ -968,15 +1295,15 @@ async function loadRestaurantProducts() {
         };
 
 
+        
+/* RESTAURANT NAME */
+const restaurantTitle = restaurant.name || "Restaurant";
 
-        /* NAME */
+document.getElementById("restaurantName").textContent =
+    restaurantTitle;
 
-        document.getElementById(
-            "restaurantName"
-        ).textContent =
-
-            restaurant.name ||
-            "Restaurant";
+document.getElementById("pageRestaurantTitle").textContent =
+    restaurantTitle;
 
 
 
@@ -1108,214 +1435,31 @@ async function loadRestaurantProducts() {
 
 
 
-        /* NO PRODUCTS */
+  
+/* NO PRODUCTS */
+if (products.length === 0) {
+    document.getElementById("menuCategories").innerHTML = "";
+
+    productBox.innerHTML = `
+        <div class="empty">
+            <div class="empty-icon">🍽️</div>
+            <div class="empty-title">No Food Items</div>
+            <div class="empty-text">
+                This restaurant has no food items available right now.
+            </div>
+        </div>
+    `;
+    return;
+}
+
+/* SAVE ALL PRODUCTS */
+restaurantProducts = products;
+selectedRestaurantProductCategory = "All";
+
+/* SHOW CATEGORIES AND PRODUCTS */
+renderRestaurantCategories();
+renderRestaurantProducts();
 
-        if (
-            products.length === 0
-        ) {
-
-
-            productBox.innerHTML = `
-
-                <div class="empty">
-
-                    <div class="empty-icon">
-                        🍽️
-                    </div>
-
-                    <div class="empty-title">
-                        No Food Items
-                    </div>
-
-                    <div class="empty-text">
-
-                        This restaurant has
-                        no food items available
-                        right now.
-
-                    </div>
-
-                </div>
-
-            `;
-
-
-            return;
-
-        }
-
-
-
-        /* PRODUCTS */
-
-        productBox.innerHTML =
-
-            products
-
-            .map(
-                product => {
-
-
-                    const productImage =
-
-                        product.image &&
-                        product.image.trim()
-
-                            ?
-
-                        product.image
-
-                            :
-
-                        "images/food.jpg";
-
-
-
-                    return `
-
-                        <div
-                            class="product-card"
-                        >
-
-
-                            <div
-                                class="product-image"
-                            >
-
-                                <img
-                                    src="${escapeHtml(
-                                        productImage
-                                    )}"
-                                    alt="${escapeHtml(
-                                        product.name ||
-                                        "Food"
-                                    )}"
-                                    onerror="
-                                        this.src=
-                                        'images/food.jpg'
-                                    "
-                                >
-
-                            </div>
-
-
-
-                            <div
-                                class="product-content"
-                            >
-
-
-                                <div
-                                    class="product-name"
-                                >
-
-                                    ${escapeHtml(
-                                        product.name ||
-                                        "Food Item"
-                                    )}
-
-                                </div>
-
-
-
-                                ${
-                                    product.description
-
-                                    ?
-
-                                    `
-                                        <div
-                                            class="product-description"
-                                        >
-
-                                            ${escapeHtml(
-                                                product.description
-                                            )}
-
-                                        </div>
-                                    `
-
-                                    :
-
-                                    ""
-                                }
-
-
-
-                                <div
-                                    class="product-bottom"
-                                >
-
-
-                                    <div
-                                        class="product-price"
-                                    >
-
-                                        ₹${product.price}
-
-                                    </div>
-
-
-                                    ${
-                                        product.isVeg
-
-                                        ?
-
-                                        `
-                                            <span
-                                                class="
-                                                    food-type
-                                                    veg
-                                                "
-                                            >
-                                                🟢 VEG
-                                            </span>
-                                        `
-
-                                        :
-
-                                        `
-                                            <span
-                                                class="
-                                                    food-type
-                                                    nonveg
-                                                "
-                                            >
-                                                🔴 NON-VEG
-                                            </span>
-                                        `
-                                    }
-
-
-                                </div>
-
-
-
-                                <button
-                                    class="add-btn"
-                                    onclick="
-                                        addToCart(
-                                            '${product._id}'
-                                        )
-                                    "
-                                >
-
-                                    🛒 Add to Cart
-
-                                </button>
-
-
-                            </div>
-
-
-                        </div>
-
-                    `;
-
-                }
-            )
-
-            .join("");
 
 
     }
@@ -1344,6 +1488,231 @@ async function loadRestaurantProducts() {
     }
 
 }
+
+
+
+
+/* RENDER CATEGORY BUTTONS */
+function renderRestaurantCategories() {
+    const categoryBox = document.getElementById("menuCategories");
+
+    const categories = [
+        ...new Set(
+            restaurantProducts
+                .map(product => String(product.category || "").trim())
+                .filter(Boolean)
+        )
+    ];
+
+    const allCategories = ["All", ...categories];
+
+    categoryBox.innerHTML = allCategories.map(category => `
+        <button
+            type="button"
+            class="menu-category-btn ${
+                category === selectedRestaurantProductCategory ? "active" : ""
+            }"
+            data-category="${escapeHtml(category)}"
+        >
+            ${escapeHtml(category)}
+        </button>
+    `).join("");
+}
+
+/* CATEGORY BUTTON CLICK */
+document.getElementById("menuCategories").addEventListener("click", function(event) {
+    const button = event.target.closest(".menu-category-btn");
+    if (!button) return;
+
+    selectedRestaurantProductCategory = button.dataset.category;
+
+    renderRestaurantCategories();
+    renderRestaurantProducts();
+});
+
+/* CURRENT SELECTED PRODUCT */
+let selectedProductDetails = null;
+
+/* OPEN PRODUCT DETAILS POPUP */
+function openProductDetails(product) {
+    if (!product) return;
+
+    selectedProductDetails = product;
+
+    const popup = document.getElementById("productDetailsPopup");
+    if (!popup) return;
+
+    document.getElementById("detailsProductImage").src =
+        product.image || "images/food.jpg";
+
+    document.getElementById("detailsProductName").textContent =
+        product.name || "Food Item";
+
+    document.getElementById("detailsProductPrice").textContent =
+        "₹" + (product.price ?? 0);
+
+    document.getElementById("detailsProductCategory").textContent =
+        product.category || "Food";
+
+    document.getElementById("detailsProductType").textContent =
+        product.isVeg ? "🟢 Veg" : "🔴 Non-Veg";
+
+    document.getElementById("detailsProductTime").textContent =
+        product.preparationTime
+            ? product.preparationTime + " min"
+            : "Preparation time not available";
+
+    document.getElementById("detailsProductDescription").textContent =
+        product.description || "No description available.";
+
+    document.getElementById("detailsProductIngredients").textContent =
+        product.ingredients || "Not provided by shop.";
+
+    document.getElementById("detailsProductExpiry").textContent =
+        product.expiryDate || product.expiry || "Not provided by shop.";
+
+    document.getElementById("detailsShopName").textContent =
+        document.getElementById("restaurantName").textContent;
+
+    document.getElementById("detailsShopAddress").textContent =
+        document.getElementById("restaurantLocation").textContent;
+
+    popup.classList.add("active");
+    popup.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+/* CLOSE PRODUCT DETAILS POPUP */
+function closeProductDetails() {
+    const popup = document.getElementById("productDetailsPopup");
+
+    if (popup) {
+        popup.classList.remove("active");
+        popup.setAttribute("aria-hidden", "true");
+    }
+
+    document.body.style.overflow = "";
+}
+
+/* CLOSE POPUP BY CLICKING OUTSIDE */
+document.getElementById("productDetailsPopup").addEventListener(
+    "click",
+    function (event) {
+        if (event.target === this) {
+            closeProductDetails();
+        }
+    }
+);
+
+/* CLOSE POPUP WITH ESC KEY */
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        closeProductDetails();
+    }
+});
+
+/* POPUP ADD TO CART */
+document.getElementById("detailsAddToCartBtn").addEventListener(
+    "click",
+    function () {
+        if (selectedProductDetails && selectedProductDetails._id) {
+            addToCart(selectedProductDetails._id);
+        }
+    }
+);
+
+/* RENDER FILTERED PRODUCTS */
+function renderRestaurantProducts() {
+    const productBox = document.getElementById("productList");
+
+    const filteredProducts =
+        selectedRestaurantProductCategory === "All"
+            ? restaurantProducts
+            : restaurantProducts.filter(product =>
+                String(product.category || "").trim() ===
+                selectedRestaurantProductCategory
+            );
+
+    if (filteredProducts.length === 0) {
+        productBox.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">🍽️</div>
+                <div class="empty-title">No Products</div>
+                <div class="empty-text">
+                    No products are available in this category.
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    productBox.innerHTML = filteredProducts.map((product, index) => {
+        const productImage =
+            product.image && product.image.trim()
+                ? product.image
+                : "images/food.jpg";
+
+        return `
+            <div class="product-card"
+                 data-product-index="${index}"
+                 style="cursor:pointer;">
+
+                <div class="product-image">
+                    <img
+                        src="${escapeHtml(productImage)}"
+                        alt="${escapeHtml(product.name || "Food")}"
+                        onerror="this.onerror=null;this.src='images/food.jpg'"
+                    >
+                </div>
+
+                <div class="product-content">
+                    <div class="product-name">
+                        ${escapeHtml(product.name || "Food Item")}
+                    </div>
+
+                    <div class="product-bottom">
+                        <div class="product-price">
+                            ₹${escapeHtml(product.price ?? 0)}
+                        </div>
+
+                        ${
+                            product.isVeg
+                                ? '<span class="food-type veg">🟢 VEG</span>'
+                                : '<span class="food-type nonveg">🔴 NON-VEG</span>'
+                        }
+                    </div>
+
+                    <button type="button" class="add-btn">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    /* PRODUCT CARD CLICK */
+    productBox.querySelectorAll(".product-card").forEach(card => {
+        card.addEventListener("click", function (event) {
+            const index = Number(this.dataset.productIndex);
+            const product = filteredProducts[index];
+
+            if (event.target.closest(".add-btn")) {
+                event.stopPropagation();
+
+                if (product && product._id) {
+                    addToCart(product._id);
+                }
+
+                return;
+            }
+
+            openProductDetails(product);
+        });
+    });
+}
+
+
+
 
 
 
@@ -1499,6 +1868,19 @@ function escapeHtml(
         "&#039;"
     );
 
+}
+
+function closeRestaurantShopView() {
+    try {
+        if (window.parent && window.parent !== window) {
+            window.parent.closeShopWindow();
+            return;
+        }
+    } catch (error) {
+        console.warn("Parent shop window close nahi hua:", error);
+    }
+
+    history.back();
 }
 
 </script>

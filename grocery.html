@@ -120,6 +120,8 @@
 
         .store-card {
             background: #142039;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
 
             border: 1px solid #2d4167;
             border-radius: 16px;
@@ -528,7 +530,8 @@ async function loadGroceryStores() {
 
                 return `
 
-                    <div class="store-card">
+                    <div class="store-card"
+                     onclick="openStore('${escapeHtml(store._id)}')">
 
                         <div class="store-top">
 
@@ -639,7 +642,7 @@ async function loadGroceryStores() {
 
                         <button
                             class="view-store-btn"
-                            onclick="openStore('${store._id}')"
+                            onclick="event.stopPropagation(); openStore('${escapeHtml(store._id)}')"
                         >
                             View Store
                         </button>

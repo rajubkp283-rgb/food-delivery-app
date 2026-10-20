@@ -66,7 +66,7 @@ body {
     align-items: center;
     gap: 12px;
 
-    border-bottom: 1px solid #334b78;
+    
 }
 
 .header h2 {
@@ -707,6 +707,212 @@ button:focus-visible {
     box-shadow: none !important;
 }
 
+
+
+
+
+/* DATE FILTER — MATCH THE PROVIDED SCREENSHOT */
+.date-filter-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 23px 18px 14px;
+   
+    
+    background: linear-gradient(180deg, #111b30 0%, #0d1629 100%);
+    border: 1px solid rgba(54, 87, 143, 0.65);
+    border-radius: 19px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+/* Heading */
+.date-filter-card label {
+    position: absolute;
+    top: -11px;
+    left: 25px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 7px;
+    margin: 0;
+    background: #111b30;
+    color: #f1f5ff;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 22px;
+    white-space: nowrap;
+}
+
+/* Calendar icon before heading */
+.date-filter-card label::before {
+    content: "\1F4C5";
+    font-size: 17px;
+}
+
+/* Date input and Today button row */
+.date-filter-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 98px;
+    gap: 10px;
+    align-items: stretch;
+    width: 100%;
+}
+
+/* Date input */
+.date-filter-card input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    height: 55px;
+    box-sizing: border-box;
+    padding: 0 14px;
+    margin: 0;
+    background: #080f1e;
+    border: 1px solid rgba(104, 137, 190, 0.48);
+    border-radius: 13px;
+    color: #f8fafc;
+    color-scheme: dark;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    outline: none;
+}
+
+.date-filter-card input[type="date"]:focus {
+    border-color: #648ed0;
+    box-shadow: 0 0 0 2px rgba(83, 121, 180, 0.16);
+}
+
+/* Today button */
+.date-filter-card .today-btn {
+    width: 100%;
+    min-width: 0;
+    height: 55px;
+    padding: 0 10px;
+    margin: 0;
+    background: linear-gradient(180deg, #385b91, #294773);
+    border: 1px solid rgba(111, 151, 210, 0.55);
+    border-radius: 13px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* Hint and order count */
+.date-order-count {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    color: #91b4ed;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.date-order-count strong {
+    color: #a9c9ff;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .date-filter-card {
+        padding: 23px 12px 13px;
+        gap: 12px;
+        border-radius: 17px;
+    }
+
+    .date-filter-card label {
+        left: 17px;
+        font-size: 14px;
+    }
+
+    .date-filter-controls {
+        grid-template-columns: minmax(0, 1fr) 88px;
+        gap: 8px;
+    }
+
+    .date-filter-card input[type="date"],
+    .date-filter-card .today-btn {
+        height: 52px;
+    }
+}
+
+@media (max-width: 340px) {
+    .date-filter-controls {
+        grid-template-columns: minmax(0, 1fr) 76px;
+        gap: 6px;
+    }
+
+    .date-filter-card {
+        padding-right: 9px;
+        padding-left: 9px;
+    }
+}
+
+
+/* Only order cards area will scroll */
+#ordersContainer {
+    height: calc(100vh - 265px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Hide scrollbar in Chrome, Edge and Safari */
+#ordersContainer::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+/* Keep order cards inside the scrolling area */
+#ordersContainer .order-card {
+    flex-shrink: 0;
+}
+
+
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.app-container {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.container {
+    height: calc(100vh - 74px);
+    height: calc(100dvh - 74px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.date-filter-card {
+    flex-shrink: 0;
+}
+
+
 </style>
 </head>
 
@@ -728,15 +934,49 @@ button:focus-visible {
         </div>
 
 
-        <div class="container">
+        
+<div class="container">
 
-            <div id="ordersContainer">
-                <div class="loading">
-                    Loading orders...
-                </div>
-            </div>
+   
+<section class="date-filter-card">
+    <label for="orderDateFilter">Filter orders by date</label>
 
-        </div>
+    <div class="date-filter-controls">
+        <input
+            type="date"
+            id="orderDateFilter"
+            aria-label="Filter orders by date"
+        >
+
+        <button
+            type="button"
+            class="today-btn"
+            onclick="resetOrderDateFilter()"
+        >
+            Today
+        </button>
+    </div>
+
+    <div class="date-order-count" id="dateOrderCount">
+        <span id="dateFilterHint">Showing orders placed today</span>
+        <strong id="dateOrderTotal">0 orders</strong>
+    </div>
+
+    <!-- Yahan selected date ke orders render honge -->
+<div id="ordersContainer">
+    <div class="loading">
+        Loading orders...
+    </div>
+</div>
+</section>
+
+
+
+
+
+
+</div>
+
 
     </div>
 
@@ -756,85 +996,110 @@ if (!authToken) {
 }
 
 
-// API request
-async function loadOrders() {
 
-    try {
+let allOrders = [];
 
-        const response = await fetch(
-            "/api/orders/my-orders",
-            {
-                method: "GET",
+const orderDateFilter = document.getElementById("orderDateFilter");
+const dateOrderCount = document.getElementById("dateOrderCount");
 
-                headers: {
-                    "Authorization":
-                        "Bearer " + authToken
-                }
-            }
-        );
+// Local date ko YYYY-MM-DD format mein badle
+function getLocalDateKey(value) {
+    if (!value) return "";
 
+    const date = new Date(value);
 
-        const data =
-            await response.json();
+    if (Number.isNaN(date.getTime())) return "";
 
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
 
-        if (!response.ok || !data.success) {
-
-            throw new Error(
-                data.message ||
-                "Failed to load orders"
-            );
-
-        }
-
-
-        displayOrders(data.orders || []);
-
-
-    } catch (error) {
-
-        console.error(
-            "Load Orders Error:",
-            error
-        );
-
-
-        document.getElementById(
-            "ordersContainer"
-        ).innerHTML = `
-            <div class="error">
-                ${error.message}
-            </div>
-        `;
-
-    }
-
+    return `${year}-${month}-${day}`;
 }
 
+// Selected date ko readable format mein badle
+function formatOrderDate(dateKey) {
+    const parts = dateKey.split("-").map(Number);
 
-// Display orders
+    return new Date(parts[0], parts[1] - 1, parts[2])
+        .toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+}
+
+// API se orders load kare
+async function loadOrders() {
+    try {
+        // Page khulte hi aaj ki date select hogi
+        orderDateFilter.value = getLocalDateKey(new Date());
+
+        const response = await fetch("/api/orders/my-orders", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + authToken
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Failed to load orders");
+        }
+
+        allOrders = Array.isArray(data.orders) ? data.orders : [];
+
+        renderFilteredOrders();
+
+    } catch (error) {
+        console.error("Load Orders Error:", error);
+
+        dateOrderCount.textContent = "Order count load nahi hua.";
+
+        document.getElementById("ordersContainer").innerHTML = `
+            <div class="error">
+                ${escapeHtml(error.message || "Failed to load orders")}
+            </div>
+        `;
+    }
+}
+
+// Date badalte hi orders filter honge
+orderDateFilter.addEventListener("change", renderFilteredOrders);
+
+function renderFilteredOrders() {
+    const selectedDate =
+        orderDateFilter.value || getLocalDateKey(new Date());
+
+    const filteredOrders = allOrders.filter(order => {
+        return getLocalDateKey(order.createdAt) === selectedDate;
+    });
+
+    
+dateOrderCount.innerHTML = `
+    <span>
+        ${selectedDate === getLocalDateKey(new Date())
+            ? "Showing orders placed today"
+            : "Showing orders for " + escapeHtml(formatOrderDate(selectedDate))}
+    </span>
+    <strong>${filteredOrders.length} orders</strong>
+`;
+
+
+    displayOrders(filteredOrders);
+}
+
+// Sirf selected date ke orders dikhaye
 function displayOrders(orders) {
+    const container = document.getElementById("ordersContainer");
 
-    const container =
-        document.getElementById(
-            "ordersContainer"
-        );
-
-
-    if (!orders.length) {
-
+    if (allOrders.length === 0) {
         container.innerHTML = `
             <div class="empty">
-
-                <div style="font-size:40px;">
-                    📦
-                </div>
-
+                <div style="font-size:40px;">📦</div>
                 <h3>No Orders Yet</h3>
-
-                <p>
-                    You have not placed any order yet.
-                </p>
+                <p>You have not placed any order yet.</p>
 
                 <button
                     class="btn view-btn"
@@ -843,191 +1108,129 @@ function displayOrders(orders) {
                 >
                     🍔 Order Food
                 </button>
-
             </div>
         `;
-
         return;
     }
 
-
-    container.innerHTML =
-        orders.map(order => {
-
-            const restaurantName =
-                order.restaurantId?.name ||
-                "Restaurant";
-
-
-            const orderDate =
-                order.createdAt
-                    ? new Date(
-                        order.createdAt
-                    ).toLocaleString("en-IN")
-                    : "N/A";
-
-
-            let statusClass = "";
-
-            if (
-                order.orderStatus ===
-                "DELIVERED"
-            ) {
-                statusClass = "delivered";
-            }
-
-            if (
-                order.orderStatus ===
-                "CANCELLED"
-            ) {
-                statusClass = "cancelled";
-            }
-
-
-            const canTrack =
-                ![
-                    "DELIVERED",
-                    "CANCELLED"
-                ].includes(
-                    order.orderStatus
-                );
-
-
-return `
-
-    <div class="order-card">
-
-        <div class="order-top">
-
-            <div class="restaurant">
-                🏪 ${escapeHtml(
-                    restaurantName
-                )}
+    if (orders.length === 0) {
+        container.innerHTML = `
+            <div class="empty">
+                <div style="font-size:40px;">🗓️</div>
+                <h3>No Orders on This Date</h3>
+                <p>Is date par koi order nahi mila. Dusri date select karein.</p>
             </div>
+        `;
+        return;
+    }
 
-            <span class="status ${statusClass}">
-                ${escapeHtml(
-                    order.orderStatus ||
-                    "UNKNOWN"
-                )}
-            </span>
+    // Latest order sabse upar
+    const sortedOrders = [...orders].sort((a, b) =>
+        new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+    );
 
-        </div>
+    container.innerHTML = sortedOrders.map(order => {
+        const restaurantName = order.restaurantId?.name || "Restaurant";
 
+        const orderDate = order.createdAt
+            ? new Date(order.createdAt).toLocaleString("en-IN")
+            : "N/A";
 
-        <div class="order-id">
-            Order ID:
-            ${escapeHtml(
-                String(order._id)
-            )}
-        </div>
+        let statusClass = "";
 
+        if (order.orderStatus === "DELIVERED") {
+            statusClass = "delivered";
+        }
 
-        <div class="order-info-grid">
+        if (order.orderStatus === "CANCELLED") {
+            statusClass = "cancelled";
+        }
 
-            <div class="order-info-box">
+        const canTrack = ![
+            "DELIVERED",
+            "CANCELLED"
+        ].includes(order.orderStatus);
 
-                <span class="order-info-label">
-                    Payment
-                </span>
+        return `
+            <div class="order-card">
+                <div class="order-top">
+                    <div class="restaurant">
+                        🏪 ${escapeHtml(restaurantName)}
+                    </div>
 
-                <span class="order-info-value">
-                    ${escapeHtml(
-                        order.paymentMethod ||
-                        "N/A"
-                    )}
-                </span>
+                    <span class="status ${statusClass}">
+                        ${escapeHtml(order.orderStatus || "UNKNOWN")}
+                    </span>
+                </div>
 
-            </div>
+                <div class="order-id">
+                    Order ID: ${escapeHtml(String(order._id))}
+                </div>
 
+                <div class="order-info-grid">
+                    <div class="order-info-box">
+                        <span class="order-info-label">Payment</span>
+                        <span class="order-info-value">
+                            ${escapeHtml(order.paymentMethod || "N/A")}
+                        </span>
+                    </div>
 
-            <div class="order-info-box">
+                    <div class="order-info-box">
+                        <span class="order-info-label">Payment Status</span>
+                        <span class="order-info-value">
+                            ${escapeHtml(order.paymentStatus || "N/A")}
+                        </span>
+                    </div>
 
-                <span class="order-info-label">
-                    Payment Status
-                </span>
+                    <div class="order-info-box">
+                        <span class="order-info-label">Total Amount</span>
+                        <span class="order-info-value">
+                            ₹${Number(order.totalAmount || 0).toFixed(2)}
+                        </span>
+                    </div>
 
-                <span class="order-info-value">
-                    ${escapeHtml(
-                        order.paymentStatus ||
-                        "N/A"
-                    )}
-                </span>
+                    <div class="order-info-box">
+                        <span class="order-info-label">Order Status</span>
+                        <span class="order-info-value">
+                            ${escapeHtml(order.orderStatus || "UNKNOWN")}
+                        </span>
+                    </div>
+                </div>
 
-            </div>
+                <div class="order-date">
+                    🕒 ${escapeHtml(orderDate)}
+                </div>
 
-
-            <div class="order-info-box">
-
-                <span class="order-info-label">
-                    Total Amount
-                </span>
-
-                <span class="order-info-value">
-                    ₹${Number(
-                        order.totalAmount || 0
-                    ).toFixed(2)}
-                </span>
-
-            </div>
-
-
-            <div class="order-info-box">
-
-                <span class="order-info-label">
-                    Order Status
-                </span>
-
-                <span class="order-info-value">
-                    ${escapeHtml(
-                        order.orderStatus ||
-                        "UNKNOWN"
-                    )}
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="order-date">
-            🕒 ${escapeHtml(orderDate)}
-        </div>
-
-
-        <div class="buttons">
-
-            <button
-                class="btn view-btn"
-                onclick="viewOrder('${order._id}')"
-            >
-                👁️ View Order
-            </button>
-
-
-            ${
-                canTrack
-                ? `
+                <div class="buttons">
                     <button
-                        class="btn track-btn"
-                        onclick="trackOrder('${order._id}')"
+                        class="btn view-btn"
+                        onclick="viewOrder('${order._id}')"
                     >
-                        📍 Track Order
+                        👁️ View Order
                     </button>
-                `
-                : ""
-            }
 
-        </div>
-
-    </div>
-
-`;
-
-        }).join("");
-
+                    ${
+                        canTrack
+                            ? `
+                                <button
+                                    class="btn track-btn"
+                                    onclick="trackOrder('${order._id}')"
+                                >
+                                    📍 Track Order
+                                </button>
+                            `
+                            : ""
+                    }
+                </div>
+            </div>
+        `;
+    }).join("");
 }
 
+function resetOrderDateFilter() {
+    orderDateFilter.value = getLocalDateKey(new Date());
+    renderFilteredOrders();
+}
 
 // View order
 function viewOrder(orderId) {

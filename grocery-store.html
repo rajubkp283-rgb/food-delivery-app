@@ -1182,13 +1182,18 @@ function filterProducts(category) {
 let selectedGroceryProduct = null;
 
 /* OPEN PRODUCT DETAILS */
+
+/* GROCERY PRODUCT POPUP BACK NAVIGATION */
+let groceryProductDetailsHistoryOpen = false;
+
+/* OPEN GROCERY PRODUCT DETAILS */
 function openGroceryProductDetails(product) {
     if (!product) return;
 
-    selectedGroceryProduct = product;
-
     const popup = document.getElementById("productDetailsPopup");
     if (!popup) return;
+
+    selectedGroceryProduct = product;
 
     document.getElementById("detailsProductImage").src =
         product.image || "images/groceries.jpg";
@@ -1203,7 +1208,9 @@ function openGroceryProductDetails(product) {
         product.category || "Other";
 
     document.getElementById("detailsProductStock").textContent =
-        product.isAvailable === false ? "Currently unavailable" : "Available";
+        product.isAvailable === false
+            ? "Currently unavailable"
+            : "Available";
 
     document.getElementById("detailsProductDescription").textContent =
         product.description || "No description available.";
@@ -1240,13 +1247,34 @@ function openGroceryProductDetails(product) {
             ? "Currently Unavailable"
             : "🛒 Add to Cart";
 
+    // Popup khulne par alag history entry banao
+    if (
+        !popup.classList.contains("active") &&
+        !groceryProductDetailsHistoryOpen
+    ) {
+        try {
+            history.pushState(
+                {
+                    ...(history.state || {}),
+                    groceryProductDetails: true
+                },
+                "",
+                window.location.href
+            );
+
+            groceryProductDetailsHistoryOpen = true;
+        } catch (error) {
+            console.warn("Grocery popup history error:", error);
+        }
+    }
+
     popup.classList.add("active");
     popup.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
 }
 
-/* CLOSE PRODUCT DETAILS */
-function closeProductDetails() {
+/* CLOSE GROCERY PRODUCT DETAILS */
+function closeProductDetails(fromPopstate = false) {
     const popup = document.getElementById("productDetailsPopup");
 
     if (popup) {
@@ -1255,7 +1283,32 @@ function closeProductDetails() {
     }
 
     document.body.style.overflow = "";
+
+    if (fromPopstate) {
+        groceryProductDetailsHistoryOpen = false;
+        return;
+    }
+
+    // X / outside click / Escape se band karne par
+    // popup ki history entry bhi remove karo
+    if (groceryProductDetailsHistoryOpen) {
+        groceryProductDetailsHistoryOpen = false;
+        history.back();
+    }
 }
+
+/* BACK BUTTON: PEHLE GROCERY PRODUCT POPUP BAND KARO */
+window.addEventListener("popstate", function () {
+    const popup = document.getElementById("productDetailsPopup");
+
+    if (popup && popup.classList.contains("active")) {
+        closeProductDetails(true);
+        return;
+    }
+
+    groceryProductDetailsHistoryOpen = false;
+});
+
 
 /* CLOSE BY CLICKING OUTSIDE */
 document.getElementById("productDetailsPopup").addEventListener(

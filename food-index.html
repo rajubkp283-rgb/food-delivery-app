@@ -3628,6 +3628,76 @@ body.shop-window-open {
     line-height: 1.6;
 }
 
+/* Vegetable category click effect */
+#groceryCareSection .beauty-care-item {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#groceryCareSection .beauty-care-circle {
+    transform: scale(1);
+    transition: transform 0.22s ease;
+}
+
+/* Click karte hi circle chhota hoga */
+#groceryCareSection .beauty-care-item:active .beauty-care-circle {
+    transform: scale(0.86);
+}
+
+.nearest-shops-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nearest-shops-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 25px;
+    border: 1px solid white;
+    border-radius: 12px;
+    color: rgb(253, 253, 253);
+    font-size: 20px;
+    box-sizing: border-box;
+}
+
+.nearest-shops-title {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.nearest-shops-arrow {
+     width: 40px;
+    height: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #ffffff;
+    border-radius: 12px;
+    background: transparent;
+
+    color: rgb(252, 252, 253);
+   font-size: 20px;
+
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.nearest-shops-arrow {
+    transition: transform 0.12s ease, background 0.12s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Click karte hi button andar dabega */
+.nearest-shops-arrow:active {
+    transform: scale(0.82);
+    background: rgba(177, 151, 252, 0.22);
+}
+
 
     </style>
 </head>
@@ -3828,7 +3898,7 @@ body.shop-window-open {
         <!-- Grocery -->
         <div
             class="category"
-            onclick="window.location.href='grocery.html'"
+            onclick="selectNearestCategory('Groceries')"
         >
             <div class="category-icon">
                 <img src="images/groceries.jpg" alt="Groceries">
@@ -3839,7 +3909,7 @@ body.shop-window-open {
         <!-- Restaurant -->
         <div
             class="category"
-            onclick="window.location.href='customer-restaurants.html'"
+            onclick="selectNearestCategory('Restaurant')"
         >
             <div class="category-icon">
                 <img src="images/restaurant.jpg" alt="Restaurant">
@@ -3850,7 +3920,7 @@ body.shop-window-open {
         <!-- Electronics -->
         <div
             class="category"
-            onclick="window.location.href='electronics.html'"
+            onclick="selectNearestCategory('Electronics')"
         >
             <div class="category-icon">
                 <img src="images/offer.jpg" alt="Electronics">
@@ -3861,7 +3931,7 @@ body.shop-window-open {
         <!-- Beauty -->
         <div
             class="category"
-            onclick="window.location.href='beauty.html'"
+            onclick="selectNearestCategory('Beauty & Personal Care')"
         >
             <div class="category-icon">
                 <img src="images/offer.jpg" alt="Beauty">
@@ -3989,7 +4059,16 @@ body.shop-window-open {
     <div class="nearest-shops-section">
 
         <h3 class="nearest-shops-title">
-            Shops Near You
+           Shops Near You
+
+         <button
+             type="button"
+             class="nearest-shops-arrow"
+             onclick="openNearestCategoryPage()"
+             aria-label="Open selected category"
+         >
+             <i class="fa-solid fa-arrow-right-long"></i>
+         </button>
         </h3>
 
         <div
@@ -4036,7 +4115,7 @@ body.shop-window-open {
         <div class="beauty-care-item"
              onclick="filterNearestProductsByCategory('Leafy Greens')">
             <div class="beauty-care-circle">
-                <img src="./images/leafy.avif" alt="Leafy Greens">
+                <img src="./images/leafy.jpg" alt="Leafy Greens">
             </div>
             <div class="beauty-care-name">Leafy Greens</div>
         </div>
@@ -4052,7 +4131,7 @@ body.shop-window-open {
         <div class="beauty-care-item"
              onclick="filterNearestProductsByCategory('Seasonal veggies')">
             <div class="beauty-care-circle">
-                <img src="./images/Seasonal.avif" alt="Seasonal veggies">
+                <img src="./images/Seasonal.jpg" alt="Seasonal veggies">
             </div>
             <div class="beauty-care-name">Seasonal</div>
         </div>
@@ -4770,35 +4849,52 @@ history.replaceState(
 
 // Mobile/browser Back button handling
 
+
 window.addEventListener("popstate", function (event) {
-    const popup = document.getElementById(
+    const productPopup = document.getElementById(
         "nearestProductDetailsPopup"
     );
 
-    // Shop Near You popup khula ho to pehle use band karein
-    const shopOverlay = document.getElementById("shopWindowOverlay");
+    const shopOverlay = document.getElementById(
+        "shopWindowOverlay"
+    );
 
-    if (shopOverlay && shopOverlay.classList.contains("active")) {
-        closeShopWindow(true);
-        return;
-    }
+    const searchOverlay = document.getElementById(
+        "productSearchOverlay"
+    );
 
-    // 1. Product popup khula hai to pehle sirf popup band karein
-    if (popup && popup.classList.contains("active")) {
+    // 1. Product details open the: sirf product popup band karein.
+    // Shop popup ko open rehne dein.
+    if (
+        productPopup &&
+        productPopup.classList.contains("active")
+    ) {
         closeNearestProductDetails(true);
         return;
     }
 
-    // 2. Popup manually close hua tha aur history.back() chal raha hai
+    // 2. Product popup history entry manually close hone ke baad
+    // popstate aaya ho to shop popup ko band na karein.
     if (nearestProductPopupHistoryOpen) {
         nearestProductPopupHistoryOpen = false;
         return;
     }
 
-    const overlay = document.getElementById("productSearchOverlay");
+    // 3. Shop popup open hai aur product popup band hai:
+    // ab shop popup band karein.
+    if (
+        shopOverlay &&
+        shopOverlay.classList.contains("active")
+    ) {
+        closeShopWindow(true);
+        return;
+    }
 
-    // 3. Product Search khula hai to pehle Search band karein
-    if (overlay && overlay.classList.contains("active")) {
+    // 4. Product search open hai to pehle search band karein.
+    if (
+        searchOverlay &&
+        searchOverlay.classList.contains("active")
+    ) {
         closingProductSearchFromPopstate = true;
         closeProductSearch(true);
         closingProductSearchFromPopstate = false;
@@ -4807,7 +4903,7 @@ window.addEventListener("popstate", function (event) {
 
     productSearchHistoryEntryOpen = false;
 
-    // 4. Ab zarurat hone par pichhli category restore karein
+    // 5. Pichhli category restore karein.
     if (
         event.state &&
         event.state.nearestCategoryEntry === true &&
@@ -4824,6 +4920,7 @@ window.addEventListener("popstate", function (event) {
         }
     }
 });
+
 
 
 
@@ -5077,28 +5174,54 @@ const matchingShops = uniqueShops.filter(shop => {
     results.innerHTML = html;
 }
 
+
 function openSearchedProduct(index, name) {
     const input = document.getElementById("productSearchQuery");
-    const query = input ? input.value.trim() : name;
+    const query = input ? input.value.trim().toLowerCase() : "";
 
-    saveProductSearchHistory(query);
-    renderProductSearchRecent();
-    closeProductSearch();
+    const products = Array.isArray(nearestProducts)
+        ? nearestProducts
+        : [];
 
-    const term = String(query || "").trim().toLowerCase();
-    const products = (Array.isArray(nearestProducts) ? nearestProducts : [])
-        .filter(product => {
-            const shopName = product.shop?.name || "";
-            return String(product.name || "").toLowerCase().includes(term) ||
-                   String(product.category || "").toLowerCase().includes(term) ||
-                   String(shopName).toLowerCase().includes(term);
-        });
+    const matchingProducts = products.filter(product => {
+        const shop = product.shop || {};
 
-    const product = products[index];
-    if (product && typeof openNearestProductDetails === "function") {
+        const shopName =
+            shop.name ||
+            shop.restaurantName ||
+            shop.shopName ||
+            "";
+
+        return (
+            String(product.name || "").toLowerCase().includes(query) ||
+            String(product.category || "").toLowerCase().includes(query) ||
+            String(shopName).toLowerCase().includes(query)
+        );
+    });
+
+    const product = matchingProducts[index];
+
+    if (!product) {
+        console.warn("Searched product nahi mila:", name, index);
+        return;
+    }
+
+    // Search history save karein
+    if (input && input.value.trim()) {
+        saveProductSearchHistory(input.value.trim());
+    }
+
+    // IMPORTANT:
+    // Search overlay ko band nahi karna hai.
+    // Isse product popup ke peeche search page bana rahega.
+
+    if (typeof openNearestProductDetails === "function") {
         openNearestProductDetails(product);
+    } else {
+        console.error("openNearestProductDetails function nahi mila.");
     }
 }
+
 
 function openSearchedShop(shopId) {
     const shop = (Array.isArray(nearestRestaurants) ? nearestRestaurants : [])
@@ -6582,7 +6705,13 @@ function openShopWindow(restaurant) {
         shopWindowHistoryOpen = true;
     }
 
-    frame.src = pageUrl;
+    // Shop page ko iframe ki existing history entry par load karein
+    try {
+        frame.contentWindow.location.replace(pageUrl);
+    } catch (error) {
+        console.error("Shop page navigation error:", error);
+        frame.src = pageUrl;
+    }
 
     overlay.classList.add("active");
     overlay.setAttribute("aria-hidden", "false");
@@ -8878,6 +9007,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateStickyBarColor();
 });
+
+function openNearestCategoryPage() {
+    const activeButton = document.querySelector(
+        "#yourNearestSection .nearest-category-btn.active"
+    );
+
+    const category = activeButton
+        ? activeButton.dataset.category
+        : "Groceries";
+
+    const pages = {
+        "Groceries": "grocery.html",
+        "Grocery": "grocery.html",
+        "Restaurant": "customer-restaurants.html",
+        "Electronics": "electronics.html",
+        "Beauty": "beauty.html",
+        "Beauty & Personal Care": "beauty.html"
+    };
+
+    const page = pages[category];
+
+    if (page) {
+        window.location.href = page;
+    }
+}
 
 </script>
 

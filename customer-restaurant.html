@@ -1534,13 +1534,19 @@ document.getElementById("menuCategories").addEventListener("click", function(eve
 let selectedProductDetails = null;
 
 /* OPEN PRODUCT DETAILS POPUP */
+
+
+/* PRODUCT DETAILS POPUP BACK NAVIGATION */
+
+let productDetailsHistoryOpen = false;
+
 function openProductDetails(product) {
     if (!product) return;
 
-    selectedProductDetails = product;
-
     const popup = document.getElementById("productDetailsPopup");
     if (!popup) return;
+
+    selectedProductDetails = product;
 
     document.getElementById("detailsProductImage").src =
         product.image || "images/food.jpg";
@@ -1577,22 +1583,63 @@ function openProductDetails(product) {
     document.getElementById("detailsShopAddress").textContent =
         document.getElementById("restaurantLocation").textContent;
 
+    // History entry sirf tab banayein jab popup pehle se band ho
+    if (!popup.classList.contains("active")) {
+        try {
+            history.pushState(
+                {
+                    ...(history.state || {}),
+                    restaurantProductDetails: true
+                },
+                "",
+                window.location.href
+            );
+
+            productDetailsHistoryOpen = true;
+        } catch (error) {
+            console.warn("Product popup history error:", error);
+        }
+    }
+
     popup.classList.add("active");
     popup.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
 }
 
 /* CLOSE PRODUCT DETAILS POPUP */
-function closeProductDetails() {
+function closeProductDetails(fromPopstate = false) {
     const popup = document.getElementById("productDetailsPopup");
 
-    if (popup) {
-        popup.classList.remove("active");
-        popup.setAttribute("aria-hidden", "true");
+    if (!popup || !popup.classList.contains("active")) return;
+
+    popup.classList.remove("active");
+    popup.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+
+    // Back button se close hua: dobara history.back() mat chalayein
+    if (fromPopstate) {
+        productDetailsHistoryOpen = false;
+        return;
     }
 
-    document.body.style.overflow = "";
+    // X button ya outside click se close hua
+    if (productDetailsHistoryOpen) {
+        productDetailsHistoryOpen = false;
+        history.back();
+    }
 }
+
+/* BACK BUTTON: PEHLE PRODUCT POPUP BAND KAREIN */
+window.addEventListener("popstate", function () {
+    const popup = document.getElementById("productDetailsPopup");
+
+    if (popup && popup.classList.contains("active")) {
+        closeProductDetails(true);
+    } else {
+        productDetailsHistoryOpen = false;
+    }
+});
+
 
 /* CLOSE POPUP BY CLICKING OUTSIDE */
 document.getElementById("productDetailsPopup").addEventListener(
@@ -1882,6 +1929,8 @@ function closeRestaurantShopView() {
 
     history.back();
 }
+
+
 
 </script>
 

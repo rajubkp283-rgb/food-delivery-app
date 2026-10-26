@@ -2783,25 +2783,90 @@ body.shop-window-open {
 
 
 
-.nearest-product-category-btn {
-    flex: 0 0 auto;
-    padding: 9px 14px;
-    border: 1px solid #2d4167;
-    border-radius: 22px;
-    background: #142039;
-    color: #c5d2e8;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: inherit;
-    white-space: nowrap;
-    cursor: pointer;
+
+/* PRODUCT CATEGORY FILTER - IMAGE CARDS */
+#nearestProductCategories.nearest-product-categories {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 5px 2px 12px;
+    margin-bottom: 12px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 
-.nearest-product-category-btn.active {
-    background: #36578F;
-    border-color: #4b70ae;
-    color: #fff;
+#nearestProductCategories::-webkit-scrollbar {
+    display: none;
 }
+
+#nearestProductCategories .product-category-name {
+    color: #ffffff !important;
+}
+
+#nearestProductCategories .nearest-product-category-btn {
+    flex: 0 0 76px;
+    width: 76px;
+    min-height: 94px;
+    padding: 7px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    border: none;
+    border-radius: 13px;
+    
+   
+    font-size: 10px;
+    font-weight: 600;
+    font-family: inherit;
+    white-space: normal;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+}
+
+#nearestProductCategories .product-category-image {
+    width: 49px;
+    height: 49px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    border: none;
+}
+
+#nearestProductCategories .product-category-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+#nearestProductCategories .product-category-name {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    margin-top: 2px;
+    padding: 0 2px;
+    color: #ffffff !important;
+    font-size: 10px;
+    line-height: 1.4;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+
+
+#nearestProductCategories .nearest-product-category-btn.active
+.product-category-image {
+    border-color: #5b91ed;
+}
+
 
 
 /* Category horizontal sliding only */
@@ -2873,7 +2938,7 @@ body.shop-window-open {
     border-radius: 50%;
     overflow: hidden;
     background: #172540;
-    border: 1px solid #344b73;
+    
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -3232,6 +3297,23 @@ body.shop-window-open {
     white-space: nowrap;
     cursor: pointer;
     pointer-events: auto;
+    background: transparent !important;
+border: none !important;
+box-shadow: none !important;
+}
+
+#nearestProductCategories .nearest-product-category-btn.active {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#nearestProductCategories .nearest-product-category-btn,
+#nearestProductCategories .nearest-product-category-btn:hover,
+#nearestProductCategories .nearest-product-category-btn:active {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 
@@ -3699,6 +3781,36 @@ body.shop-window-open {
 }
 
 
+
+.sticky-categories .category {
+    transition: background-color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.sticky-categories .category.category-active {
+    background-color:#FFFFFF;
+}
+
+.sticky-categories .category:active {
+    background-color: #FFFFFF;
+}
+
+.sticky-categories .category.category-active .category-name {
+    color: #000 !important;
+}
+
+
+/* Category circle click press animation */
+#nearestProductCategories .nearest-product-category-btn:active
+.product-category-image {
+    transform: scale(0.88);
+}
+
+#nearestProductCategories .product-category-image {
+    transition: transform 0.12s ease;
+}
+
+
     </style>
 </head>
 
@@ -3961,7 +4073,7 @@ body.shop-window-open {
 
     <!-- Heading + Category Selector -->
 
-    <div class="your-nearest-header">
+    <!-- <div class="your-nearest-header">
 
         <h2 class="section-title">
             Your Nearest
@@ -4011,7 +4123,7 @@ body.shop-window-open {
 
         </div>
 
-    </div>
+    </div> -->
 
     
 <!-- PRODUCT CATEGORY FILTER -->
@@ -4151,10 +4263,7 @@ body.shop-window-open {
             </div>
             <div class="beauty-care-name">Exotic</div>
         </div>
-
-     
     </div>
-
     <!-- GROCERY CATEGORY PRODUCTS -->
 <div id="groceryCategoryProducts"
      style="display:none; margin-top:16px;">
@@ -4171,7 +4280,583 @@ body.shop-window-open {
         Is Grocery category mein abhi product nahi hai.
     </div>
 </div>
+<br>
+
+
+<h3 class="beauty-care-title">Grains & Flours</h3>
+
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Rice')">
+            <div class="beauty-care-circle">
+                <img src="./images/rice.jpg" alt="Rice">
+            </div>
+            <div class="beauty-care-name">Rice</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Poha')">
+            <div class="beauty-care-circle">
+                <img src="./images/poha.jpg" alt="Poha">
+            </div>
+            <div class="beauty-care-name">Poha</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Aata')">
+            <div class="beauty-care-circle">
+                <img src="./images/aata.jpg" alt="Atta">
+            </div>
+            <div class="beauty-care-name">Aata</div>
+        </div>
+
+         <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Daliya')">
+            <div class="beauty-care-circle">
+                <img src="./images/daliya.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Daliya</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Besan')">
+            <div class="beauty-care-circle">
+                <img src="./images/besan.jpg" alt="Besan">
+            </div>
+            <div class="beauty-care-name">Besan</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Maida')">
+            <div class="beauty-care-circle">
+                <img src="./images/maida.jpg" alt="Maida">
+            </div>
+            <div class="beauty-care-name">Maida</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Sooji')">
+            <div class="beauty-care-circle">
+                <img src="./images/sooji.jpg" alt="Sooji">
+            </div>
+            <div class="beauty-care-name">Sooji</div>
+        </div>
+    </div>
+    <!-- GRAINS & FLOURS PRODUCTS -->
+    <div id="grainsCategoryProducts"
+         style="display:none; margin-top:16px;">
+    
+        <h3 id="grainsCategoryTitle"
+            class="beauty-care-title"></h3>
+    
+        <div id="grainsCategoryProductsRow"
+             class="nearest-products-row"></div>
+    
+        <div id="grainsCategoryEmpty"
+             class="nearest-empty"
+             style="display:none; margin-top:10px;">
+            Is category mein abhi product nahi hai.
+        </div>
+    
+    </div>
+     <br>
+
+    <h3 class="beauty-care-title">Pulses(Dal)</h3>
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Arhar Dal')">
+            <div class="beauty-care-circle">
+                <img src="./images/arhar-dal.jpg" alt="Arhar">
+            </div>
+            <div class="beauty-care-name">Arhar Dal</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Masoor Dal')">
+            <div class="beauty-care-circle">
+                <img src="./images/masoor.jpg" alt="Poha">
+            </div>
+            <div class="beauty-care-name">Masoor Dal</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Moong Dal')">
+            <div class="beauty-care-circle">
+                <img src="./images/moong.jpg" alt="Atta">
+            </div>
+            <div class="beauty-care-name">Moong Dal</div>
+        </div>
+
+         <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Chana Dal')">
+            <div class="beauty-care-circle">
+                <img src="./images/chana.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Chana Dal</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Urad Dal')">
+            <div class="beauty-care-circle">
+                <img src="./images/urad.jpg" alt="Besan">
+            </div>
+            <div class="beauty-care-name">Urad Dal</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Rajma')">
+            <div class="beauty-care-circle">
+                <img src="./images/rajma.jpg" alt="Maida">
+            </div>
+            <div class="beauty-care-name">Rajma</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Kabuli chana')">
+            <div class="beauty-care-circle">
+                <img src="./images/kabuli.jpg" alt="Sooji">
+            </div>
+            <div class="beauty-care-name">Kabuli chana</div>
+        </div>
+
+         <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Matar')">
+            <div class="beauty-care-circle">
+                <img src="./images/matar.jpg" alt="Sooji">
+            </div>
+            <div class="beauty-care-name">Matar</div>
+        </div>
+
+     
+    </div>
+
+    <div id="pulsesCategoryProducts"
+     style="display:none; margin-top:16px;">
+
+    <h3 id="pulsesCategoryTitle"
+        class="beauty-care-title"></h3>
+
+    <div id="pulsesCategoryProductsRow"
+         class="nearest-products-row"></div>
+
+    <div id="pulsesCategoryEmpty"
+         class="nearest-empty"
+         style="display:none; margin-top:10px;">
+        Is category mein abhi product nahi hai.
+    </div>
+
+</div>
+
+    
+    <br>
+
+    <h3 class="beauty-care-title">Oils</h3>
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Mustard oil')">
+            <div class="beauty-care-circle">
+                <img src="./images/mustard.jpg" alt="Arhar">
+            </div>
+            <div class="beauty-care-name">Mustard oil</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Refined oil')">
+            <div class="beauty-care-circle">
+                <img src="./images/refiend.jpg" alt="Poha">
+            </div>
+            <div class="beauty-care-name">Refined Oil</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Coconut Oil')">
+            <div class="beauty-care-circle">
+                <img src="./images/coconut.jpg" alt="Atta">
+            </div>
+            <div class="beauty-care-name">Coconut Oil</div>
+        </div>
+
+        
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Sesame Oil')">
+            <div class="beauty-care-circle">
+                <img src="./images/sesame.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Sesame Oil</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Canola Oil')">
+            <div class="beauty-care-circle">
+                <img src="./images/canola.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Canola Oil</div>
+        </div>
+
+     
+    </div>
+
+    <!-- OILS PRODUCTS -->
+<div id="oilsCategoryProducts"
+     style="display:none; margin-top:16px;">
+
+    <h3 id="oilsCategoryTitle"
+        class="beauty-care-title"></h3>
+
+    <div id="oilsCategoryProductsRow"
+         class="nearest-products-row"></div>
+
+    <div id="oilsCategoryEmpty"
+         class="nearest-empty"
+         style="display:none; margin-top:10px;">
+        Is category mein abhi product nahi hai.
+    </div>
+
+</div>
+    <br>
+
+
+     <h3 class="beauty-care-title">Spices & Condiments</h3>
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Haldi Powder')">
+            <div class="beauty-care-circle">
+                <img src="./images/haldi.jpg" alt="Arhar">
+            </div>
+            <div class="beauty-care-name">Haldi Powder</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Red Chilli')">
+            <div class="beauty-care-circle">
+                <img src="./images/red-chilli.jpg" alt="Poha">
+            </div>
+            <div class="beauty-care-name">Red Chilli</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Dhaniya')">
+            <div class="beauty-care-circle">
+                <img src="./images/dhaniya.jpg" alt="Atta">
+            </div>
+            <div class="beauty-care-name">Dhaniya</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Jeera')">
+            <div class="beauty-care-circle">
+                <img src="./images/jeera.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Jeera</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Rai')">
+            <div class="beauty-care-circle">
+                <img src="./images/rai.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Rai</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Kali Mirch')">
+            <div class="beauty-care-circle">
+                <img src="./images/kali-mirch.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Kali Mirch</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Hing')">
+            <div class="beauty-care-circle">
+                <img src="./images/hing.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Hing</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Garam Masala')">
+            <div class="beauty-care-circle">
+                <img src="./images/garam-masala.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Garam Masala</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Kitchen King')">
+            <div class="beauty-care-circle">
+                <img src="./images/kitchen-king.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Kitchen King</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Chaat Masala')">
+            <div class="beauty-care-circle">
+                <img src="./images/chaat-masala.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Chaat Masala</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Salt')">
+            <div class="beauty-care-circle">
+                <img src="./images/salt.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Salt</div>
+        </div>
+     
+    </div>
+
+    <!-- SPICES & CONDIMENTS PRODUCTS -->
+    <div id="spicesCategoryProducts"
+         style="display:none; margin-top:16px;">
+    
+        <h3 id="spicesCategoryTitle"
+            class="beauty-care-title"></h3>
+    
+        <div id="spicesCategoryProductsRow"
+             class="nearest-products-row"></div>
+    
+        <div id="spicesCategoryEmpty"
+             class="nearest-empty"
+             style="display:none; margin-top:10px;">
+            Is category mein abhi product nahi hai.
+        </div>
+    
+    </div>
+    <br>
+
+    <!-- Beverages & Sweeteners -->
+    <h3 class="beauty-care-title">Beverages & Sweeteners</h3>
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Chai patti')">
+            <div class="beauty-care-circle">
+                <img src="./images/chaipati.jpg" alt="Arhar">
+            </div>
+            <div class="beauty-care-name">Chai patti</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Coffee')">
+            <div class="beauty-care-circle">
+                <img src="./images/coffee.jpg" alt="Poha">
+            </div>
+            <div class="beauty-care-name">Coffee</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Gurr')">
+            <div class="beauty-care-circle">
+                <img src="./images/gurr.jpg" alt="Atta">
+            </div>
+            <div class="beauty-care-name">Gurr</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Sugar')">
+            <div class="beauty-care-circle">
+                <img src="./images/sugar.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Sugar</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Honey')">
+            <div class="beauty-care-circle">
+                <img src="./images/honey.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Honey</div>
+        </div>
+     
+    </div>
+    <!-- BEVERAGES & SWEETENERS PRODUCTS -->
+<div id="beveragesCategoryProducts"
+     style="display:none; margin-top:16px;">
+
+    <h3 id="beveragesCategoryTitle"
+        class="beauty-care-title"></h3>
+
+    <div id="beveragesCategoryProductsRow"
+         class="nearest-products-row"></div>
+
+    <div id="beveragesCategoryEmpty"
+         class="nearest-empty"
+         style="display:none; margin-top:10px;">
+        Is category mein abhi product nahi hai.
+    </div>
+
+</div>
+    <br>
+
+     <h3 class="beauty-care-title">Dry Fruits</h3>
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Kaju')">
+            <div class="beauty-care-circle">
+                <img src="./images/kaju.jpg" alt="Arhar">
+            </div>
+            <div class="beauty-care-name">Kaju</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Badam')">
+            <div class="beauty-care-circle">
+                <img src="./images/badam.jpg" alt="Poha">
+            </div>
+            <div class="beauty-care-name">Badam</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Kismis')">
+            <div class="beauty-care-circle">
+                <img src="./images/kismis.jpg" alt="Atta">
+            </div>
+            <div class="beauty-care-name">Kismis</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Pista')">
+            <div class="beauty-care-circle">
+                <img src="./images/pista.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Pista</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Makhana')">
+            <div class="beauty-care-circle">
+                <img src="./images/makhana.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Makhana</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Akhrot')">
+            <div class="beauty-care-circle">
+                <img src="./images/akhrot.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Akhrot</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Anjeer')">
+            <div class="beauty-care-circle">
+                <img src="./images/anjir.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Anjeer</div>
+        </div>
+     
+    </div>
+    <!-- DRY FRUITS PRODUCTS -->
+<div id="dryFruitsCategoryProducts"
+     style="display:none; margin-top:16px;">
+
+    <h3 id="dryFruitsCategoryTitle"
+        class="beauty-care-title"></h3>
+
+    <div id="dryFruitsCategoryProductsRow"
+         class="nearest-products-row"></div>
+
+    <div id="dryFruitsCategoryEmpty"
+         class="nearest-empty"
+         style="display:none; margin-top:10px;">
+        Is category mein abhi product nahi hai.
+    </div>
+
+</div>
+    <br>
+
+     <h3 class="beauty-care-title">Dairy & Refrigerated</h3>
+
+    <div class="beauty-care-slider">
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Milk')">
+            <div class="beauty-care-circle">
+                <img src="./images/milk.jpg" alt="Arhar">
+            </div>
+            <div class="beauty-care-name">Milk</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Dahi')">
+            <div class="beauty-care-circle">
+                <img src="./images/dahi.jpg" alt="Poha">
+            </div>
+            <div class="beauty-care-name">Dahi</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Paneer')">
+            <div class="beauty-care-circle">
+                <img src="./images/paneer-2.jpg" alt="Atta">
+            </div>
+            <div class="beauty-care-name">Paneer</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Cream')">
+            <div class="beauty-care-circle">
+                <img src="./images/cream.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Cream</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Cheese')">
+            <div class="beauty-care-circle">
+                <img src="./images/cheese.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Cheese</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Butter')">
+            <div class="beauty-care-circle">
+                <img src="./images/butter.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Butter</div>
+        </div>
+
+        <div class="beauty-care-item"
+             onclick="filterNearestProductsByCategory('Ghee')">
+            <div class="beauty-care-circle">
+                <img src="./images/ghee.jpg" alt="oil">
+            </div>
+            <div class="beauty-care-name">Ghee</div>
+        </div>
+     
+    </div>
+
+        <!-- DAIRY & REFRIGERATED PRODUCTS PANEL -->
+    <div id="dairyCategoryProducts"
+         style="display:none; margin-top:16px;">
+
+        <h3 id="dairyCategoryTitle"
+            class="beauty-care-title"></h3>
+
+        <div id="dairyCategoryProductsRow"
+             class="nearest-products-row"></div>
+
+        <div id="dairyCategoryEmpty"
+             class="nearest-empty"
+             style="display:none; margin-top:10px;">
+            Is category mein abhi product nahi hai.
+        </div>
+
+    </div>
 </section>
+
+
+
+
 
 
 <!-- =========================================
@@ -4770,6 +5455,24 @@ body.shop-window-open {
 
 <script>
 
+    
+document.querySelectorAll(".sticky-categories .category").forEach(category => {
+    category.addEventListener("click", function () {
+        document.querySelectorAll(
+            ".sticky-categories .category"
+        ).forEach(item => {
+            item.classList.remove("category-active");
+        });
+
+        this.classList.add("category-active");
+
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+    });
+});
+
+
 
 const PRODUCT_SEARCH_HISTORY_KEY = "ors_recent_product_searches";
 
@@ -5264,6 +5967,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
 
+
 function renderNearestProductCategories(products) {
     const container = document.getElementById("nearestProductCategories");
     if (!container) return;
@@ -5278,17 +5982,83 @@ function renderNearestProductCategories(products) {
 
     const allCategories = ["All", ...categories];
 
+    // Category ke hisaab se image path
+    function getCategoryImage(category) {
+        const key = category.trim().toLowerCase();
+
+        
+             const imageMap = {
+          // Common
+          "all": "images/For-you.jpg",
+      
+          // GROCERY
+          "bakery": "images/bakery.jpg",
+          "dairy & milk": "images/dairy-milk.jpg",
+          "household": "images/household.jpg",
+          "beverages": "images/beverages.jpg",
+          "fruits & vegetables": "images/fruits-vegetables.jpg",
+          "grocery": "images/grocery.jpg",
+          "dry fruits": "images/dry-fruits.jpg",
+          "snacks": "images/snacks.jpg",
+          "breakfast cereal": "images/breakfast-cereal.jpg",
+          "spices & condiments": "images/spices.jpg",
+          "oil": "images/oil.jpg",
+          "pulses (dal)": "images/dal.jpg",
+          "grains & flours": "images/grain.jpg",
+
+      
+          // RESTAURANT
+          "chinese": "images/chinese.jpg",
+          "main course": "images/main-course.jpg",
+          "tandoor & tawa": "images/tandoor-tawa.jpg",
+          "tandoori & tava": "images/tandoor-tawa.jpg",
+          "paratha": "images/paratha.jpg",
+          "pizza": "images/pizza.jpg",
+          "burger": "image/burger.jpg",
+      
+          // ELECTRONICS
+          "appliances": "images/appliances.jpg",
+          "mobile accessories": "images/mobile-accessories.jpg",
+          "mobile phones": "images/mobile-phones.jpg",
+      
+          // BEAUTY
+          "baby care": "images/baby-care.jpg",
+          "makeup": "images/makeup.jpg",
+          "beauty tools": "images/beauty-tools.jpg",
+          "bath & body": "images/bath-body.jpg",
+          "skin care": "images/skin-care.jpg",
+          "skincare": "images/skin-care.jpg"
+        };
+      
+
+        return imageMap[key] || "images/offer.jpg";
+    }
+
     container.innerHTML = allCategories.map(category => {
         const active =
             category.toLowerCase() ===
             String(selectedNearestProductCategory || "All").toLowerCase();
+
+        const image = getCategoryImage(category);
 
         return `
             <button
                 type="button"
                 class="nearest-product-category-btn ${active ? "active" : ""}"
                 data-product-category="${escapeNearestHtml(category)}"
-            >${escapeNearestHtml(category)}</button>
+            >
+                <span class="product-category-image">
+                    <img
+                        src="${image}"
+                        alt="${escapeNearestHtml(category)}"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='images/offer.jpg';"
+                    >
+                </span>
+                <span class="product-category-name">
+                    ${escapeNearestHtml(category)}
+                </span>
+            </button>
         `;
     }).join("");
 }
@@ -5358,6 +6128,8 @@ document.addEventListener("click", function (event) {
 function filterNearestProductsByCategory(category) {
     selectedNearestProductCategory = category;
 
+    
+
     const normalizeCategory = value =>
         String(value || "")
             .trim()
@@ -5366,16 +6138,95 @@ function filterNearestProductsByCategory(category) {
 
     const clickedCategory = normalizeCategory(category);
     const currentCategory = normalizeCategory(selectedNearestCategory);
-
-    const vegetableSubcategories = [
+    
+    const grocerySubcategories = [
+        // Fruits & Vegetables
         "leafy greens",
         "daily staples",
         "seasonal veggies",
         "local veggies",
-        "exotic vegetables"
-    ];
+        "exotic vegetables",
+    
+        // Grains & Flours
+        "rice",
+        "wheat",
+        "aata",
+        "atta",
+        "maida",
+        "besan",
+        "sooji",
+        "daliya",
+        "poha",
+    
+       // Pulses (Dal)
+        "arhar dal",
+        "masoor dal",
+        "moong dal",
+        "chana dal",
+        "urad dal",
+        "rajma",
+        "kabuli chana",
+        "matar",
+    
+        // Oil
+        "mustard oil",
+        "refined oil",
+        "coconut oil",
+        "sesame oil",
+        "canola oil",
 
-    const accessoryCategories = [
+        // Spices & Condiments
+        "haldi powder",
+        "dhaniya",
+        "jeera",
+        "rai",
+        "kali mirch",
+        "hing",
+        "kitchen king",
+        "chaat masala",
+    
+        // Other Grocery Subcategories
+        "turmeric powder",
+        "red chilli powder",
+        "coriander powder",
+        "garam masala",
+        "whole spices",
+        "salt",
+        "tea",
+        "coffee",
+        "sugar",
+        "jaggery",
+        "honey",
+         "chai patti",
+        "gurr",
+        "kaju",
+        "badam",
+        "kismis",
+        "pista",
+        "makhana",
+        "akhrot",
+        "anjeer",
+        "cashew",
+        "almond",
+        "raisins",
+        "walnut",
+        "dates",
+        "milk",
+        "curd",
+        "paneer",
+        "butter",
+        "ghee",
+        "cheese",
+        "chips",
+        "namkeen",
+        "biscuits",
+        "cookies",
+        "bread",
+        "cake",
+        "rusk"
+    ];
+    
+        const accessoryCategories = [
         "earphones",
         "chargers",
         "covers",
@@ -5407,20 +6258,109 @@ const isAppliance =
     applianceCategories.includes(clickedCategory);
 
 
-    const isVegetableSubcategory =
-        currentCategory === "groceries" &&
-        vegetableSubcategories.includes(clickedCategory);
+    const isGrocerySubcategory =
+    currentCategory === "groceries" &&
+    grocerySubcategories.includes(clickedCategory);
+
+    // Dairy & Refrigerated subcategories
+const dairyCategories = [
+    "milk",
+    "dahi",
+    "curd",
+    "paneer",
+    "cream",
+    "creem",
+    "cheese",
+    "butter",
+    "ghee"
+];
+
+const isDairyCategory =
+    currentCategory === "groceries" &&
+    dairyCategories.includes(clickedCategory);
 
     const isMobileAccessory =
         currentCategory === "electronics" &&
         accessoryCategories.includes(clickedCategory);
 
     const filteredProducts = nearestProducts.filter(function (product) {
+        
         const productCategory = normalizeCategory(product.category);
         const productSubcategory = normalizeCategory(product.subcategory);
         const productBrand = normalizeCategory(product.brand);
 
-        if (isVegetableSubcategory) {
+        // Dairy & Refrigerated products filtering
+if (isDairyCategory) {
+
+    const dairySubcategoryMap = {
+        "milk": ["milk"],
+        "dahi": ["dahi", "curd"],
+        "curd": ["curd", "dahi"],
+        "paneer": ["paneer"],
+        "cream": ["cream", "creem"],
+        "creem": ["cream", "creem"],
+        "cheese": ["cheese"],
+        "butter": ["butter"],
+        "ghee": ["ghee"]
+    };
+
+    const matchingSubcategories =
+        dairySubcategoryMap[clickedCategory] || [];
+
+    // Product ki subcategory match karein
+    if (matchingSubcategories.includes(productSubcategory)) {
+        return true;
+    }
+
+    // Kuch purane products ki subcategory khaali ho sakti hai.
+    // Unhe Dairy & Milk category aur product name se match karein.
+    if (
+        productCategory === "dairy & milk" &&
+        productSubcategory === ""
+    ) {
+        const productName = normalizeCategory(product.name);
+
+        if (
+            clickedCategory === "milk" &&
+            productName.includes("milk")
+        ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+               // Dry Fruits: Hindi names ko product subcategory se match karein
+        if (
+            currentCategory === "groceries" &&
+            [
+                "kaju",
+                "badam",
+                "kismis",
+                "pista",
+                "makhana",
+                "akhrot",
+                "anjeer"
+            ].includes(clickedCategory)
+        ) {
+             const dryFruitSubcategoryMap = {
+                "kaju": "kaju",
+                "badam": "badam",
+                "kismis": "kismis",
+                "pista": "pista",
+                "makhana": "makhana",
+                "akhrot": "akhrot",
+                "anjeer": "anjeer"
+            };
+
+            
+            
+            return productSubcategory ===
+                dryFruitSubcategoryMap[clickedCategory];
+        }
+
+        if (isGrocerySubcategory) {
             return productSubcategory === clickedCategory;
         }
 
@@ -5481,34 +6421,187 @@ const isAppliance =
 
 
     // Baaki categories ke existing product panels
-    const panelMap = {
-        "beauty & personal care": {
-            panel: "beautyCategoryProducts",
-            title: "beautyCategoryTitle",
-            row: "beautyCategoryProductsRow",
-            empty: "beautyCategoryEmpty"
-        },
-        "groceries": {
-            panel: "groceryCategoryProducts",
-            title: "groceryCategoryTitle",
-            row: "groceryCategoryProductsRow",
-            empty: "groceryCategoryEmpty"
-        },
-        "restaurant": {
-            panel: "restaurantCategoryProducts",
-            title: "restaurantCategoryTitle",
-            row: "restaurantCategoryProductsRow",
-            empty: "restaurantCategoryEmpty"
-        },
-        "electronics": {
-            panel: "electronicsCategoryProducts",
-            title: "electronicsCategoryTitle",
-            row: "electronicsCategoryProductsRow",
-            empty: "electronicsCategoryEmpty"
-        }
-    };
+    // Baaki categories ke existing product panels
+// Grains & Flours subcategories
+const grainCategories = [
+    "rice",
+    "wheat",
+    "aata",
+    "atta",
+    "maida",
+    "besan",
+    "sooji",
+    "daliya",
+    "poha"
+];
 
-    const ids = panelMap[currentCategory];
+// Pulses (Dal) subcategories
+const pulsesCategories = [
+    "arhar dal",
+    "masoor dal",
+    "moong dal",
+    "chana dal",
+    "urad dal",
+    "rajma",
+    "kabuli chana",
+    "matar"
+];
+
+
+// Oils subcategories
+const oilsCategories = [
+    "mustard oil",
+    "refined oil",
+    "coconut oil",
+    "sesame oil",
+    "canola oil"
+];
+
+// Spices & Condiments subcategories
+const spicesCategories = [
+"haldi powder",
+"red chilli",
+"dhaniya",
+"jeera",
+"rai",
+"kali mirch",
+"hing",
+"garam masala",
+"kitchen king",
+"chaat masala",
+"salt"
+];
+
+// Beverages & Sweeteners subcategories
+const beveragesCategories = [
+    "chai patti",
+    "coffee",
+    "gurr",
+    "sugar",
+    "honey"
+];
+
+// Dry Fruits subcategories
+const dryFruitCategories = [
+    "kaju",
+    "badam",
+    "kismis",
+    "pista",
+    "makhana",
+    "akhrot",
+    "anjeer"
+];
+
+
+
+
+const isGrainsCategory =
+    currentCategory === "groceries" &&
+    grainCategories.includes(clickedCategory);
+
+const isPulsesCategory =
+    currentCategory === "groceries" &&
+    pulsesCategories.includes(clickedCategory);
+
+const isOilsCategory =
+    currentCategory === "groceries" &&
+    oilsCategories.includes(clickedCategory);  
+    
+const isSpicesCategory =
+currentCategory === "groceries" &&
+spicesCategories.includes(clickedCategory);
+
+const isBeveragesCategory =
+currentCategory === "groceries" &&
+beveragesCategories.includes(clickedCategory);
+
+const isDryFruitsCategory =
+    currentCategory === "groceries" &&
+    dryFruitCategories.includes(clickedCategory);
+
+   
+
+// Existing category panels
+const panelMap = {
+    "beauty & personal care": {
+        panel: "beautyCategoryProducts",
+        title: "beautyCategoryTitle",
+        row: "beautyCategoryProductsRow",
+        empty: "beautyCategoryEmpty"
+    },
+
+    "groceries": isGrainsCategory
+    ? {
+        panel: "grainsCategoryProducts",
+        title: "grainsCategoryTitle",
+        row: "grainsCategoryProductsRow",
+        empty: "grainsCategoryEmpty"
+    }
+    : isPulsesCategory
+    ? {
+        panel: "pulsesCategoryProducts",
+        title: "pulsesCategoryTitle",
+        row: "pulsesCategoryProductsRow",
+        empty: "pulsesCategoryEmpty"
+    }
+    : isOilsCategory
+    ? {
+        panel: "oilsCategoryProducts",
+        title: "oilsCategoryTitle",
+        row: "oilsCategoryProductsRow",
+        empty: "oilsCategoryEmpty"
+    }
+    : isSpicesCategory
+    ? {
+        panel: "spicesCategoryProducts",
+        title: "spicesCategoryTitle",
+        row: "spicesCategoryProductsRow",
+        empty: "spicesCategoryEmpty"
+    }
+     : isBeveragesCategory
+    ? {
+        panel: "beveragesCategoryProducts",
+        title: "beveragesCategoryTitle",
+        row: "beveragesCategoryProductsRow",
+        empty: "beveragesCategoryEmpty"
+    }
+    : isDryFruitsCategory
+    ? {
+        panel: "dryFruitsCategoryProducts",
+        title: "dryFruitsCategoryTitle",
+        row: "dryFruitsCategoryProductsRow",
+        empty: "dryFruitsCategoryEmpty"
+    }
+    : isDairyCategory
+    ? {
+        panel: "dairyCategoryProducts",
+        title: "dairyCategoryTitle",
+        row: "dairyCategoryProductsRow",
+        empty: "dairyCategoryEmpty"
+    }
+    : {
+        panel: "groceryCategoryProducts",
+        title: "groceryCategoryTitle",
+        row: "groceryCategoryProductsRow",
+        empty: "groceryCategoryEmpty"
+    },
+
+    "restaurant": {
+        panel: "restaurantCategoryProducts",
+        title: "restaurantCategoryTitle",
+        row: "restaurantCategoryProductsRow",
+        empty: "restaurantCategoryEmpty"
+    },
+
+    "electronics": {
+        panel: "electronicsCategoryProducts",
+        title: "electronicsCategoryTitle",
+        row: "electronicsCategoryProductsRow",
+        empty: "electronicsCategoryEmpty"
+    }
+};
+
+const ids = panelMap[currentCategory];
 
     if (!ids) {
         const empty = document.getElementById("nearestEmpty");
@@ -5533,6 +6626,26 @@ const isAppliance =
         console.error("Category product panel nahi mila:", currentCategory);
         return;
     }
+
+    // Grocery mein ek samay par sirf selected panel dikhayein
+if (currentCategory === "groceries") {
+    [
+        "groceryCategoryProducts",
+        "grainsCategoryProducts",
+        "pulsesCategoryProducts",
+        "oilsCategoryProducts",
+        "spicesCategoryProducts",
+         "beveragesCategoryProducts",
+         "dryFruitsCategoryProducts",
+          "dairyCategoryProducts"
+    ].forEach(function (panelId) {
+        const existingPanel = document.getElementById(panelId);
+
+        if (existingPanel) {
+            existingPanel.style.display = "none";
+        }
+    });
+}
 
     panel.style.display = "block";
     title.textContent = category;
@@ -6136,9 +7249,45 @@ if (shopContainer) {
 
         renderNearestProductCategories(nearestProducts);
 
-        renderYourNearestProducts(
-            nearestProducts
-        );
+        
+/* Render products */
+
+// 1. Upar ke main category filter ko render karein
+renderNearestProductCategories(nearestProducts);
+
+// 2. Main product rows mein products dikhayein
+renderYourNearestProducts(nearestProducts);
+
+// 3. Nearby shops dikhayein
+renderYourNearestShops(nearestRestaurants);
+
+// 4. Default subcategory select karein
+const currentMainCategory = String(selectedNearestCategory || "")
+    .trim()
+    .toLowerCase();
+
+if (currentMainCategory === "groceries") {
+    filterNearestProductsByCategory("Leafy Greens");
+
+} else if (currentMainCategory === "restaurant") {
+    filterNearestProductsByCategory("Pizza");
+
+} else if (currentMainCategory === "electronics") {
+    filterNearestProductsByCategory("Samsung");
+
+} else if (currentMainCategory === "beauty & personal care") {
+    filterNearestProductsByCategory("Skincare");
+}
+
+// Grocery ke subcategory products ko default mein dikhayein
+if (
+    String(selectedNearestCategory || "")
+        .trim()
+        .toLowerCase() === "groceries"
+) {
+    filterNearestProductsByCategory("Leafy Greens");
+}
+
 
         renderYourNearestShops(
            nearestRestaurants

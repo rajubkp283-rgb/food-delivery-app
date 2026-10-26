@@ -165,6 +165,48 @@ async function getRestaurants(req, res) {
     }
 }
 
+// ===============================
+// GET SINGLE APPROVED RESTAURANT
+// ===============================
+
+async function getRestaurantById(req, res) {
+    try {
+        const { id } = req.params;
+
+        if (!id || !/^[a-fA-F0-9]{24}$/.test(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid restaurant ID"
+            });
+        }
+
+        const restaurant = await Restaurant.findOne({
+            _id: id,
+            isApproved: true,
+            isBanned: false
+        }).lean();
+
+        if (!restaurant) {
+            return res.status(404).json({
+                success: false,
+                message: "Approved store not found"
+            });
+        }
+
+        return res.json({
+            success: true,
+            restaurant
+        });
+
+    } catch (error) {
+        console.error("Get Restaurant By ID Error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to load store"
+        });
+    }
+}
 
 // ===============================
 // UPDATE RESTAURANT IMAGE
@@ -224,5 +266,6 @@ module.exports = {
     register,
     login,
     getRestaurants,
+    getRestaurantById,
     updateRestaurantImage
 };

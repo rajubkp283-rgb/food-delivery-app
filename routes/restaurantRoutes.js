@@ -4,6 +4,7 @@ const {
     register,
     login,
     getRestaurants,
+    getRestaurantById,
     updateRestaurantImage
 } = require("../controllers/restaurantController");
 
@@ -16,6 +17,12 @@ const router = express.Router();
 router.get(
     "/",
     getRestaurants
+);
+
+// Get single approved restaurant by ID
+router.get(
+    "/:id",
+    getRestaurantById
 );
 
 

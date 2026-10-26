@@ -5531,13 +5531,16 @@ function setProductCategories(storeCategory) {
         placeholder = "Select Grocery Category";
 
         categories = [
-            { value: "Breakfast Cereal", text: "🥣 Breakfast Cereal" },
             { value: "Fruits & Vegetables", text: "🍎 Fruits & Vegetables" },
-            { value: "Dry Fruits and Nuts", text: "🥜 Dry Fruits and Nuts" },
+            { value: "Grains & Flours", text: "🌾 Grains & Flours" },
+            { value: "Pulses (Dal)", text: "🫘 Pulses (Dal)" },
+            { value: "Oil", text: "🫒 Oil" },
+            { value: "Spices & Condiments", text: "🌶️ Spices & Condiments" },
+            { value: "Beverages & Sweeteners", text: "🥤 Beverages & Sweeteners" },
+            { value: "Breakfast Cereal", text: "🥣 Breakfast Cereal" },
+            { value: "Dry Fruits", text: "🥜 Dry Fruits" },
             { value: "Dairy & Milk", text: "🥛 Dairy & Milk" },
-            { value: "Grocery & Staples", text: "🌾 Grocery & Staples" },
             { value: "Snacks", text: "🍿 Snacks" },
-            { value: "Beverages", text: "🥤 Beverages" },
             { value: "Personal Care", text: "🧴 Personal Care" },
             { value: "Household", text: "🧹 Household" },
             { value: "Bakery", text: "🍞 Bakery" },
@@ -5603,9 +5606,144 @@ function setProductCategories(storeCategory) {
 }
 
 
-/* =========================================
-   FRUITS & VEGETABLES SUBCATEGORY
-========================================= */
+
+
+// ============================================
+// GROCERY CATEGORY WISE SUBCATEGORIES
+// ============================================
+
+const grocerySubcategoryOptions = {
+    "Fruits & Vegetables": [
+        "Leafy Greens",
+        "Daily Staples",
+        "Seasonal Veggies",
+        "Local Veggies",
+        "Exotic Vegetables"
+    ],
+
+    "Grains & Flours": [
+        "Rice",
+        "Wheat",
+        "Aata",
+        "Maida",
+        "Besan",
+        "Sooji",
+        "Daliya",
+        "Poha",
+        "Other Grains & Flours"
+    ],
+
+    "Pulses (Dal)": [
+        "Arhar Dal",
+        "Masoor Dal",
+        "Moong Dal",
+        "Chana Dal",
+        "Urad Dal",
+        "Rajma",
+        "Kabuli chana",
+        "Matar",
+        "Other Pulses"
+    ],
+
+    "Oil": [
+        "Mustard Oil",
+        "Refined Oil",
+        "Coconut Oil",
+        "Sesame Oil",
+        "Canola Oil",
+        "Other Oil"
+    ],
+
+    "Spices & Condiments": [
+        "Haldi Powder",
+        "Red Chilli",
+        "Dhaniya",
+        "Jeera",
+        "Rai",
+        "Kali Mirch",
+        "Hing",
+        "Garam Masala",
+        "Kitchen King",
+        "Chaat Masala",
+        "Salt",
+        "Other Spices & Condiments"
+    ],
+
+    "Beverages & Sweeteners": [
+        "Chai patti",
+        "Coffee",
+        "Gurr",
+        "Sugar",
+        "Honey",
+        "Other Beverages & Sweeteners"
+    ],
+
+    "Breakfast Cereal": [
+        "Cornflakes",
+        "Oats",
+        "Muesli",
+        "Other Breakfast Cereal"
+    ],
+
+    "Dry Fruits": [
+        "Kaju",
+        "Badam",
+        "Kismis",
+        "Pista",
+        "Makhana",
+        "Akhrot",
+        "Anjeer",
+        "Other Dry Fruits"
+    ],
+
+    "Dairy & Milk": [
+        "Milk",
+        "Curd",
+        "Paneer",
+        "Butter",
+        "Ghee",
+        "Cheese",
+        "Other Dairy Products"
+    ],
+
+    "Snacks": [
+        "Chips",
+        "Namkeen",
+        "Biscuits",
+        "Cookies",
+        "Other Snacks"
+    ],
+
+    "Personal Care": [
+        "Soap",
+        "Shampoo",
+        "Toothpaste",
+        "Other Personal Care"
+    ],
+
+    "Household": [
+        "Cleaning Products",
+        "Detergents",
+        "Dishwash Products",
+        "Other Household Products"
+    ],
+
+    "Bakery": [
+        "Bread",
+        "Cake",
+        "Rusk",
+        "Other Bakery Products"
+    ],
+
+    "Other": [
+        "Other Grocery Products"
+    ]
+};
+
+
+// ============================================
+// UPDATE SUBCATEGORY DROPDOWN
+// ============================================
 
 function updateFruitVegetableSubcategory() {
 
@@ -5625,25 +5763,72 @@ function updateFruitVegetableSubcategory() {
         .toLowerCase();
 
     const selectedCategory = String(mainCategory.value || "")
-        .trim()
-        .toLowerCase();
+        .trim();
 
-    const shouldShow =
-        ["grocery", "groceries"].includes(storeCategory) &&
-        selectedCategory === "fruits & vegetables";
+    const isGrocery =
+        ["grocery", "groceries"].includes(storeCategory);
 
-    group.style.display = shouldShow ? "block" : "none";
-    subcategory.required = shouldShow;
+    const options = isGrocery
+        ? grocerySubcategoryOptions[selectedCategory]
+        : null;
 
-    if (!shouldShow) {
+    // Show dropdown only when the selected category has subcategories
+    group.style.display = options ? "block" : "none";
+
+    // Update label
+    const label = group.querySelector("label");
+
+    if (label) {
+        label.textContent = "📦 Select Product Subcategory";
+    }
+
+    // Clear old options
+    subcategory.innerHTML = "";
+
+    // Add default option
+    const defaultOption = document.createElement("option");
+
+    defaultOption.value = "";
+    defaultOption.textContent = options
+        ? "Select Subcategory"
+        : "Select Product Subcategory";
+
+    subcategory.appendChild(defaultOption);
+
+    // Add category-specific subcategories
+    if (options) {
+
+        options.forEach(function (item) {
+
+            const option = document.createElement("option");
+
+            option.value = item;
+            option.textContent = item;
+
+            subcategory.appendChild(option);
+        });
+
+    }
+
+    // Subcategory is compulsory when options exist
+    subcategory.required = Boolean(options);
+
+    // Clear selection if category does not have subcategories
+    if (!options) {
         subcategory.value = "";
     }
 }
 
-/* Update when the main category changes */
-document.getElementById("productCategory")
-    ?.addEventListener("change", updateFruitVegetableSubcategory);
 
+// ============================================
+// UPDATE WHEN MAIN CATEGORY CHANGES
+// ============================================
+
+document.getElementById("productCategory")
+    ?.addEventListener(
+        "change",
+        updateFruitVegetableSubcategory
+    );
     
 /* ==========================================
    ALL ELECTRONICS SUBCATEGORIES + BRANDS
@@ -6591,20 +6776,24 @@ const isVeg = isRestaurant
         }
 
         
-         /* Require subcategory for Fruits & Vegetables */
-         if (isFruitVegetable && !subcategory.trim()) {
-             alert("Please select a Vegetable Type before adding this product.");
-         
-             const subcategoryField = document.getElementById(
-                 "fruitVegetableSubcategory"
-             );
-         
-             if (subcategoryField) {
-                 subcategoryField.focus();
-             }
-         
-             return;
-         }
+         // Require subcategory for all grocery categories
+const requiresGrocerySubcategory =
+    isGrocery &&
+    Boolean(grocerySubcategoryOptions[category]);
+
+if (requiresGrocerySubcategory && !subcategory.trim()) {
+
+    alert("Please select a product subcategory before adding this product.");
+
+    const subcategoryField =
+        document.getElementById("fruitVegetableSubcategory");
+
+    if (subcategoryField) {
+        subcategoryField.focus();
+    }
+
+    return;
+}
 
 
 
@@ -7132,9 +7321,9 @@ const categoryOptions = isElectronics
             ? [
                 "Breakfast Cereal",
                 "Fruits & Vegetables",
-                "Dry Fruits and Nuts",
+                "Dry Fruits",
                 "Dairy & Milk",
-                "Grocery & Staples",
+                "Grocery",
                 "Snacks",
                 "Beverages",
                 "Personal Care",

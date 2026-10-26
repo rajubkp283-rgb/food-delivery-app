@@ -932,34 +932,6 @@ button:focus-visible {
 
     <div class="container">
 
-        <!-- HEADER -->
-
-        <div class="page-header">
-
-            <button
-                class="back-button"
-                onclick="closeGroceryShopView()"
-            >
-                ←
-            </button>
-
-            <div class="header-content">
-
-                <div
-                    id="headerTitle"
-                    class="header-title"
-                >
-                    Grocery Store
-                </div>
-
-                <div class="header-subtitle">
-                    Store details
-                </div>
-
-            </div>
-
-        </div>
-
 
         <!-- STORE PROFILE -->
 
@@ -988,7 +960,7 @@ button:focus-visible {
         data-category="All"
         onclick="filterProducts('All')"
     >
-        All
+        For you
     </button>
 
     <button
@@ -1009,10 +981,10 @@ button:focus-visible {
 
     <button
         class="category-btn"
-        data-category="Grocery & Staples"
-        onclick="filterProducts('Grocery & Staples')"
+        data-category="Grocery"
+        onclick="filterProducts('Grocery')"
     >
-        Grocery & Staples
+        Grocery
     </button>
 
     <button
@@ -1230,9 +1202,11 @@ function openGroceryProductDetails(product) {
         product.bestBefore ||
         "Not provided by shop.";
 
+    const storeNameElement =
+    document.querySelector(".store-name");
+
     document.getElementById("detailsShopName").textContent =
-        document.getElementById("headerTitle").textContent ||
-        "Grocery Store";
+        storeNameElement?.textContent.trim() || "Grocery Store";
 
     const storeLocation = document.querySelector(".store-location");
 
@@ -1452,35 +1426,19 @@ function renderProducts() {
 
         try {
 
-            const response =
-                await fetch(
-                    "/api/restaurants"
-                );
+           const response = await fetch(
+            `/api/restaurants/${encodeURIComponent(storeId)}`
+            );
 
-            const result =
-                await response.json();
+           const result = await response.json();
 
+           if (!response.ok) {
+               throw new Error(
+                   result.message || "Failed to load store"
+               );
+           }
 
-            if (!response.ok) {
-
-                throw new Error(
-                    result.message ||
-                    "Failed to load stores"
-                );
-
-            }
-
-
-            const stores =
-                result.restaurants || [];
-
-
-            const store =
-                stores.find(
-                    item =>
-                        String(item._id) ===
-                        String(storeId)
-                );
+          const store = result.restaurant;
 
 
             if (!store) {
@@ -1497,11 +1455,11 @@ function renderProducts() {
 
             /* HEADER */
 
-            document.getElementById(
-                "headerTitle"
-            ).textContent =
-                store.name ||
-                "Grocery Store";
+            const headerTitle = document.getElementById("headerTitle");
+
+             if (headerTitle) {
+                 headerTitle.textContent = store.name || "Grocery Store";
+             }
 
 
             /* IMAGE */

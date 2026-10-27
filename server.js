@@ -33,6 +33,7 @@ const app = express();
 
 app.use(cors());
 
+
 app.use(
     express.json({
         limit: "10mb"
@@ -55,6 +56,417 @@ app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// የዳታቤዝ ግንኙነት መስመር (MongoDB Atlas Connection)
+const MONGODB_URI =
+  "mongodb+srv://rajubkp283_db_user:RajuKr12345@cluster0.hirgpz2.mongodb.net/ors_practice?appName=Cluster0";
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => console.log("ORS Database Cluster Connected Successfully"))
+  .catch((err) => console.error("MongoDB Connection Error:", err));
+
+// --- SCHEMAS ---
+const UserSchema = new mongoose.Schema({
+  phone: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  promoCode: { type: String, unique: true },
+  referredBy: { type: String, default: null },
+  balance: { type: Number, default: 0 }, // Referral users receive ₹50 welcome bonus
+  isBanned: { type: Boolean, default: false },
+  upiAccount: { type: String, default: undefined },
+  upiName: { type: String, default: "" },
+  upiMobile: { type: String, default: undefined },
+  bankAccount: { type: String, default: undefined },
+  bankIFSC: { type: String, default: "" },
+  bankName: { type: String, default: "" },
+  lastCheckIn: { type: String, default: "" },
+  checkInCount: { type: Number, default: 0 },
+ 
+ products: [{
+    vipLevel: Number,
+    purchasePrice: Number,
+    dailyIncome: Number,
+
+    purchasedAt: {
+        type: Date,
+        default: Date.now
+    },
+
+    lastPayoutAt: {
+        type: Date,
+        default: Date.now
+    },
+
+    totalCollected: {
+        type: Number,
+        default: 0
+    }
+}],
+
+  
+   referralsCount: { type: Number, default: 0 },
+  validReferrals: { type: Number, default: 0 },
+
+  referralDetails: {
+  referredByPhone: {
+    type: String,
+    default: null
+  },
+
+  referredByPromoCode: {
+    type: String,
+    default: null
+  },
+
+  referredAt: {
+    type: Date,
+    default: null
+  },
+
+  welcomeBonus: {
+    type: Number,
+    default: 0
+  }
+},
+
+  // Each referral has its own separate ₹100 locked bonus.
+  // It unlocks only when that specific referred user purchases a Holding.
+  referralBonuses: [{
+    referredUserPhone: {
+      type: String,
+      required: true
+    },
+
+    amount: {
+      type: Number,
+      default: 100
+    },
+
+    unlocked: {
+      type: Boolean,
+      default: false
+    },
+
+    createdAt: {
+      type: Date,
+      default: Date.now
+    },
+
+    unlockedAt: {
+      type: Date,
+      default: null
+    }
+  }],
+
+});
+
+UserSchema.index(
+  { bankAccount: 1 },
+  {
+    unique: true,
+    sparse: true,
+  },
+);
+
+const TransactionSchema = new mongoose.Schema({
+  phone: String,
+
+  type: {
+    type: String,
+    enum: [
+      "deposit",
+      "withdraw",
+      "investment",
+      "bonus",
+      "checkin",
+      "daily_profit",
+    ],
+  },
+
+  amount: Number,
+
+  fee: {
+    type: Number,
+    default: 0,
+  },
+
+  netAmount: Number,
+
+  // Withdrawal payment method
+  paymentMethod: {
+    type: String,
+    enum: ["", "UPI", "BANK"],
+    default: "",
+  },
+
+  // UPI details
+  upiAccount: {
+    type: String,
+    default: "",
+  },
+
+  upiName: {
+    type: String,
+    default: "",
+  },
+
+  // Bank details
+  bankName: {
+    type: String,
+    default: "",
+  },
+
+  bankAccount: {
+    type: String,
+    default: "",
+  },
+
+  bankIFSC: {
+    type: String,
+    default: "",
+  },
+
+  status: {
+    type: String,
+    enum: ["pending", "success"],
+    default: "pending",
+  },
+
+  txId: {
+    type: String,
+    default: "",
+  },
+
+  productName: {
+    type: String,
+    default: "",
+  },
+
+  // Deposit payment screenshot
+  paymentScreenshot: {
+    type: String,
+    default: "",
+  },
+
+  // Deposit payment note
+  paymentNote: {
+    type: String,
+    default: "",
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const AdminPromoSchema = new mongoose.Schema({
+  code: { type: String, required: true, unique: true },
+  createdAt: { type: Date, default: Date.now },
+  expiresAt: { type: Date, required: true },
+  redeemedUsers: [String],
+});
+
+const SystemConfigSchema = new mongoose.Schema({
+  supportLink: { type: String, default: "https://t.me/your_support" },
+  channelLink: { type: String, default: "https://t.me/your_channel" },
+
+  // Deposit Payment Settings
+  depositUpiId: {
+    type: String,
+    default: "6202875038@ptyes",
+  },
+
+  depositReceiverName: {
+    type: String,
+    default: "Sona devi",
+  },
+
+  depositQrCode: {
+    type: String,
+    default: "",
+  },
+
+  usedTxIds: [String],
+});
+
+const User = mongoose.model("User", UserSchema);
+const Transaction = mongoose.model("Transaction", TransactionSchema);
+const AdminPromo = mongoose.model("AdminPromo", AdminPromoSchema);
+const SystemConfig = mongoose.model("SystemConfig", SystemConfigSchema);
+
+async function initConfig() {
+  const config = await SystemConfig.findOne();
+  if (!config) {
+    await SystemConfig.create({});
+  }
+}
+
+initConfig();
+
+// Helper function for formatting password and phone number
+function formatPhoneNumber(phone) {
+  let clean = phone.replace(/[\s+]/g, ""); // Removes spaces and the + symbol
+
+  if (clean.startsWith("2510")) {
+    clean = "0" + clean.slice(4);
+  } else if (clean.startsWith("251")) {
+    clean = "0" + clean.slice(3);
+  }
+
+  return clean; // Ensures the number always starts with '09...' or '07...'
+}
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+  jwt.verify(token, "ORS_SECRET_KEY_2026", async (err, decoded) => {
+    if (err) return res.status(403).json({ message: "Forbidden" });
+
+    if (decoded.id === "ADMIN") {
+      req.isAdmin = true;
+      req.user = null;
+      return next();
+    }
+
+    const user = await User.findById(decoded.id);
+
+    if (!user || user.isBanned) {
+      return res.status(403).json({
+        message: "Account suspended or not found",
+      });
+    }
+
+    req.user = user;
+    req.isAdmin = false;
+    next();
+  });
+};
+
+// Fix 1: Correctly serve all static files (HTML, CSS, JS) from the main directory
+app.use(express.static(__dirname));
+
+// --- AUTH ROUTES ---
+app.post("/api/register", async (req, res) => {
+  try {
+    let { phone, password, confirmPassword, promoCode } = req.body;
+
+    if (!phone || !password || !confirmPassword) {
+      return res.status(400).json({
+        message: "Please fill in all required information",
+      });
+    }
+
+    phone = formatPhoneNumber(phone.trim());
+    password = password.trim();
+    confirmPassword = confirmPassword.trim();
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        message: "The two passwords do not match!",
+      });
+    }
+
+    const existingUser = await User.findOne({ phone });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "This phone number is already registered!",
+      });
+    }
+
+    let uniquePromo = Math.floor(100000 + Math.random() * 900000).toString();
+
+    let referredByUser = null;
+
+    if (promoCode) {
+      referredByUser = await User.findOne({
+        promoCode: promoCode.trim(),
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+   const newUser = new User({
+  phone,
+  password: hashedPassword,
+  promoCode: uniquePromo,
+
+  // Existing referral system — isko same rakha gaya hai
+  referredBy: referredByUser ? referredByUser.phone : null,
+
+  // New detailed referral information
+  referralDetails: referredByUser
+    ? {
+        referredByPhone: referredByUser.phone,
+        referredByPromoCode: referredByUser.promoCode,
+        referredAt: new Date(),
+        welcomeBonus: 50
+      }
+    : null,
+
+  balance: 0,
+});
+
+    await newUser.save();
+
+    console.log("USER SAVED:", newUser.phone);
+
+   if (referredByUser) {
+  // ============================================================
+  // REFERRAL REWARDS
+  // Referrer = ₹100 LOCKED
+  // New referred user = ₹50 DIRECT WALLET BONUS
+  // ============================================================
+
+  await User.updateOne(
+    { phone: referredByUser.phone },
+    {
+      $inc: {
+        referralsCount: 1,
+      },
+      $push: {
+        referralBonuses: {
+          referredUserPhone: newUser.phone,
+          amount: 100,
+          unlocked: false,
+          createdAt: new Date(),
+        },
+      },
+    },
+  );
+
+  // ₹50 welcome referral bonus for the new user
+  newUser.balance += 50;
+  await newUser.save();
+
+  // Add transaction history for the ₹50 bonus
+  await Transaction.create({
+    phone: newUser.phone,
+    type: "bonus",
+    amount: 50,
+    fee: 0,
+    netAmount: 50,
+    status: "success",
+    txId: `REFERRAL-WELCOME-${newUser.phone}-${Date.now()}`,
+    productName: "Referral Welcome Bonus",
+  });
+}
+
+    res.status(201).json({
+      message: "Registration Successful",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+c003dc96283bf09755786ce9a94b963b666cab84
 });
 
 // ===============================
@@ -108,10 +520,10 @@ app.get("/api/health", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-const MONGODB_URI =
-    process.env.MONGODB_URI;
+
 
     
+
 
 if (!MONGODB_URI) {
 
@@ -120,8 +532,1393 @@ if (!MONGODB_URI) {
     );
 
     process.exit(1);
+    }
+
+app.post("/api/profile/update-bank", authenticateToken, async (req, res) => {
+  try {
+    const { bankAccount, bankIFSC, bankName } = req.body;
+
+    if (!bankAccount || !bankIFSC || !bankName) {
+      return res.status(400).json({
+        message:
+          "Bank account number, IFSC code and account name are required.",
+      });
+    }
+
+    const cleanBankAccount = bankAccount.trim();
+    const cleanBankIFSC = bankIFSC.trim().toUpperCase();
+    const cleanBankName = bankName.trim();
+
+    // Bank account can only be saved once
+    if (req.user.bankAccount) {
+      return res.status(400).json({
+        message: "Your bank account is already saved and cannot be changed.",
+      });
+    }
+
+    // Prevent the same bank account from being used by another user
+    const existingBankAccount = await User.findOne({
+      bankAccount: cleanBankAccount,
+      _id: { $ne: req.user._id },
+    });
+
+    if (existingBankAccount) {
+      return res.status(400).json({
+        message: "This bank account is already linked to another user.",
+      });
+    }
+
+    req.user.bankAccount = cleanBankAccount;
+    req.user.bankIFSC = cleanBankIFSC;
+    req.user.bankName = cleanBankName;
+
+    await req.user.save();
+
+    res.json({
+      message: "Bank account information saved successfully!",
+    });
+  } catch (err) {
+    console.error("Bank Account Update Error:", err);
+
+    res.status(500).json({
+      message: "Failed to save bank account information.",
+    });
+  }
+});
+
+app.post("/api/profile/update-upi", authenticateToken, async (req, res) => {
+  try {
+    const { upiAccount, upiName } = req.body;
+
+    if (!upiAccount || !upiName) {
+      return res.status(400).json({
+        message: "UPI account and UPI holder name are required.",
+      });
+    }
+
+    const cleanUPI = upiAccount.trim().toLowerCase();
+    const cleanUPIName = upiName.trim();
+
+    // UPI can only be saved once
+    if (req.user.upiAccount) {
+      return res.status(400).json({
+        message: "Your UPI account is already saved and cannot be changed.",
+      });
+    }
+
+    // Validate UPI ID - text and numbers both allowed
+const upiParts = cleanUPI.split("@");
+
+if (
+  upiParts.length !== 2 ||
+  !upiParts[0] ||
+  !upiParts[1]
+) {
+  return res.status(400).json({
+    message: "Please enter a valid UPI ID.",
+  });
 }
 
+    // Prevent the same UPI ID from being used by another user
+const existingUPI = await User.findOne({
+  upiAccount: cleanUPI,
+  _id: { $ne: req.user._id },
+});
+
+if (existingUPI) {
+  return res.status(400).json({
+    message: "This UPI ID is already linked to another user.",
+  });
+}
+
+   req.user.upiAccount = cleanUPI;
+req.user.upiMobile = "";
+req.user.upiName = cleanUPIName;
+
+    await req.user.save();
+
+    res.json({
+      message: "UPI account information saved successfully!",
+    });
+  } catch (err) {
+    console.error("UPI Update Error:", err);
+
+    res.status(500).json({
+      message: "Failed to save UPI account information.",
+    });
+  }
+});
+
+// ============================================================
+// CHANGE PASSWORD
+// ============================================================
+
+app.post(
+  "/api/profile/change-password",
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const { newPassword } = req.body;
+
+      if (!newPassword) {
+        return res.status(400).json({
+          message: "Please enter a new password!",
+        });
+      }
+
+      req.user.password = await bcrypt.hash(newPassword, 10);
+
+      await req.user.save();
+
+      res.json({
+        message: "Your password has been changed successfully!",
+      });
+    } catch (err) {
+      console.error("Password Change Error:", err);
+
+      res.status(500).json({
+        message: "Failed to change password",
+      });
+    }
+  },
+);
+
+app.post("/api/checkin", authenticateToken, async (req, res) => {
+  try {
+    const today = new Date().toISOString().split("T")[0];
+
+    // Already claimed today
+    if (req.user.lastCheckIn === today) {
+      return res.status(400).json({
+        message:
+          "You have already claimed today's daily gift! Please try again tomorrow.",
+      });
+    }
+
+    // First ever check-in = fixed ₹5
+// Every next check-in = random ₹1 to ₹5
+let checkInBonus;
+
+if (Number(req.user.checkInCount || 0) === 0) {
+    checkInBonus = 5;
+} else {
+    checkInBonus = Math.floor(Math.random() * 5) + 1;
+}
+
+    // Add reward to wallet
+    req.user.balance += checkInBonus;
+
+    // Save check-in information
+    req.user.lastCheckIn = today;
+    req.user.checkInCount = Number(req.user.checkInCount || 0) + 1;
+
+    await req.user.save();
+
+    // Save transaction history
+    await Transaction.create({
+      phone: req.user.phone,
+      type: "checkin",
+      amount: checkInBonus,
+      fee: 0,
+      netAmount: checkInBonus,
+      status: "success",
+      txId: `CHECKIN-${Date.now()}`,
+      productName: "Daily Check-In",
+    });
+
+    res.json({
+      message: `Congratulations! You received ₹${checkInBonus} daily check-in gift.`,
+      reward: checkInBonus,
+      newBalance: req.user.balance,
+    });
+
+  } catch (err) {
+    console.error("Check-In Error:", err);
+
+    res.status(500).json({
+      message: "Check-in failed. Please try again.",
+    });
+  }
+});
+
+app.post("/api/promo-bonus", authenticateToken, async (req, res) => {
+  const { code } = req.body;
+
+  if (!code || code.trim() === "") {
+    return res.status(400).json({
+      message: "Please enter a valid promo code",
+    });
+  }
+
+  const activePromo = await AdminPromo.findOne({
+    code: code.trim().toUpperCase(),
+  });
+
+  if (!activePromo) {
+    return res.status(400).json({
+      message: "The promo code you entered was not found!",
+    });
+  }
+
+  if (new Date() > activePromo.expiresAt) {
+    return res.status(400).json({
+      message: "This bonus code has expired!",
+    });
+  }
+
+  if (activePromo.redeemedUsers.includes(req.user.phone)) {
+    return res.status(400).json({
+      message: "You have already used this bonus code!",
+    });
+  }
+
+  const bonus = Math.floor(Math.random() * 10) + 1;
+
+  req.user.balance += bonus;
+
+  activePromo.redeemedUsers.push(req.user.phone);
+
+  await activePromo.save();
+  await req.user.save();
+
+  await Transaction.create({
+    phone: req.user.phone,
+    type: "bonus",
+    amount: bonus,
+    fee: 0,
+    netAmount: bonus,
+    status: "success",
+    txId: `BONUS-${Date.now()}`,
+    productName: `Promo Bonus - ${code.trim().toUpperCase()}`,
+  });
+
+  res.json({
+    message: `Congratulations! You received a ${bonus} INR bonus gift.`,
+    newBalance: req.user.balance,
+  });
+});
+
+// ============================================================
+// VIP PRODUCT PURCHASE FROM WALLET
+// ============================================================
+
+const VIP_PRODUCTS = {
+  1: {
+    price: 100,
+    dailyIncome: 10,
+  },
+
+  2: {
+    price: 200,
+    dailyIncome: 20,
+  },
+
+  3: {
+    price: 400,
+    dailyIncome: 40,
+  },
+
+  4: {
+    price: 600,
+    dailyIncome: 60,
+  },
+
+  5: {
+    price: 1000,
+    dailyIncome: 100,
+  },
+
+  6: {
+    price: 1500,
+    dailyIncome: 150,
+  },
+
+  7: {
+    price: 2000,
+    dailyIncome: 200,
+  },
+
+  8: {
+    price: 3000,
+    dailyIncome: 300,
+  },
+
+  9: {
+    price: 4000,
+    dailyIncome: 400,
+  },
+
+  10: {
+    price: 5000,
+    dailyIncome: 500,
+  },
+
+  11: {
+    price: 7500,
+    dailyIncome: 750,
+  },
+
+  12: {
+    price: 10000,
+    dailyIncome: 1000,
+  },
+
+  13: {
+    price: 15000,
+    dailyIncome: 1500,
+  },
+
+  14: {
+    price: 20000,
+    dailyIncome: 2000,
+  },
+
+  15: {
+    price: 25000,
+    dailyIncome: 2500,
+  },
+};
+
+app.post("/api/buy-product", authenticateToken, async (req, res) => {
+  try {
+    const vipLevel = Number(req.body.vipLevel);
+
+    const product = VIP_PRODUCTS[vipLevel];
+
+    if (!product) {
+      return res.status(400).json({
+        message: "Invalid VIP product.",
+      });
+    }
+
+    // Deduct the price from the wallet balance
+    // and save the product in MongoDB.
+
+    const updatedUser = await User.findOneAndUpdate(
+      {
+        _id: req.user._id,
+        balance: { $gte: product.price },
+      },
+
+      {
+        $inc: {
+          balance: -product.price,
+        },
+
+        $push: {
+          products: {
+            vipLevel: vipLevel,
+            purchasePrice: product.price,
+            dailyIncome: product.dailyIncome,
+            purchasedAt: new Date(),
+            lastPayoutAt: new Date(),
+          },
+        },
+      },
+
+      {
+        new: true,
+      },
+    );
+
+    // Wallet balance is insufficient
+    if (!updatedUser) {
+      const user = await User.findById(req.user._id);
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User account not found.",
+        });
+      }
+
+      return res.status(400).json({
+        message: `Insufficient wallet balance. VIP ${vipLevel} requires ${product.price} INR. Your balance is ${user.balance} INR.`,
+      });
+    }
+
+    // Save the investment transaction
+    await Transaction.create({
+      phone: updatedUser.phone,
+
+      type: "investment",
+
+      amount: product.price,
+
+      fee: 0,
+
+      netAmount: product.price,
+
+      status: "success",
+
+      txId: `VIP${vipLevel}-${Date.now()}`,
+
+      productName: `VIP ${vipLevel} Product`,
+    });
+
+    // ============================================================
+    // REFERRAL BONUS UNLOCK
+    // The referral bonus unlocks only when this referred user
+    // purchases a Holding/VIP product.
+    // ============================================================
+
+    if (updatedUser.referredBy) {
+      const referrer = await User.findOne({
+        phone: updatedUser.referredBy,
+      });
+
+      if (referrer) {
+        const referralBonus = referrer.referralBonuses?.find(
+          (ref) =>
+            ref.referredUserPhone === updatedUser.phone &&
+            ref.unlocked === false,
+        );
+
+        if (referralBonus) {
+          const bonusAmount = Number(referralBonus.amount || 100);
+
+          referralBonus.unlocked = true;
+          referralBonus.unlockedAt = new Date();
+
+          referrer.balance = Number(referrer.balance || 0) + bonusAmount;
+          referrer.validReferrals = Number(referrer.validReferrals || 0) + 1;
+
+          await referrer.save();
+
+          // Save referral bonus transaction
+          await Transaction.create({
+            phone: referrer.phone,
+
+            type: "bonus",
+
+            amount: bonusAmount,
+
+            fee: 0,
+
+            netAmount: bonusAmount,
+
+            status: "success",
+
+            txId: `REFERRAL-${updatedUser.phone}-${Date.now()}`,
+
+            productName: `Referral Bonus - ${updatedUser.phone}`,
+          });
+
+          console.log(
+            `REFERRAL BONUS UNLOCKED:`,
+            `Referrer: ${referrer.phone}`,
+            `Referred User: ${updatedUser.phone}`,
+            `Bonus: ${bonusAmount}`,
+          );
+        }
+      }
+    }
+
+    console.log(
+      `VIP ${vipLevel} PURCHASED:`,
+      updatedUser.phone,
+      `Price: ${product.price}`,
+      `New Balance: ${updatedUser.balance}`,
+    );
+
+    res.json({
+      message: `VIP ${vipLevel} purchased successfully. ${product.price} INR deducted from wallet.`,
+
+      vipLevel: vipLevel,
+
+      price: product.price,
+
+      dailyIncome: product.dailyIncome,
+
+      balance: updatedUser.balance,
+
+      products: updatedUser.products,
+    });
+  } catch (err) {
+    console.error("VIP Purchase Error:", err);
+
+    res.status(500).json({
+      message: "VIP purchase failed. Please try again.",
+    });
+  }
+});
+
+// ============================================================
+// MANUAL DEPOSIT REQUEST
+// Customer submits payment details.
+// Balance is NOT added here.
+// Admin must approve it.
+// ============================================================
+
+app.post("/api/deposit", authenticateToken, async (req, res) => {
+  try {
+    const { amount, txId, paymentNote, paymentScreenshot } = req.body;
+
+    const parsedAmount = Number(amount);
+
+   // Validate manual deposit amount
+if (!Number.isFinite(parsedAmount) || parsedAmount < 100) {
+    return res.status(400).json({
+        message: "Minimum deposit amount is ₹100.",
+    });
+}
+
+    // Transaction ID required
+    if (!txId || !txId.trim()) {
+      return res.status(400).json({
+        message: "Please enter your UTR / Transaction ID.",
+      });
+    }
+
+    const cleanTxId = txId.trim().toUpperCase();
+
+    // Screenshot required
+    if (!paymentScreenshot || !paymentScreenshot.startsWith("data:image/")) {
+      return res.status(400).json({
+        message: "Please upload your payment screenshot.",
+      });
+    }
+
+    // Prevent duplicate transaction ID
+    const existingTransaction = await Transaction.findOne({
+      txId: cleanTxId,
+    });
+
+    if (existingTransaction) {
+      return res.status(400).json({
+        message: "This transaction ID has already been submitted.",
+      });
+    }
+
+    // Save request as PENDING
+    const depositRequest = await Transaction.create({
+      phone: req.user.phone,
+
+      type: "deposit",
+
+      amount: parsedAmount,
+
+      netAmount: parsedAmount,
+
+      status: "pending",
+
+      txId: cleanTxId,
+
+      paymentScreenshot: paymentScreenshot,
+
+      paymentNote: paymentNote ? paymentNote.trim() : "",
+    });
+
+    console.log(
+      "NEW DEPOSIT REQUEST:",
+      depositRequest._id,
+      req.user.phone,
+      parsedAmount,
+      cleanTxId,
+    );
+
+    res.status(201).json({
+      message:
+        "Deposit request submitted successfully. Please wait for admin verification.",
+
+      status: "pending",
+
+      requestId: depositRequest._id,
+    });
+  } catch (err) {
+    console.error("Deposit Request Error:", err);
+
+    res.status(500).json({
+      message: "Failed to submit deposit request.",
+    });
+  }
+});
+
+// ============================================================
+// WITHDRAW REQUESTS
+// ============================================================
+
+app.post("/api/withdraw", authenticateToken, async (req, res) => {
+  try {
+    const { amount, paymentMethod, paymentDetails } = req.body;
+
+    const withdrawAmount = parseFloat(amount);
+
+    // ============================================================
+// DEPOSIT REQUIRED BEFORE WITHDRAWAL
+// Referral ₹50 bonus ko bina successful deposit ke withdraw
+// nahi kiya ja sakta.
+// ============================================================
+
+const hasSuccessfulDeposit = await Transaction.exists({
+  phone: req.user.phone,
+  type: "deposit",
+  status: "success",
+});
+
+if (!hasSuccessfulDeposit) {
+  return res.status(400).json({
+    message: "Withdrawal ke liye pehle kam se kam ek successful deposit karna hoga.",
+  });
+}
+
+    // Basic amount validation
+    if (!Number.isFinite(withdrawAmount)) {
+      return res.status(400).json({
+        message: "Please enter a valid withdrawal amount.",
+      });
+    }
+
+    if (req.user.products.length === 0) {
+      return res.status(400).json({
+        message:
+          "You must purchase at least one VIP product before submitting a withdrawal request.",
+      });
+    }
+
+    if (withdrawAmount < 106) {
+      return res.status(400).json({
+        message: "The minimum withdrawal amount is 106 INR.",
+      });
+    }
+
+    if (req.user.balance < withdrawAmount) {
+      return res.status(400).json({
+        message: "Insufficient balance in your account.",
+      });
+    }
+
+    // Only allow the two methods used by the frontend
+    if (!["UPI", "BANK"].includes(paymentMethod)) {
+      return res.status(400).json({
+        message: "Please select UPI or Bank Account.",
+      });
+    }
+
+    // Validate selected payment details
+    if (!paymentDetails || typeof paymentDetails !== "object") {
+      return res.status(400).json({
+        message: "Payment details are required.",
+      });
+    }
+
+    // ============================================================
+// WITHDRAWAL FEE — 5% SYSTEM MAINTENANCE HANDLING FEE
+// ============================================================
+
+const fee = Number((withdrawAmount * 0.05).toFixed(2));
+const netAmount = Number((withdrawAmount - fee).toFixed(2));
+
+let transactionData = {
+  phone: req.user.phone,
+  type: "withdraw",
+
+  // User ne jitna withdrawal request kiya
+  amount: withdrawAmount,
+
+  // 5% maintenance fee
+  fee: fee,
+
+  // Fee minus karne ke baad user ko milne wala amount
+  netAmount: netAmount,
+
+  paymentMethod: paymentMethod,
+  status: "pending"
+};
+
+    // UPI request
+    if (paymentMethod === "UPI") {
+      if (!req.user.upiAccount || !req.user.upiName) {
+        return res.status(400).json({
+          message: "Please connect your UPI account from your profile first.",
+        });
+      }
+
+      transactionData.upiAccount = req.user.upiAccount;
+      transactionData.upiName = req.user.upiName;
+    }
+
+    // Bank request
+    if (paymentMethod === "BANK") {
+      if (!req.user.bankAccount || !req.user.bankIFSC || !req.user.bankName) {
+        return res.status(400).json({
+          message: "Please add your complete bank account details first.",
+        });
+      }
+
+      transactionData.bankAccount = req.user.bankAccount;
+      transactionData.bankIFSC = req.user.bankIFSC;
+      transactionData.bankName = req.user.bankName;
+    }
+
+    // Deduct withdrawal amount from user's wallet balance
+    req.user.balance -= withdrawAmount;
+
+    await req.user.save();
+
+    // Create withdrawal request.
+    // No real payout/transfer is performed here.
+    const withdrawalRequest = await Transaction.create(transactionData);
+
+    console.log(
+      "WITHDRAWAL REQUEST:",
+      withdrawalRequest._id,
+      req.user.phone,
+      paymentMethod,
+      withdrawAmount,
+    );
+
+    res.status(201).json({
+  message:
+    "withdrawal request submitted successfully. It is pending for review.",
+  status: "pending",
+  requestId: withdrawalRequest._id,
+
+  amount: withdrawAmount,
+  fee: fee,
+  netAmount: netAmount,
+
+  paymentMethod: paymentMethod
+});
+  } catch (err) {
+    console.error("Withdrawal Request Error:", err);
+
+    res.status(500).json({
+      message: "Failed to submit withdrawal request.",
+    });
+  }
+});
+
+// ============================================================
+// TRANSACTION HISTORY
+// ============================================================
+
+app.get("/api/history", authenticateToken, async (req, res) => {
+  try {
+    // Admin does not have a user transaction history
+    if (req.isAdmin) {
+      return res.json([]);
+    }
+
+    // Normal user
+    if (!req.user) {
+      return res.status(401).json({
+        message: "User not authenticated",
+      });
+    }
+
+    const history = await Transaction.find({
+      phone: req.user.phone,
+    }).sort({
+      createdAt: -1,
+    });
+
+    res.json(history);
+  } catch (err) {
+    console.error("History Error:", err);
+
+    res.status(500).json({
+      message: "Failed to load transaction history",
+    });
+  }
+});
+
+// ============================================================
+// SYSTEM LINKS
+// ============================================================
+
+app.get("/api/system-links", async (req, res) => {
+  const config = await SystemConfig.findOne();
+  res.json(config);
+});
+
+
+// ============================================================
+// PUBLIC - GET DEPOSIT PAYMENT SETTINGS
+// ============================================================
+
+app.get("/api/deposit-settings", async (req, res) => {
+  try {
+    const config = await SystemConfig.findOne();
+
+    res.json({
+      upiId: config?.depositUpiId || "",
+      receiverName: config?.depositReceiverName || "",
+      qrCode: config?.depositQrCode || "",
+    });
+  } catch (err) {
+    console.error("Deposit Settings Load Error:", err);
+
+    res.status(500).json({
+      message: "Failed to load deposit payment settings.",
+    });
+  }
+});
+
+// ============================================================
+// ADMIN SYSTEM ENDPOINTS
+// ============================================================
+
+const verifyAdmin = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({
+      message: "Denied",
+    });
+  }
+
+  jwt.verify(token, "ORS_SECRET_KEY_2026", (err, decoded) => {
+    if (err || !decoded.isAdmin) {
+      return res.status(403).json({
+        message: "Access Denied",
+      });
+    }
+
+    next();
+  });
+};
+
+// ============================================================
+// USER - REFERRAL STATS
+// ============================================================
+
+app.get("/api/referral-stats", authenticateToken, async (req, res) => {
+  try {
+    if (req.isAdmin || !req.user) {
+      return res.status(403).json({
+        message: "User access only",
+      });
+    }
+
+    const user = await User.findById(req.user._id).select(
+      "referralsCount validReferrals referralBonuses",
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const referralBonuses = user.referralBonuses || [];
+
+    const lockedBonus = referralBonuses
+      .filter((ref) => !ref.unlocked)
+      .reduce((total, ref) => total + Number(ref.amount || 100), 0);
+
+    const withdrawableBonus = referralBonuses
+      .filter((ref) => ref.unlocked)
+      .reduce((total, ref) => total + Number(ref.amount || 100), 0);
+
+    res.json({
+      referralsCount: Number(user.referralsCount || 0),
+      validReferrals: Number(user.validReferrals || 0),
+
+      lockedBonus,
+      withdrawableBonus,
+
+      referralBonuses: referralBonuses.map((ref) => ({
+        referredUserPhone: ref.referredUserPhone,
+        amount: Number(ref.amount || 100),
+        unlocked: Boolean(ref.unlocked),
+        createdAt: ref.createdAt,
+        unlockedAt: ref.unlockedAt,
+      })),
+    });
+  } catch (err) {
+    console.error("Referral Stats Error:", err);
+
+    res.status(500).json({
+      message: "Failed to load referral statistics.",
+    });
+  }
+});
+
+// ============================================================
+// ADMIN DASHBOARD
+// ============================================================
+
+app.get("/api/admin/dashboard", verifyAdmin, async (req, res) => {
+  const totalUsers = await User.countDocuments();
+
+  const totalDep = await Transaction.aggregate([
+    {
+      $match: {
+        type: "deposit",
+        status: "success",
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total: {
+          $sum: "$amount",
+        },
+      },
+    },
+  ]);
+
+  const totalWith = await Transaction.aggregate([
+    {
+      $match: {
+        type: "withdraw",
+        status: "success",
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total: {
+          $sum: "$amount",
+        },
+      },
+    },
+  ]);
+
+  const pendingWith = await Transaction.aggregate([
+    {
+      $match: {
+        type: "withdraw",
+        status: "pending",
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total: {
+          $sum: "$netAmount",
+        },
+      },
+    },
+  ]);
+
+  const pendingRequests = await Transaction.find({
+    type: "withdraw",
+    status: "pending",
+  })
+    .select(
+      "phone amount fee netAmount paymentMethod upiAccount upiName bankName bankAccount bankIFSC createdAt",
+    )
+    .sort({
+      createdAt: -1,
+    });
+
+  res.json({
+    totalMembers: totalUsers,
+    totalDeposit: totalDep[0]?.total || 0,
+    totalWithdraw: totalWith[0]?.total || 0,
+    pendingWithdraw: pendingWith[0]?.total || 0,
+    pendingRequests,
+  });
+});
+
+// ============================================================
+// ADMIN - GET PENDING DEPOSITS
+// ============================================================
+
+app.get("/api/admin/pending-deposits", verifyAdmin, async (req, res) => {
+  try {
+    const deposits = await Transaction.find({
+      type: "deposit",
+      status: "pending",
+    })
+      .select(
+        "phone amount netAmount txId paymentScreenshot paymentNote createdAt",
+      )
+      .sort({
+        createdAt: -1,
+      });
+
+    res.json({
+      deposits,
+    });
+  } catch (err) {
+    console.error("Pending Deposits Error:", err);
+
+    res.status(500).json({
+      message: "Failed to load pending deposits.",
+    });
+  }
+});
+
+// ============================================================
+// ADMIN - APPROVE DEPOSIT
+// ============================================================
+
+app.post("/api/admin/approve-deposit", verifyAdmin, async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        message: "Deposit request ID is required.",
+      });
+    }
+
+    // Find pending deposit
+    const deposit = await Transaction.findOne({
+      _id: id,
+      type: "deposit",
+      status: "pending",
+    });
+
+    if (!deposit) {
+      return res.status(404).json({
+        message: "Pending deposit request not found.",
+      });
+    }
+
+    // Find user
+    const user = await User.findOne({
+      phone: deposit.phone,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User account not found.",
+      });
+    }
+
+    // Add deposit amount to user's wallet
+    const depositAmount = Number(deposit.amount);
+
+    user.balance += depositAmount;
+    await user.save();
+
+    
+
+    // Mark transaction successful
+    deposit.status = "success";
+
+    await deposit.save();
+
+    console.log(
+      "DEPOSIT APPROVED:",
+      deposit.phone,
+      deposit.amount,
+      deposit.txId,
+    );
+
+    res.json({
+      message: `Deposit approved. ${deposit.amount} INR added to user's wallet.`,
+
+      balance: user.balance,
+    });
+  } catch (err) {
+    console.error("Approve Deposit Error:", err);
+
+    res.status(500).json({
+      message: "Failed to approve deposit.",
+    });
+  }
+});
+
+// ============================================================
+// ADMIN - GENERATE PROMO CODE
+// ============================================================
+
+app.post("/api/admin/generate-promo", verifyAdmin, async (req, res) => {
+  try {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    let generatedCode = "";
+
+    for (let i = 0; i < 6; i++) {
+      generatedCode += letters.charAt(
+        Math.floor(Math.random() * letters.length),
+      );
+    }
+
+    const expires = new Date();
+
+    expires.setHours(expires.getHours() + 24);
+
+    const newPromo = new AdminPromo({
+      code: generatedCode,
+      expiresAt: expires,
+      redeemedUsers: [],
+    });
+
+    await newPromo.save();
+
+    res.json({
+      message: "Bonus code generated successfully!",
+      code: generatedCode,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error generating promo code",
+    });
+  }
+});
+
+// ============================================================
+// ADMIN - SEARCH USER
+// ============================================================
+
+app.post("/api/admin/search-user", verifyAdmin, async (req, res) => {
+  let { phone } = req.body;
+
+  phone = formatPhoneNumber(phone.trim());
+
+  const target = await User.findOne({
+    phone,
+  }).select("-password");
+
+  if (!target) {
+    return res.status(404).json({
+      message: "The user phone number was not found in the system!",
+    });
+  }
+
+  res.json(target);
+});
+
+// ============================================================
+// ADMIN - USER ACTIONS
+// ============================================================
+
+app.post("/api/admin/action-user", verifyAdmin, async (req, res) => {
+  let { phone, action, amount } = req.body;
+
+  phone = formatPhoneNumber(phone.trim());
+
+  const target = await User.findOne({
+    phone,
+  });
+
+  if (!target) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  if (action === "ban") {
+    target.isBanned = true;
+  }
+
+  if (action === "unban") {
+    target.isBanned = false;
+  }
+
+  if (action === "addbalance") {
+    target.balance += parseFloat(amount || 0);
+  }
+
+  await target.save();
+
+  res.json({
+    message: "The action was completed successfully!",
+  });
+});
+
+// ============================================================
+// ADMIN - APPROVE WITHDRAWAL
+// ============================================================
+
+app.post("/api/admin/approve-withdraw", verifyAdmin, async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        message: "Withdrawal request ID is required.",
+      });
+    }
+
+    // Only approve a pending withdrawal request
+    const withdrawal = await Transaction.findOne({
+      _id: id,
+      type: "withdraw",
+      status: "pending",
+    });
+
+    if (!withdrawal) {
+      return res.status(404).json({
+        message: "Pending withdrawal request not found.",
+      });
+    }
+
+    // Approval status update only.
+    // No payout transfer is performed here.
+    withdrawal.status = "success";
+
+    await withdrawal.save();
+
+    console.log(
+      "WITHDRAWAL APPROVED:",
+      withdrawal.phone,
+      withdrawal.amount,
+      withdrawal.paymentMethod,
+    );
+
+    res.json({
+      message: "Withdrawal request approved successfully.",
+      status: "success",
+      requestId: withdrawal._id,
+    });
+  } catch (err) {
+    console.error("Withdrawal Approval Error:", err);
+
+    res.status(500).json({
+      message: "Failed to approve withdrawal request.",
+    });
+  }
+});
+
+// ============================================================
+// ADMIN - UPDATE SYSTEM LINKS
+// ============================================================
+
+app.post("/api/admin/update-links", verifyAdmin, async (req, res) => {
+  const { supportLink, channelLink } = req.body;
+
+  await SystemConfig.updateOne(
+    {},
+    {
+      supportLink,
+      channelLink,
+    },
+  );
+
+  res.json({
+    message: "Official Telegram links have been updated!",
+  });
+});
+
+// ============================================================
+// ADMIN - UPDATE DEPOSIT PAYMENT SETTINGS
+// ============================================================
+
+app.post("/api/admin/update-deposit-settings", verifyAdmin, async (req, res) => {
+  try {
+    const { upiId, receiverName, qrCode } = req.body;
+
+    if (!upiId || !upiId.trim()) {
+      return res.status(400).json({
+        message: "UPI ID is required.",
+      });
+    }
+
+    if (!receiverName || !receiverName.trim()) {
+      return res.status(400).json({
+        message: "Receiver name is required.",
+      });
+    }
+
+    if (qrCode && !qrCode.startsWith("data:image/")) {
+      return res.status(400).json({
+        message: "Invalid QR image.",
+      });
+    }
+
+    const updateData = {
+      depositUpiId: upiId.trim(),
+      depositReceiverName: receiverName.trim(),
+    };
+
+    // QR code is optional.
+    // If admin does not select a new QR, old QR remains unchanged.
+    if (qrCode) {
+      updateData.depositQrCode = qrCode;
+    }
+
+    const config = await SystemConfig.findOneAndUpdate(
+      {},
+      updateData,
+      {
+        new: true,
+        upsert: true,
+      }
+    );
+
+    res.json({
+      message: "Deposit payment settings updated successfully!",
+      depositSettings: {
+        upiId: config.depositUpiId,
+        receiverName: config.depositReceiverName,
+        qrCode: config.depositQrCode || "",
+      },
+    });
+  } catch (err) {
+    console.error("Deposit Settings Update Error:", err);
+
+    res.status(500).json({
+      message: "Failed to update deposit payment settings.",
+    });
+  }
+});
+
+// ============================================================
+// PASSIVE DYNAMIC VIP DAILY INCOME AUTOMATION
+// ============================================================
+
+setInterval(
+  async () => {
+    try {
+      const users = await User.find({
+        "products.0": {
+          $exists: true,
+        },
+      });
+
+      const now = new Date();
+
+      for (let u of users) {
+        let updated = false;
+
+        for (const p of u.products) {
+          const totalAgeDays =
+            (now.getTime() - new Date(p.purchasedAt).getTime()) /
+            1000 /
+            60 /
+            60 /
+            24;
+
+          if (totalAgeDays <= 30) {
+            const hoursSinceLastPayout =
+              (now.getTime() - new Date(p.lastPayoutAt).getTime()) /
+              1000 /
+              60 /
+              60;
+
+            if (hoursSinceLastPayout >= 24) { 
+    u.balance += p.dailyIncome;
+
+    // Add daily income to this holding's total collected
+    p.totalCollected = (p.totalCollected || 0) + p.dailyIncome;
+ 
+    await Transaction.create({ 
+        phone: u.phone, 
+        type: "daily_profit", 
+        amount: p.dailyIncome, 
+        fee: 0, 
+        netAmount: p.dailyIncome, 
+        status: "success", 
+        txId: `PROFIT-VIP${p.vipLevel}-${Date.now()}`, 
+        productName: `VIP ${p.vipLevel} Daily Profit`, 
+    }); 
+ 
+    p.lastPayoutAt = now; 
+    updated = true; 
+c003dc96283bf09755786ce9a94b963b666cab84
+}
+          }
+        }
+
+ HEAD
+        if (updated) {
+          await u.save();
+        }
+      }
+    } catch (err) {
+      console.error("Error in Daily Income Scheduler:", err);
+    }
+  },
+  1000 * 60 * 1,
+);
+c003dc96283bf09755786ce9a94b963b666cab84
 
 mongoose
     .connect(MONGODB_URI)
@@ -130,6 +1927,7 @@ mongoose
         console.log(
             "✅ Food Delivery MongoDB Connected"
         );
+
 
         app.listen(PORT, () => {
 
@@ -150,3 +1948,8 @@ mongoose
         process.exit(1);
 
     });
+
+app.listen(PORT, () =>
+  console.log(`ORS Database cluster engine online on port ${PORT}`),
+);
+

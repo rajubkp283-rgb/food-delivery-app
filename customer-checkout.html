@@ -767,8 +767,10 @@ button:focus-visible {
 
     <script>
 
-        const token =
-            localStorage.getItem("authToken");
+        // Render Backend API URL
+const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
+
+const token = localStorage.getItem("authToken");
 
 
         let cartData = null;
@@ -796,47 +798,48 @@ button:focus-visible {
         }
 
 
-        async function apiRequest(
-            url,
-            options = {}
-        ) {
+        async function apiRequest(url, options = {}) {
+    const apiUrl = /^https?:\/\//i.test(url)
+        ? url
+        : `${API_BASE_URL}${url.startsWith("/") ? url : "/" + url}`;
 
-            const response =
-                await fetch(
-                    url,
-                    {
-                        ...options,
+        console.log("API REQUEST URL:", apiUrl);
 
-                        headers: {
-                            "Content-Type":
-                                "application/json",
-
-                            "Authorization":
-                                "Bearer " + token,
-
-                            ...(options.headers || {})
-                        }
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.message ||
-                    "Request failed"
-                );
-
-            }
-
-
-            return data;
-
+    const response = await fetch(apiUrl, {
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+            ...(options.headers || {})
         }
+    });
+
+    const contentType = response.headers.get("content-type") || "";
+
+    if (!contentType.includes("application/json")) {
+        const responseText = await response.text();
+
+        console.error("Backend returned non-JSON:", {
+            url: apiUrl,
+            status: response.status,
+            response: responseText.slice(0, 300)
+        });
+
+        throw new Error(
+            `Backend se JSON response nahi mila. HTTP Status: ${response.status}. URL: ${apiUrl}`
+        );
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            data.message || `Request failed. HTTP Status: ${response.status}`
+        );
+    }
+
+    return data;
+}
 
 
         async function loadCart() {
@@ -1262,7 +1265,7 @@ async function loadSavedAddress() {
 
                     const response =
                         await fetch(
-                            "/api/orders/from-cart",
+                            `${API_BASE_URL}/api/orders/from-cart`,
                             {
                                 method: "POST",
 

@@ -59,13 +59,9 @@ app.get("/", (req, res) => {
 });
 
 // የዳታቤዝ ግንኙነት መስመር (MongoDB Atlas Connection)
-const MONGODB_URI =
-  "mongodb+srv://rajubkp283_db_user:RajuKr12345@cluster0.hirgpz2.mongodb.net/ors_practice?appName=Cluster0";
+const MONGODB_URI = process.env.MONGODB_URI;
 
-mongoose
-  .connect(MONGODB_URI)
-  .then(() => console.log("ORS Database Cluster Connected Successfully"))
-  .catch((err) => console.error("MongoDB Connection Error:", err));
+
 
 // --- SCHEMAS ---
 const UserSchema = new mongoose.Schema({
@@ -292,7 +288,7 @@ const SystemConfigSchema = new mongoose.Schema({
   usedTxIds: [String],
 });
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.models.User || mongoose.model("User", UserSchema);
 const Transaction = mongoose.model("Transaction", TransactionSchema);
 const AdminPromo = mongoose.model("AdminPromo", AdminPromoSchema);
 const SystemConfig = mongoose.model("SystemConfig", SystemConfigSchema);
@@ -466,7 +462,6 @@ app.post("/api/register", async (req, res) => {
       message: err.message,
     });
   }
-c003dc96283bf09755786ce9a94b963b666cab84
 });
 
 // ===============================
@@ -1902,12 +1897,10 @@ setInterval(
  
     p.lastPayoutAt = now; 
     updated = true; 
-c003dc96283bf09755786ce9a94b963b666cab84
 }
           }
         }
 
- HEAD
         if (updated) {
           await u.save();
         }
@@ -1918,7 +1911,6 @@ c003dc96283bf09755786ce9a94b963b666cab84
   },
   1000 * 60 * 1,
 );
-c003dc96283bf09755786ce9a94b963b666cab84
 
 mongoose
     .connect(MONGODB_URI)
@@ -1949,7 +1941,4 @@ mongoose
 
     });
 
-app.listen(PORT, () =>
-  console.log(`ORS Database cluster engine online on port ${PORT}`),
-);
 

@@ -187,17 +187,83 @@ const getNearestProducts = async (req, res) => {
     // -------------------------------
     // Find approved shops
     // -------------------------------
-    const restaurants = await Restaurant.find({
-      category: categoryRegex,
-      isApproved: true,
-      isBanned: false,
-      latitude: {
-        $ne: null
-      },
-      longitude: {
-        $ne: null
-      }
-    }).lean();
+
+
+    const restaurantQuery = {
+  category: categoryRegex,
+  isApproved: true,
+  isBanned: false,
+  latitude: { $ne: null },
+  longitude: { $ne: null }
+};
+
+console.log("========== NEAREST DEBUG ==========");
+console.log("Database:", Restaurant.db.name);
+console.log("Collection:", Restaurant.collection.name);
+console.log("Requested category:", category);
+console.log("Category regex:", categoryRegex);
+console.log("User latitude:", userLatitude);
+console.log("User longitude:", userLongitude);
+console.log("Restaurant query:", restaurantQuery);
+
+const restaurants = await Restaurant.find(restaurantQuery).lean();
+
+
+
+console.log("\n========== DATABASE CHECK ==========");
+
+console.log(
+    "Total restaurants:",
+    await Restaurant.countDocuments({})
+);
+
+console.log(
+    "Category matches:",
+    await Restaurant.countDocuments({
+        category: categoryRegex
+    })
+);
+
+console.log(
+    "Approved restaurants:",
+    await Restaurant.countDocuments({
+        isApproved: true
+    })
+);
+
+console.log(
+    "Unbanned restaurants:",
+    await Restaurant.countDocuments({
+        isBanned: false
+    })
+);
+
+console.log(
+    "Sample restaurant records:",
+    await Restaurant.find({})
+        .select("name category isApproved isBanned latitude longitude")
+        .limit(10)
+        .lean()
+);
+
+console.log("====================================\n");
+
+console.log("Restaurants found:", restaurants.length);
+
+console.log(
+  "Restaurant coordinates:",
+  restaurants.map(r => ({
+    id: r._id,
+    name: r.name,
+    category: r.category,
+    latitude: r.latitude,
+    longitude: r.longitude,
+    isApproved: r.isApproved,
+    isBanned: r.isBanned
+  }))
+);
+
+console.log("===================================");
 
 
     // -------------------------------

@@ -137,11 +137,14 @@ async function getRestaurants(req, res) {
             filter.category = category.trim();
         }
 
-        const restaurants = await Restaurant.find(
-            filter
-        ).sort({
-            createdAt: -1
-        });
+       const restaurants = await Restaurant.find(
+           filter
+       )
+       .select("-password")
+       .sort({
+           createdAt: -1
+       })
+       .lean();
 
         res.json({
             success: true,
@@ -180,11 +183,13 @@ async function getRestaurantById(req, res) {
             });
         }
 
-        const restaurant = await Restaurant.findOne({
+       const restaurant = await Restaurant.findOne({
             _id: id,
             isApproved: true,
             isBanned: false
-        }).lean();
+        })
+        .select("-password")
+        .lean();
 
         if (!restaurant) {
             return res.status(404).json({

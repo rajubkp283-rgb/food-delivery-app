@@ -1064,6 +1064,9 @@ button:focus-visible {
 
     const storeId = params.get("id");
 
+    // Backend API URL
+const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
+
 
 
     /* LOAD GROCERY PRODUCTS */
@@ -1094,8 +1097,9 @@ async function loadProducts() {
             </div>
         `;
 
+        
         const response = await fetch(
-            `/api/products/restaurant/${storeId}`
+            `${API_BASE_URL}/api/products/restaurant/${encodeURIComponent(storeId)}`
         );
 
         const result = await response.json();
@@ -1427,9 +1431,8 @@ function renderProducts() {
         try {
 
            const response = await fetch(
-            `/api/restaurants/${encodeURIComponent(storeId)}`
-            );
-
+           `${API_BASE_URL}/api/restaurants/${encodeURIComponent(storeId)}`
+            )
            const result = await response.json();
 
            if (!response.ok) {
@@ -1627,7 +1630,7 @@ async function addToCart(productId) {
 
         const response =
             await fetch(
-                "/api/cart/add",
+            `${API_BASE_URL}/api/cart/add`,
                 {
                     method: "POST",
 

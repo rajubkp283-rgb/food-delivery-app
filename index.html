@@ -7140,36 +7140,26 @@ if (shopContainer) {
 
 
     try {
+const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
 
-        const url =
-            "/api/products/nearest" +
-            "?latitude=" +
-            encodeURIComponent(
-                location.latitude
-            ) +
-            "&longitude=" +
-            encodeURIComponent(
-                location.longitude
-            ) +
-            "&category=" +
-            encodeURIComponent(
-                selectedNearestCategory
-            );
+const url =
+API_BASE_URL +
+"/api/products/nearest" +
+"?latitude=" +
+encodeURIComponent(location.latitude) +
+"&longitude=" +
+encodeURIComponent(location.longitude) +
+"&category=" +
+encodeURIComponent(selectedNearestCategory);
 
+console.log("YOUR NEAREST API:", url);
 
-        console.log(
-            "YOUR NEAREST API:",
-            url
-        );
+const response = await fetch(url, {
+signal: requestSignal
+});
 
+const data = await response.json();
 
-        const response = await fetch(url, {
-         signal: requestSignal
-        });
-
-
-        const data =
-            await response.json();
 
             /* Ignore outdated category responses */
            if (

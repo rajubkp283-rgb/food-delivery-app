@@ -549,8 +549,9 @@ button:focus-visible {
 
 <script>
 
-const token =
-    localStorage.getItem("authToken");
+const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
+
+const token = localStorage.getItem("authToken");
 
 
 /* Check Login */
@@ -567,22 +568,22 @@ async function loadAccount() {
 
     try {
 
-        const response =
-            await fetch(
-                "/api/auth/profile",
-                {
-                    method: "GET",
+        
 
-                    headers: {
-                        "Authorization":
-                            "Bearer " + token
-                    }
-                }
-            );
+const response = await fetch(
+    `${API_BASE_URL}/api/auth/profile`,
+    {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + token,
+            "Accept": "application/json"
+        }
+    }
+);
 
 
-        const data =
-            await response.json();
+
+const data = await response.json();
 
 
         if (!response.ok || !data.success) {
@@ -843,9 +844,7 @@ async function loadAddress() {
     try {
 
         const response =
-            await fetch(
-                "/api/customer/address",
-                {
+            await fetch(`${API_BASE_URL}/api/customer/address`, {
                     method: "GET",
 
                     headers: {
@@ -1236,10 +1235,8 @@ async function saveAddress() {
 
 
         const response =
-            await fetch(
-                "/api/customer/address",
-                {
-                    method: "PUT",
+            await fetch(`${API_BASE_URL}/api/customer/address`, {
+                   method: "PUT",
 
                     headers: {
                         "Content-Type": "application/json",

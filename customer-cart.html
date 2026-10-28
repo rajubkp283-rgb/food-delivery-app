@@ -708,6 +708,7 @@ button:focus-visible {
 
         const token =
             localStorage.getItem("authToken");
+            const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
 
 
         if (!token) {
@@ -727,47 +728,60 @@ button:focus-visible {
         }
 
 
-        async function apiRequest(
-            url,
-            options = {}
-        ) {
+    
 
-            const response =
-                await fetch(
-                    url,
-                    {
-                        ...options,
+    async function apiRequest(url, options = {}) {
 
-                        headers: {
-                            "Content-Type":
-                                "application/json",
+    const apiUrl = url.startsWith("http")
+        ? url
+        : `${API_BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
 
-                            "Authorization":
-                                "Bearer " + token,
+    const response = await fetch(apiUrl, {
+        ...options,
 
-                            ...(options.headers || {})
-                        }
-                    }
-                );
+        headers: {
+            "Accept": "application/json",
 
+            ...(options.body
+                ? { "Content-Type": "application/json" }
+                : {}),
 
-            const data =
-                await response.json();
+            "Authorization": "Bearer " + token,
 
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.message ||
-                    "Request failed"
-                );
-
-            }
-
-
-            return data;
-
+            ...(options.headers || {})
         }
+    });
+
+    const contentType =
+        response.headers.get("content-type") || "";
+
+    if (!contentType.includes("application/json")) {
+
+        const responseText = await response.text();
+
+        console.error("API URL:", apiUrl);
+        console.error("HTTP Status:", response.status);
+        console.error("Content-Type:", contentType);
+        console.error(
+            "Response Preview:",
+            responseText.slice(0, 500)
+        );
+
+        throw new Error(
+            `API से JSON response नहीं मिला (HTTP ${response.status})। Console में error देखें।`
+        );
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            data.message || "Request failed"
+        );
+    }
+
+    return data;
+}
 
 
         async function loadCart() {

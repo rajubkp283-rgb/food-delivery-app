@@ -1,7 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://areaxpress.in/</loc>
   </url>
+
+  <url>
+    <loc>https://areaxpress.in/beauty.html</loc>
+  </url>
+
+  <url>
+    <loc>https://areaxpress.in/electronics.html</loc>
+  </url>
+
+  <url>
+    <loc>https://areaxpress.in/grocery.html</loc>
+  </url>
+
+  <url>
+    <loc>https://areaxpress.in/grocery-store.html</loc>
+  </url>
+
+  <url>
+    <loc>https://areaxpress.in/customer-restaurant.html</loc>
+  </url>
+
+  <url>
+    <loc>https://areaxpress.in/customer-restaurants.html</loc>
+  </url>
+
+  <url>
+    <loc>https://areaxpress.in/restaurant-menu.html</loc>
+  </url>
+
 </urlset>

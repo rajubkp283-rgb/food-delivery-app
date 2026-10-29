@@ -5418,6 +5418,8 @@ input,
 
     <script>
 
+        const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
+
 
 /* =========================================
    DASHBOARD SECTION NAVIGATION
@@ -6123,7 +6125,7 @@ document.getElementById("editProductCategory")
 
             try {
 
-                const response = await fetch("/api/restaurant/profile", {
+                const response = await fetch(`${API_BASE_URL}/api/restaurant/profile`, {
                     method: "GET",
 
                     headers: {
@@ -6530,7 +6532,7 @@ async function handleOwnerImageSelect(event) {
         }
 
         const response =
-            await fetch("/api/restaurant/owner-image", {
+            await fetch(`${API_BASE_URL}/api/restaurant/owner-image`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -6808,7 +6810,7 @@ if (requiresGrocerySubcategory && !subcategory.trim()) {
         // Add Product
 
         const response = await fetch(
-            "/api/restaurant/products",
+            `${API_BASE_URL}/api/restaurant/products`,
             {
                 method: "POST",
 
@@ -6997,7 +6999,7 @@ if (!confirmDelete) {
 
         // Delete Product
         const response = await fetch(
-            "/api/restaurant/products/" + productId,
+            `${API_BASE_URL}/api/restaurant/products/` + productId,
             {
                 method: "DELETE",
 
@@ -8032,7 +8034,7 @@ if (isElectronics) {
 
         const responseUpdate =
             await fetch(
-                "/api/restaurant/products/" +
+                `${API_BASE_URL}/api/restaurant/products/` +
                 editingProductId,
                 {
 
@@ -8824,7 +8826,7 @@ async function loadRestaurantProducts() {
 
         const response =
             await fetch(
-                "/api/restaurant/products",
+                `${API_BASE_URL}/api/restaurant/products`,
                 {
                     method: "GET",
 
@@ -8923,7 +8925,7 @@ async function loadRestaurantOrders() {
 
         const response = await fetch(
 
-            "/api/orders/restaurant/orders",
+            `${API_BASE_URL}/api/orders/restaurant/orders`,
 
             {
 
@@ -9440,7 +9442,7 @@ async function loadRestaurantOrders() {
     try {
 
         const response = await fetch(
-            "/api/orders/restaurant/orders",
+            `${API_BASE_URL}/api/orders/restaurant/orders`,
             {
                 method: "GET",
                 headers: {
@@ -9952,7 +9954,7 @@ async function loadDeliveryBoys(orderId) {
     try {
 
         const response = await fetch(
-            "/api/delivery-boys/approved"
+            `${API_BASE_URL}/api/delivery-boys/approved`
         );
 
         const data = await response.json();
@@ -10097,7 +10099,7 @@ async function assignDeliveryBoy(orderId, deliveryBoyId) {
         }
 
         const response = await fetch(
-            "/api/orders/restaurant/orders/" +
+            `${API_BASE_URL}/api/orders/restaurant/orders/` +
             orderId +
             "/assign",
             {
@@ -10150,9 +10152,7 @@ async function updateRestaurantOrderStatus(orderId, status) {
         }
 
         const response = await fetch(
-            "/api/orders/restaurant/orders/" +
-            orderId +
-            "/status",
+            `${API_BASE_URL}/api/orders/restaurant/orders/${orderId}/status`,
             {
                 method: "PUT",
 
@@ -10544,7 +10544,7 @@ async function handleRestaurantCoverSelect(event) {
         }
 
         const response =
-            await fetch("/api/restaurant/image", {
+            await fetch(`${API_BASE_URL}/api/restaurant/image`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -10620,7 +10620,7 @@ async function toggleRestaurantStatus() {
 
         const response =
             await fetch(
-                "/api/restaurant/status",
+                `${API_BASE_URL}/api/restaurant/status`,
                 {
                     method:"PUT",
 

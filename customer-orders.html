@@ -1035,12 +1035,15 @@ async function loadOrders() {
         // Page khulte hi aaj ki date select hogi
         orderDateFilter.value = getLocalDateKey(new Date());
 
-        const response = await fetch("/api/orders/my-orders", {
-            method: "GET",
-            headers: {
-                "Authorization": "Bearer " + authToken
-            }
-        });
+       const response = await fetch(
+    "https://food-delivery-app-yrag.onrender.com/api/orders/my-orders",
+    {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + authToken
+        }
+    }
+);
 
         const data = await response.json();
 

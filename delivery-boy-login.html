@@ -600,6 +600,8 @@ button:focus-visible {
 
 <script>
 
+    const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
+
 
 async function loginDeliveryBoy(event){
 
@@ -638,25 +640,19 @@ async function loginDeliveryBoy(event){
     try{
 
 
-        const response =
-            await fetch(
-                "/api/delivery-boys/login",
-                {
-
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                        "application/json"
-                    },
-
-                    body:JSON.stringify({
-                        phone,
-                        password
-                    })
-
-                }
-            );
+        const response = await fetch(
+    `${API_BASE_URL}/api/delivery-boys/login`,
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            phone,
+            password
+        })
+    }
+);
 
 
         const data =

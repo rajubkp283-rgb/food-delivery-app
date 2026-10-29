@@ -675,6 +675,8 @@ button:focus-visible {
 
 <script>
 
+    const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
+
 
 // ==========================================
 // SHOP CURRENT LOCATION
@@ -931,23 +933,18 @@ document
 
         try{
 
-            const response =
-                await fetch(
-                    "/api/restaurants/register",
-                    {
-                        method:"POST",
-
-                        headers:{
-                            "Content-Type":
-                            "application/json"
-                        },
-
-                        body:
-                            JSON.stringify(data)
-                    }
-                );
-
-
+            const response = await fetch(
+            `${API_BASE_URL}/api/restaurants/register`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+        );
+        
+        
             const result =
                 await response.json();
 

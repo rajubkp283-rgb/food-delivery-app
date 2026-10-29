@@ -513,23 +513,23 @@ document
 
     try{
 
-        const response =
-            await fetch(
-                "/api/restaurants/login",
-                {
-                    method:"POST",
+        const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
 
-                    headers:{
-                        "Content-Type":
-                        "application/json"
-                    },
-
-                    body:JSON.stringify({
-                        phone:phone,
-                        password:password
-                    })
-                }
-            );
+        const response = await fetch(
+            `${API_BASE_URL}/api/restaurants/login`,
+            {
+                method: "POST",
+        
+                headers: {
+                    "Content-Type": "application/json"
+                },
+        
+                body: JSON.stringify({
+                    phone: phone,
+                    password: password
+                })
+            }
+        );
 
 
         const data =

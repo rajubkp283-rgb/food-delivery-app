@@ -800,8 +800,8 @@ const token = localStorage.getItem("authToken");
 
         async function apiRequest(url, options = {}) {
     const apiUrl = /^https?:\/\//i.test(url)
-        ? url
-        : `${API_BASE_URL}${url.startsWith("/") ? url : "/" + url}`;
+    ? url
+    : `${API_BASE_URL}${url.startsWith("/") ? url : "/" + url}`;
 
         console.log("API REQUEST URL:", apiUrl);
 

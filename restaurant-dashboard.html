@@ -5536,16 +5536,18 @@ function setProductCategories(storeCategory) {
             { value: "Fruits & Vegetables", text: "🍎 Fruits & Vegetables" },
             { value: "Grains & Flours", text: "🌾 Grains & Flours" },
             { value: "Pulses (Dal)", text: "🫘 Pulses (Dal)" },
-            { value: "Oil", text: "🫒 Oil" },
+            { value: "Oils", text: "🫒 Oils" },
             { value: "Spices & Condiments", text: "🌶️ Spices & Condiments" },
             { value: "Beverages & Sweeteners", text: "🥤 Beverages & Sweeteners" },
             { value: "Breakfast Cereal", text: "🥣 Breakfast Cereal" },
             { value: "Dry Fruits", text: "🥜 Dry Fruits" },
-            { value: "Dairy & Milk", text: "🥛 Dairy & Milk" },
+            { value: "Dairy & Refrigerated", text: "🥛 Dairy & Refrigerated" },
             { value: "Snacks", text: "🍿 Snacks" },
+            { value: "Drinks & Juices", text: "🧃 Drinks & Juices" },
+            { value: "Chocolates", text: "🍫 Chocolates" },
+            { value: "Bakery & Biscuits", text: "🍞 Bakery & Biscuits" },
             { value: "Personal Care", text: "🧴 Personal Care" },
             { value: "Household", text: "🧹 Household" },
-            { value: "Bakery", text: "🍞 Bakery" },
             { value: "Other", text: "📦 Other" }
         ];
 
@@ -5616,132 +5618,91 @@ function setProductCategories(storeCategory) {
 
 const grocerySubcategoryOptions = {
     "Fruits & Vegetables": [
-        "Leafy Greens",
-        "Daily Staples",
-        "Seasonal Veggies",
-        "Local Veggies",
-        "Exotic Vegetables"
+        "Leafy Greens", "Daily Staples", "Seasonal Veggies",
+        "Local Veggies", "Exotic Vegetables"
     ],
 
     "Grains & Flours": [
-        "Rice",
-        "Wheat",
-        "Aata",
-        "Maida",
-        "Besan",
-        "Sooji",
-        "Daliya",
-        "Poha",
-        "Other Grains & Flours"
+        "Rice", "Wheat", "Aata", "Poha", "Daliya",
+        "Besan", "Maida", "Sooji", "Other Grains & Flours"
     ],
 
     "Pulses (Dal)": [
-        "Arhar Dal",
-        "Masoor Dal",
-        "Moong Dal",
-        "Chana Dal",
-        "Urad Dal",
-        "Rajma",
-        "Kabuli chana",
-        "Matar",
-        "Other Pulses"
+        "Arhar Dal", "Masoor Dal", "Moong Dal", "Chana Dal",
+        "Urad Dal", "Rajma", "Kabuli chana", "Matar", "Other Pulses"
     ],
 
-    "Oil": [
-        "Mustard Oil",
-        "Refined Oil",
-        "Coconut Oil",
-        "Sesame Oil",
-        "Canola Oil",
-        "Other Oil"
+    "Oils": [
+        "Mustard Oil", "Refined Oil", "Coconut Oil",
+        "Sesame Oil", "Canola Oil", "Other Oils"
     ],
 
     "Spices & Condiments": [
-        "Haldi Powder",
-        "Red Chilli",
-        "Dhaniya",
-        "Jeera",
-        "Rai",
-        "Kali Mirch",
-        "Hing",
-        "Garam Masala",
-        "Kitchen King",
-        "Chaat Masala",
-        "Salt",
+        "Haldi Powder", "Red Chilli", "Dhaniya", "Jeera",
+        "Rai", "Kali Mirch", "Hing", "Garam Masala",
+        "Kitchen King", "Chaat Masala", "Salt",
         "Other Spices & Condiments"
     ],
 
     "Beverages & Sweeteners": [
-        "Chai patti",
-        "Coffee",
-        "Gurr",
-        "Sugar",
-        "Honey",
-        "Other Beverages & Sweeteners"
+        "Chai patti", "Coffee", "Gurr", "Sugar",
+        "Honey", "Other Beverages & Sweeteners"
     ],
 
     "Breakfast Cereal": [
-        "Cornflakes",
-        "Oats",
-        "Muesli",
-        "Other Breakfast Cereal"
+        "Cornflakes", "Oats", "Muesli", "Other Breakfast Cereal"
     ],
 
     "Dry Fruits": [
-        "Kaju",
-        "Badam",
-        "Kismis",
-        "Pista",
-        "Makhana",
-        "Akhrot",
-        "Anjeer",
-        "Other Dry Fruits"
+        "Kaju", "Badam", "Kismis", "Pista",
+        "Makhana", "Akhrot", "Anjeer", "Other Dry Fruits"
     ],
 
-    "Dairy & Milk": [
-        "Milk",
-        "Curd",
-        "Paneer",
-        "Butter",
-        "Ghee",
-        "Cheese",
-        "Other Dairy Products"
+    "Dairy & Refrigerated": [
+        "Milk", "Dahi", "Curd", "Paneer", "Butter",
+        "Ghee", "Cream", "Cheese", "Other Dairy Products"
     ],
 
     "Snacks": [
-        "Chips",
-        "Namkeen",
-        "Biscuits",
-        "Cookies",
-        "Other Snacks"
+        "Chips", "Kurkure", "Namkeen", "Aloo Bhujia",
+        "Dal Mot", "Moong Dal", "Mixtures", "Nachos",
+        "Popcorn", "Biscuits", "Cookies", "Other Snacks"
+    ],
+
+    "Drinks & Juices": [
+        "Thums Up", "Coca Cola", "Sprite", "Fizz", "Pepsi",
+        "Campa", "Fanta", "Limca", "Mountain Dew", "Mirinda",
+        "7up", "Jeera Masala", "Mazza", "Slice",
+        "Red Bull", "Sting", "Other Drinks & Juices"
+    ],
+
+    "Chocolates": [
+        "Dairy Milk", "KitKat", "Munch", "Kinder Joy",
+        "Gems", "5 Star", "Milkybar", "Snickers",
+        "Perk", "Gift Pack", "Other Chocolates"
+    ],
+
+    "Bakery & Biscuits": [
+        "Cakes", "Cookies", "Cream Biscuits",
+        "Glucose Biscuits", "Marie Biscuits",
+        "Salty Biscuits", "Sweet Biscuits",
+        "Healthy Biscuits", "Bread", "Rusk",
+        "Other Bakery Products"
     ],
 
     "Personal Care": [
-        "Soap",
-        "Shampoo",
-        "Toothpaste",
-        "Other Personal Care"
+        "Soap", "Shampoo", "Toothpaste", "Other Personal Care"
     ],
 
     "Household": [
-        "Cleaning Products",
-        "Detergents",
-        "Dishwash Products",
-        "Other Household Products"
-    ],
-
-    "Bakery": [
-        "Bread",
-        "Cake",
-        "Rusk",
-        "Other Bakery Products"
+        "Cleaning Products", "Detergents",
+        "Dishwash Products", "Other Household Products"
     ],
 
     "Other": [
         "Other Grocery Products"
     ]
 };
-
 
 // ============================================
 // UPDATE SUBCATEGORY DROPDOWN
@@ -6104,6 +6065,58 @@ function updateEditElectronicsFields(
     subcategory.value = savedSubcategory;
     brand.value = savedBrand;
 }
+
+function updateEditGrocerySubcategory(savedSubcategory = "") {
+
+    const category = document.getElementById("editProductCategory");
+    const group = document.getElementById("editGrocerySubcategoryGroup");
+    const subcategory = document.getElementById("editGrocerySubcategory");
+
+    if (!category || !group || !subcategory) return;
+
+    const storeCategory = String(currentStoreCategory || "")
+        .trim()
+        .toLowerCase();
+
+    const isGrocery = ["grocery", "groceries"].includes(storeCategory);
+
+    const options = isGrocery
+        ? grocerySubcategoryOptions[category.value]
+        : null;
+
+    group.style.display = options ? "block" : "none";
+
+    subcategory.innerHTML =
+        '<option value="">Select Subcategory</option>';
+
+    if (!options) {
+        subcategory.required = false;
+        return;
+    }
+
+    options.forEach(item => {
+        const option = document.createElement("option");
+        option.value = item;
+        option.textContent = item;
+        subcategory.appendChild(option);
+    });
+
+    // पुराने Product की Subcategory भी सुरक्षित रखें
+    if (savedSubcategory && !options.includes(savedSubcategory)) {
+        const option = document.createElement("option");
+        option.value = savedSubcategory;
+        option.textContent = savedSubcategory;
+        subcategory.appendChild(option);
+    }
+
+    subcategory.required = true;
+    subcategory.value = savedSubcategory;
+}
+
+document.getElementById("editProductCategory")
+    ?.addEventListener("change", function () {
+        updateEditGrocerySubcategory("");
+    });
 
 
 /* Reset selections when edit category changes */
@@ -7320,19 +7333,7 @@ const categoryOptions = isElectronics
             "Other"
         ]
         : isGrocery
-            ? [
-                "Breakfast Cereal",
-                "Fruits & Vegetables",
-                "Dry Fruits",
-                "Dairy & Milk",
-                "Grocery",
-                "Snacks",
-                "Beverages",
-                "Personal Care",
-                "Household",
-                "Bakery",
-                "Other"
-            ]
+    ? Object.keys(grocerySubcategoryOptions)
             : [
                 "Quick Bites",
                 "Chicken",
@@ -7379,6 +7380,10 @@ categoryOptions.forEach(category => {
 updateEditElectronicsFields(
     product.subcategory || "",
     product.brand || ""
+);
+
+updateEditGrocerySubcategory(
+    product.subcategory || ""
 );
 
     /*
@@ -7820,6 +7825,17 @@ const isRestaurant =
 let subcategory = editingProductData?.subcategory || "";
 let brand = editingProductData?.brand || "";
 
+if (isGrocery) {
+    subcategory =
+        document.getElementById("editGrocerySubcategory")?.value || "";
+
+    if (!subcategory) {
+        alert("Please select Grocery Subcategory.");
+        document.getElementById("editGrocerySubcategory").focus();
+        return;
+    }
+}
+
 if (isElectronics) {
     subcategory =
         document.getElementById("editElectronicsSubcategory")?.value || "";
@@ -8034,7 +8050,7 @@ if (isElectronics) {
 
         const responseUpdate =
             await fetch(
-                "https://food-delivery-app-yrag.onrender.com/api/restaurant/products" +
+                "https://food-delivery-app-yrag.onrender.com/api/restaurant/products/" +
                 editingProductId,
                 {
 
@@ -10955,6 +10971,20 @@ document
 
                 <select id="editProductCategory">
                 </select>
+
+                <!-- EDIT GROCERY SUBCATEGORY -->
+                <div id="editGrocerySubcategoryGroup"
+                     style="display:none; margin-top:14px;">
+                
+                    <label for="editGrocerySubcategory">
+                        📦 Select Grocery Subcategory
+                    </label>
+                
+                    <select id="editGrocerySubcategory"
+                            style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;">
+                        <option value="">Select Subcategory</option>
+                    </select>
+                </div>
 
                 
                   <!-- EDIT ELECTRONICS SUBCATEGORY -->

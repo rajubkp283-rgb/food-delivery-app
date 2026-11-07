@@ -1519,7 +1519,7 @@ box-shadow:
     width: 100%;
     height: 65px;
 
-    background: #f5f5f5;
+    background: #ffffff;
 
     overflow: hidden;
 }
@@ -3821,7 +3821,7 @@ box-shadow: none !important;
     width: 100%;
     height: 76px;
     overflow: hidden;
-    background: #f5f5f5;
+    background: #ffffff;
 
     display: flex;
     align-items: center;
@@ -3860,6 +3860,156 @@ box-shadow: none !important;
 
     object-fit: contain !important;
     object-position: center center;
+}
+
+
+/* =====================================
+   SIMILAR PRODUCTS
+===================================== */
+
+.nearest-similar-section {
+    width: 100%;
+    margin: 0 0 18px;
+}
+
+.nearest-similar-title {
+    margin: 0 0 11px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #222;
+}
+
+.nearest-similar-products {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 2px 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.nearest-similar-products::-webkit-scrollbar {
+    display: none;
+}
+
+.nearest-similar-products .nearest-product-card {
+    flex: 0 0 112px;
+    width: 112px;
+    min-width: 112px;
+    border: 1px solid #e7e7e7;
+    border-radius: 10px;
+    box-shadow: 0 2px 7px rgba(0,0,0,.07);
+}
+
+.nearest-similar-products .nearest-product-image {
+    height: 85px;
+}
+
+.nearest-similar-products .nearest-product-info {
+    padding: 7px;
+}
+
+.nearest-similar-products .nearest-product-name {
+    font-size: 11px;
+}
+
+.nearest-similar-products .nearest-product-price {
+    font-size: 12px;
+}
+
+.nearest-similar-products .nearest-shop-name {
+    font-size: 9px;
+}
+
+.nearest-similar-empty {
+    width: 100%;
+    padding: 12px;
+    background: #f7f8fa;
+    border-radius: 9px;
+    color: #777;
+    font-size: 12px;
+}
+
+/* =====================================
+   PRODUCT MULTI IMAGE SLIDER
+===================================== */
+
+.nearest-card-slider,
+.nearest-details-slider {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.nearest-image-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.nearest-image-track::-webkit-scrollbar {
+    display: none;
+}
+
+.nearest-image-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    scroll-snap-align: start;
+}
+
+.nearest-image-slide img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain !important;
+    object-position: center;
+
+    display: block;
+}
+
+.nearest-image-dots {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+
+    pointer-events: none;
+}
+
+.nearest-image-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+    background: #cccccc;
+}
+
+.nearest-image-dot.active {
+    background: #36578F;
+    width: 12px;
+    border-radius: 5px;
 }
 
 
@@ -8639,9 +8789,15 @@ function createNearestProductCard(
         "nearest-product-card";
 
 
-    const image =
-        product.image ||
-        "images/food-placeholder.jpg";
+    const productImages = (
+    Array.isArray(product.images) && product.images.length
+        ? product.images
+        : [product.image || "images/food-placeholder.jpg"]
+).filter(Boolean);
+
+const safeImages = productImages.length
+    ? productImages
+    : ["images/food-placeholder.jpg"];
 
 
     const productName =
@@ -8674,16 +8830,36 @@ function createNearestProductCard(
 
     card.innerHTML = `
 
-        <div class="nearest-product-image">
+       <div class="nearest-product-image">
 
-            <img
-                src="${escapeNearestHtml(image)}"
-                alt="${escapeNearestHtml(productName)}"
-                loading="lazy"
-                onerror="this.src='images/food-placeholder.jpg'"
-            >
+    <div class="nearest-card-slider">
+
+        <div class="nearest-image-track">
+
+            ${safeImages.map((src, index) => `
+                <div class="nearest-image-slide">
+                    <img
+                        src="${escapeNearestHtml(src)}"
+                        alt="${escapeNearestHtml(productName)}"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='images/food-placeholder.jpg'"
+                    >
+                </div>
+            `).join("")}
 
         </div>
+
+        ${safeImages.length > 1 ? `
+            <div class="nearest-image-dots">
+                ${safeImages.map((_, index) => `
+                    <span class="nearest-image-dot ${index === 0 ? "active" : ""}"></span>
+                `).join("")}
+            </div>
+        ` : ""}
+
+    </div>
+
+</div>
 
 
         <div class="nearest-product-info">
@@ -8716,6 +8892,22 @@ function createNearestProductCard(
         </div>
 
     `;
+
+        const slider = card.querySelector(".nearest-card-slider");
+    const track = slider?.querySelector(".nearest-image-track");
+    const dots = slider?.querySelectorAll(".nearest-image-dot");
+
+    if (track && dots && dots.length) {
+        track.addEventListener("scroll", function () {
+            const index = Math.round(
+                track.scrollLeft / track.clientWidth
+            );
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === index);
+            });
+        }, { passive: true });
+    }
 
 
     /*
@@ -8784,6 +8976,157 @@ let selectedNearestProduct = null;
 
 let nearestProductPopupHistoryOpen = false;
 
+
+/* ==========================================
+   FIND AND SHOW SIMILAR PRODUCTS
+========================================== */
+
+function renderNearestSimilarProducts(selectedProduct) {
+
+    const container = document.getElementById(
+        "nearestSimilarProducts"
+    );
+
+    const section = document.getElementById(
+        "nearestSimilarSection"
+    );
+
+    if (!container || !section || !selectedProduct) {
+        return;
+    }
+
+    container.innerHTML = "";
+
+    const allProducts = Array.isArray(nearestProducts)
+        ? nearestProducts
+        : [];
+
+    const normalize = value =>
+        String(value || "").trim().toLowerCase();
+
+    const selectedId = String(
+        selectedProduct._id || selectedProduct.id || ""
+    );
+
+    const selectedName = normalize(selectedProduct.name);
+
+    const selectedShop = normalize(
+        selectedProduct.shop?.name
+    );
+
+    // Current product ko exclude karein
+    const otherProducts = allProducts.filter(product => {
+
+        const productId = String(
+            product._id || product.id || ""
+        );
+
+        if (selectedId && productId === selectedId) {
+            return false;
+        }
+
+        if (
+            !selectedId &&
+            normalize(product.name) === selectedName &&
+            normalize(product.shop?.name) === selectedShop
+        ) {
+            return false;
+        }
+
+        return true;
+
+    });
+
+    const selectedSubcategory = normalize(
+        selectedProduct.subcategory
+    );
+
+    const selectedCategory = normalize(
+        selectedProduct.category
+    );
+
+    let similarProducts = [];
+
+    // First priority: Same subcategory
+    if (selectedSubcategory) {
+
+        similarProducts = otherProducts.filter(product => {
+
+            return (
+                normalize(product.subcategory) ===
+                selectedSubcategory
+            );
+
+        });
+
+    }
+
+    // Second priority: Same category
+    // Agar 4 se kam products hain to category se aur add karein
+    if (similarProducts.length < 4 && selectedCategory) {
+
+        const categoryProducts = otherProducts.filter(product => {
+
+            return (
+                normalize(product.category) === selectedCategory
+            );
+
+        });
+
+        categoryProducts.forEach(product => {
+
+            const alreadyAdded = similarProducts.some(item => {
+
+                const itemId = String(item._id || item.id || "");
+                const productId = String(product._id || product.id || "");
+
+                if (itemId && productId) {
+                    return itemId === productId;
+                }
+
+                return item === product;
+
+            });
+
+            if (!alreadyAdded) {
+                similarProducts.push(product);
+            }
+
+        });
+
+    }
+
+    // Maximum 8 similar products
+    similarProducts = similarProducts.slice(0, 8);
+
+    // No similar products
+    if (similarProducts.length === 0) {
+
+        section.style.display = "block";
+
+        container.innerHTML = `
+            <div class="nearest-similar-empty">
+                No similar products available.
+            </div>
+        `;
+
+        return;
+    }
+
+    section.style.display = "block";
+
+    // Existing product card function reuse karein
+    similarProducts.forEach(product => {
+
+        const card = createNearestProductCard(product);
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
 function openNearestProductDetails(product) {
 
     if (!product) {
@@ -8809,26 +9152,75 @@ function openNearestProductDetails(product) {
     const shop =
         product.shop || {};
 
-
-    /* Product image */
-
-    const image =
-        document.getElementById(
-            "nearestDetailsImage"
-        );
+        renderNearestSimilarProducts(product);
 
 
-    if (image) {
+    const imageBox = popup.querySelector(
+    ".nearest-details-image-box"
+);
 
-        image.src =
-            product.image ||
-            "images/food-placeholder.jpg";
+const detailImages = (
+    Array.isArray(product.images) && product.images.length
+        ? product.images
+        : [product.image || "images/food-placeholder.jpg"]
+).filter(Boolean);
 
-        image.alt =
-            product.name ||
-            "Product";
+const safeDetailImages = detailImages.length
+    ? detailImages
+    : ["images/food-placeholder.jpg"];
+
+if (imageBox) {
+
+    imageBox.innerHTML = `
+
+        <div class="nearest-details-slider">
+
+            <div class="nearest-image-track">
+
+                ${safeDetailImages.map((src, index) => `
+                    <div class="nearest-image-slide">
+                        <img
+                            src="${escapeNearestHtml(src)}"
+                            alt="${escapeNearestHtml(product.name || "Product")}"
+                            onerror="this.onerror=null;this.src='images/food-placeholder.jpg'"
+                        >
+                    </div>
+                `).join("")}
+
+            </div>
+
+            ${safeDetailImages.length > 1 ? `
+                <div class="nearest-image-dots">
+                    ${safeDetailImages.map((_, index) => `
+                        <span class="nearest-image-dot ${index === 0 ? "active" : ""}"></span>
+                    `).join("")}
+                </div>
+            ` : ""}
+
+        </div>
+
+    `;
+
+    const track = imageBox.querySelector(".nearest-image-track");
+    const dots = imageBox.querySelectorAll(".nearest-image-dot");
+
+    if (track && dots.length) {
+
+        track.addEventListener("scroll", function () {
+
+            const index = Math.round(
+                track.scrollLeft / track.clientWidth
+            );
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === index);
+            });
+
+        }, { passive: true });
 
     }
+
+}
 
 
     /* Product name */
@@ -9470,6 +9862,8 @@ function renderSavedAddresses() {
 
     });
 }
+
+
 
 function selectSavedAddress(addressId) {
     const savedAddresses = getSavedAddresses();
@@ -11050,6 +11444,8 @@ function openNearestCategoryPage() {
 
         </div>
 
+        
+
 
         <!-- Product Content -->
         <div class="nearest-details-content">
@@ -11086,6 +11482,26 @@ function openNearestCategoryPage() {
                 </span>
 
             </div>
+
+            
+
+
+
+<!-- SIMILAR PRODUCTS -->
+<div class="nearest-similar-section" id="nearestSimilarSection">
+
+    <h3 class="nearest-similar-title">
+        Similar Products
+    </h3>
+
+    <div
+        id="nearestSimilarProducts"
+        class="nearest-similar-products"
+    ></div>
+
+</div>
+
+            
 
 
             <!-- Distance -->
@@ -11353,7 +11769,7 @@ function openNearestCategoryPage() {
 
     overflow: hidden;
 
-    background: #f5f5f5;
+    background: #ffffff;
 
 }
 

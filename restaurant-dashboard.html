@@ -5257,35 +5257,60 @@ input,
     id="productImageUploadRow"
     style="
         display:flex;
-        align-items:center;
+        flex-direction:column;
+        align-items:flex-start;
         gap:10px;
         width:100%;
     "
 >
 
-<input
-    type="file"
-    id="productImageFile"
-    accept="image/*"
-    style="display:none;"
->
+    <input
+        type="file"
+        id="productImageFile"
+        accept="image/*"
+        multiple
+        style="display:none;"
+    >
 
-<button
-    type="button"
-    id="chooseProductImageBtn"
+    <button
+        type="button"
+        id="chooseProductImageBtn"
+        style="
+            align-self:flex-start;
+            background:#e23744;
+            color:#fff;
+            border:none;
+            border-radius:10px;
+            padding:10px 16px;
+            font-size:12px;
+            font-weight:600;
+            cursor:pointer;
+        "
+    >
+        Choose File
+    </button>
+
+    <div
+    id="productImagesPreview"
     style="
-        background:#e23744;
-        color:#fff;
-        border:none;
-        border-radius:10px;
-        padding:10px 16px;
-        font-size:12px;
-        font-weight:600;
-        cursor:pointer;
+        display:flex;
+        flex-wrap:nowrap;
+        gap:10px;
+        margin-top:8px;
+        width:100%;
+        max-height:100px;
+        overflow-x:auto;
+        overflow-y:hidden;
+        padding:5px 2px 10px;
+        scroll-behavior:smooth;
+        -webkit-overflow-scrolling:touch;
+        scrollbar-width:thin;
+        cursor:grab;
+        touch-action:pan-x;
     "
->
-    Choose File
-</button>
+></div>
+
+</div>
 
 </div>
 
@@ -6743,10 +6768,15 @@ const isRestaurant =
                 document.getElementById("productPrice").value
             );
 
-        const image =
-    document.getElementById("productImageFile").files[0];
+        const imageFiles = Array.from(
+    document.getElementById("productImageFile").files
+);
 
-    const imageBase64 = await productImageToBase64(image);
+const imagesBase64 = await Promise.all(
+    imageFiles.map(file => productImageToBase64(file))
+);
+
+const imageBase64 = imagesBase64[0] || "";
 
 
         // Food-only fields
@@ -6848,6 +6878,7 @@ if (requiresGrocerySubcategory && !subcategory.trim()) {
                        price: price,
                    
                        image: imageBase64,
+                       images: imagesBase64,
                    
                        preparationTime:
                            preparationTime || 20,
@@ -6907,11 +6938,12 @@ if (requiresGrocerySubcategory && !subcategory.trim()) {
         ).value = "";
 
         document.getElementById("productImageFile").value = "";
+        selectedProductImageFiles = [];
 
-const preview = document.getElementById("productImagePreview");
+const preview = document.getElementById("productImagesPreview");
 
 if (preview) {
-    preview.remove();
+    preview.innerHTML = "";
 }
 
 
@@ -7510,54 +7542,62 @@ updateEditGrocerySubcategory(
     }
 
 
-    /*
-       Product image
-    */
+   /*
+   Product images - Load existing images
+*/
 
-    const imagePreview =
-        document.getElementById(
-            "editProductImagePreview"
-        );
+const imagePreview =
+    document.getElementById("editProductImagePreview");
 
+const imagesPreview =
+    document.getElementById("editProductImagesPreview");
 
-    if (imagePreview) {
+const existingImages =
+    Array.isArray(product.images) && product.images.length
+        ? product.images
+        : product.image
+            ? [product.image]
+            : [];
 
-        if (product.image) {
-
-            imagePreview.innerHTML = `
-                <img
-                    src="${product.image}"
-                    alt="Product"
-                >
-            `;
-
-        } else {
-
-            imagePreview.innerHTML =
-                isGrocery
-                    ? "🛒"
-                    : "🍽️";
-
-        }
-
+if (imagePreview) {
+    if (existingImages.length > 0) {
+        imagePreview.innerHTML = `
+            <img
+                src="${existingImages[0]}"
+                alt="Product"
+            >
+        `;
+    } else {
+        imagePreview.innerHTML = isGrocery ? "🛒" : "🍽️";
     }
+}
 
+if (imagesPreview) {
+    imagesPreview.innerHTML = existingImages.map((src, index) => `
+        <img
+            src="${src}"
+            alt="Product Image ${index + 1}"
+            style="
+                width:65px;
+                height:65px;
+                object-fit:cover;
+                border-radius:8px;
+                border:1px solid #36578f;
+            "
+        >
+    `).join("");
+}
 
-    /*
-       Reset new image picker
-    */
+/*
+   Reset new image picker
+*/
 
-    const imageFile =
-        document.getElementById(
-            "editProductImageFile"
-        );
+const imageFile =
+    document.getElementById("editProductImageFile");
 
-
-    if (imageFile) {
-
-        imageFile.value = "";
-
-    }
+if (imageFile) {
+    imageFile.value = "";
+}
 
 
     /*
@@ -7919,40 +7959,43 @@ if (isElectronics) {
         }
 
 
-        /*
-           Image
-        */
+        
+/*
+   MULTIPLE PRODUCT IMAGES
+*/
 
-        let image =
-            editingProductData &&
-            editingProductData.image
-                ? editingProductData.image
-                : "";
+// पहले से सेव सभी images लोड करें
+let images =
+    Array.isArray(editingProductData?.images) &&
+    editingProductData.images.length > 0
+        ? [...editingProductData.images]
+        : editingProductData?.image
+            ? [editingProductData.image]
+            : [];
 
+// पहली image को पुराने सिस्टम के लिए रखें
+let image = images[0] || "";
 
-        const imageFile =
-            document.getElementById(
-                "editProductImageFile"
-            );
+// नई images का input
+const imageFile =
+    document.getElementById("editProductImageFile");
 
+// अगर नई images चुनी गई हैं तो पुरानी images replace होंगी
+if (
+    imageFile &&
+    imageFile.files &&
+    imageFile.files.length > 0
+) {
+    images = await Promise.all(
+        Array.from(imageFile.files).map(file =>
+            productImageToBase64(file)
+        )
+    );
 
-        /*
-           If new image selected,
-           convert it to base64.
-        */
+    // पहली image पुराने image field में भी सेव होगी
+    image = images[0] || "";
+}
 
-        if (
-            imageFile &&
-            imageFile.files &&
-            imageFile.files[0]
-        ) {
-
-            image =
-                await productImageToBase64(
-                    imageFile.files[0]
-                );
-
-        }
 
 
         /*
@@ -8085,7 +8128,10 @@ if (isElectronics) {
 
                             image:
                                 image,
-
+                            
+                            images:
+                                images,
+                            
                             preparationTime:
                                 preparationTime,
 
@@ -8199,7 +8245,7 @@ if (isElectronics) {
 
 
 /* =========================================================
-   EDIT IMAGE PREVIEW
+   EDIT IMAGE PREVIEW - MULTIPLE IMAGES
 ========================================================= */
 
 document.addEventListener(
@@ -8210,71 +8256,96 @@ document.addEventListener(
             event.target.id !==
             "editProductImageFile"
         ) {
-
-            return;
-
-        }
-
-
-        const file =
-            event.target.files &&
-            event.target.files[0];
-
-
-        if (!file) {
             return;
         }
 
+        const files = Array.from(
+            event.target.files || []
+        );
 
-        if (
-            !file.type.startsWith(
-                "image/"
-            )
-        ) {
+        if (!files.length) {
+            return;
+        }
 
-            alert(
-                "Please select an image."
+        const preview =
+            document.getElementById(
+                "editProductImagesPreview"
             );
 
-            event.target.value =
-                "";
+        const mainPreview =
+            document.getElementById(
+                "editProductImagePreview"
+            );
 
+        if (!preview) return;
+
+        const validFiles = files.filter(file =>
+            file.type.startsWith("image/")
+        );
+
+        if (validFiles.length !== files.length) {
+            alert("Please select only image files.");
+            event.target.value = "";
             return;
-
         }
 
+        preview.innerHTML = "";
 
-        const reader =
-            new FileReader();
+        validFiles.forEach((file, index) => {
 
+            const reader = new FileReader();
 
-        reader.onload =
-            function(e) {
+            reader.onload = function(e) {
 
-                const preview =
-                    document.getElementById(
-                        "editProductImagePreview"
-                    );
+                const imageBox =
+                    document.createElement("div");
 
-
-                if (!preview) {
-                    return;
-                }
-
-
-                preview.innerHTML = `
-                    <img
-                        src="${e.target.result}"
-                        alt="Product Preview"
-                    >
+                imageBox.style.cssText = `
+                    width:65px;
+                    height:65px;
+                    flex:0 0 65px;
+                    border-radius:8px;
+                    overflow:hidden;
+                    border:1px solid #36578f;
                 `;
 
+                const img =
+                    document.createElement("img");
+
+                img.src = e.target.result;
+                img.alt = "Product Image " + (index + 1);
+
+                img.style.cssText = `
+                    width:100%;
+                    height:100%;
+                    object-fit:contain;
+                    display:block;
+                    background:#ffffff;
+                `;
+
+                imageBox.appendChild(img);
+                preview.appendChild(imageBox);
+
+                if (index === 0 && mainPreview) {
+                    mainPreview.innerHTML = "";
+
+                    const mainImage =
+                        document.createElement("img");
+
+                    mainImage.src = e.target.result;
+                    mainImage.style.cssText = `
+                        width:100%;
+                        height:100%;
+                        object-fit:contain;
+                    `;
+
+                    mainPreview.appendChild(mainImage);
+                }
             };
 
+            reader.readAsDataURL(file);
 
-        reader.readAsDataURL(
-            file
-        );
+        });
 
     }
 );
@@ -8501,7 +8572,13 @@ console.table(
     (products || []).map(product => ({
         name: product.name,
         category: product.category,
-        subcategory: product.subcategory
+        image: product.image ? "YES" : "NO",
+        imagesType: Array.isArray(product.images)
+            ? "ARRAY"
+            : typeof product.images,
+        imagesCount: Array.isArray(product.images)
+            ? product.images.length
+            : 0
     }))
 );
 
@@ -10742,122 +10819,130 @@ setInterval(loadRestaurantOrders, 5000);
 
 
 
+
+
+// सभी चुनी गई product images को सुरक्षित रखेगा
+let selectedProductImageFiles = [];
+
 document
     .getElementById("productImageFile")
     .addEventListener("change", function(event) {
 
-        const file = event.target.files[0];
+        const input = event.target;
+        const newFiles = Array.from(input.files || []);
 
-        if (!file) {
-            return;
+        const validFiles = newFiles.filter(file =>
+            file.type.startsWith("image/")
+        );
+
+        if (validFiles.length !== newFiles.length) {
+            alert("Please select only image files.");
         }
 
-        const reader = new FileReader();
+        // पुरानी और नई images को एक साथ सुरक्षित रखें
+        selectedProductImageFiles = [
+            ...selectedProductImageFiles,
+            ...validFiles
+        ];
 
-        reader.onload = function(e) {
+        // सभी images को file input में वापस डालें
+        const dataTransfer = new DataTransfer();
 
-            let preview =
-                document.getElementById("productImagePreview");
+        selectedProductImageFiles.forEach(file => {
+            dataTransfer.items.add(file);
+        });
 
-            if (!preview) {
+        input.files = dataTransfer.files;
 
-                preview =
-                    document.createElement("div");
+        // Preview दिखाएँ
+        const preview =
+            document.getElementById("productImagesPreview");
 
-                preview.id =
-                    "productImagePreview";
+        if (!preview) return;
 
-                preview.style.marginTop = "10px";
-                preview.style.display = "flex";
-                preview.style.alignItems = "center";
-                preview.style.gap = "10px";
+        preview.innerHTML = "";
 
-                document
-                    .getElementById("productImageFile")
-                    .parentNode
-                    .appendChild(preview);
-            }
+        selectedProductImageFiles.forEach((file, index) => {
+            const reader = new FileReader();
 
-            preview.innerHTML = `
-                <img
-                    src="${e.target.result}"
-                    alt="Product Preview"
-                    style="
-                        width:70px;
-                        height:70px;
-                        object-fit:cover;
-                        border-radius:10px;
-                        border:1px solid #ddd;
-                    "
-                >
+            reader.onload = function(e) {
+                const imageBox = document.createElement("div");
 
-                <span
-                    style="
-                        font-size:12px;
-                        color:#2e7d32;
-                        font-weight:bold;
-                    "
-                >
-                    ✓ Photo Selected
-                </span>
-            `;
-        };
+                imageBox.style.cssText = `
+                    width:75px;
+                    height:75px;
+                    flex:0 0 75px;
+                    border-radius:10px;
+                    overflow:hidden;
+                    border:1px solid #557bb8;
+                `;
 
-        reader.readAsDataURL(file);
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.alt = "Product Image " + (index + 1);
+
+                img.style.cssText = `
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    display:block;
+                `;
+
+                imageBox.appendChild(img);
+                preview.appendChild(imageBox);
+            };
+
+            reader.readAsDataURL(file);
+        });
     });
 
-    document
-    .getElementById("productImageFile")
-    .addEventListener("change", function(event) {
-
-        const file = event.target.files[0];
-
-        if (!file) return;
-
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-
-            let preview =
-                document.getElementById("productImagePreview");
-
-            if (!preview) {
-
-                preview =
-                    document.createElement("img");
-
-                preview.id =
-                    "productImagePreview";
-
-                preview.style.width = "58px";
-                preview.style.height = "58px";
-                preview.style.objectFit = "cover";
-                preview.style.borderRadius = "9px";
-                preview.style.border = "1px solid #ddd";
-                preview.style.display = "block";
-                preview.style.flexShrink = "0";
-
-                document
-                    .getElementById("productImageUploadRow")
-                    .appendChild(preview);
-            }
-
-            preview.src = e.target.result;
-        };
-
-        reader.readAsDataURL(file);
-    });
-
-
-    document
+// Choose File button
+document
     .getElementById("chooseProductImageBtn")
-    .addEventListener("click", function () {
-
-        document
-            .getElementById("productImageFile")
-            .click();
-
+    .addEventListener("click", function() {
+        document.getElementById("productImageFile").click();
     });
+
+  
+    // Product images ko mouse se drag karke slide karna
+const productPreview =
+    document.getElementById("productImagesPreview");
+
+if (productPreview) {
+
+    let isDragging = false;
+    let startX = 0;
+    let scrollStart = 0;
+
+    productPreview.addEventListener("mousedown", function(e) {
+        isDragging = true;
+        startX = e.pageX;
+        scrollStart = productPreview.scrollLeft;
+        productPreview.style.cursor = "grabbing";
+    });
+
+    window.addEventListener("mouseup", function() {
+        isDragging = false;
+
+        if (productPreview) {
+            productPreview.style.cursor = "grab";
+        }
+    });
+
+    productPreview.addEventListener("mousemove", function(e) {
+        if (!isDragging) return;
+
+        e.preventDefault();
+
+        const distance = e.pageX - startX;
+
+        productPreview.scrollLeft =
+            scrollStart - distance;
+    });
+}
+
+
+
 
     </script>
 
@@ -10898,32 +10983,43 @@ document
         </div>
 
 
-        <!-- Product Image -->
         <div class="edit-product-image-section">
 
-            <div
-                id="editProductImagePreview"
-                class="edit-product-image-preview"
-            >
-                🍽️
-            </div>
+    <div
+        id="editProductImagePreview"
+        class="edit-product-image-preview"
+    >
+        🍽️
+    </div>
 
-            <label
-                for="editProductImageFile"
-                class="edit-product-change-image"
-            >
-                <span>📷</span>
-                Change Image
-            </label>
+    <label
+        for="editProductImageFile"
+        class="edit-product-change-image"
+    >
+        <span>📷</span>
+        Change Images
+    </label>
 
-            <input
-                type="file"
-                id="editProductImageFile"
-                accept="image/*"
-                hidden
-            >
+    <input
+        type="file"
+        id="editProductImageFile"
+        accept="image/*"
+        multiple
+        hidden
+    >
 
-        </div>
+    <div
+        id="editProductImagesPreview"
+        style="
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+            margin-top:12px;
+            width:100%;
+        "
+    ></div>
+
+</div>
 
 
         <!-- FORM -->

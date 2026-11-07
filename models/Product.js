@@ -43,6 +43,12 @@ const ProductSchema = new mongoose.Schema(
       default: "",
     },
 
+    // Multiple product images
+    images: {
+      type: [String],
+      default: [],
+    },
+
     price: {
       type: Number,
       required: true,

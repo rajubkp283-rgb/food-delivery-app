@@ -4,6 +4,14 @@ const Product = require("../models/Product");
 // Add Product
 const addProduct = async (req, res) => {
   try {
+
+    console.log("ADD PRODUCT IMAGE CHECK:", {
+  imageReceived: !!req.body.image,
+  imagesIsArray: Array.isArray(req.body.images),
+  imagesCount: Array.isArray(req.body.images)
+    ? req.body.images.length
+    : 0,
+});
     const {
       name,
       description,
@@ -11,6 +19,7 @@ const addProduct = async (req, res) => {
       subcategory,
       brand,
       image,
+      images,
       price,
       isAvailable,
       isVeg,
@@ -33,12 +42,23 @@ const addProduct = async (req, res) => {
       subcategory: subcategory || "",
       brand: brand || "",
       image: image || "",
+      images: Array.isArray(images)
+        ? images
+        : image
+          ? [image]
+          : [],
       price,
       isAvailable:
         isAvailable !== undefined ? isAvailable : true,
       isVeg: isVeg !== undefined ? isVeg : true,
       preparationTime: preparationTime || 20,
     });
+
+    console.log("PRODUCT SAVED IMAGE CHECK:", {
+  productId: product._id,
+  imagesIsArray: Array.isArray(product.images),
+  imagesCount: product.images?.length || 0,
+});
 
     return res.status(201).json({
       success: true,
@@ -55,6 +75,8 @@ const addProduct = async (req, res) => {
     });
   }
 };
+
+
 
 // Get Restaurant Products
 const getRestaurantProducts = async (req, res) => {
@@ -79,6 +101,8 @@ const getRestaurantProducts = async (req, res) => {
   }
 };
 
+
+
 // Update Product
 const updateProduct = async (req, res) => {
   try {
@@ -91,6 +115,7 @@ const updateProduct = async (req, res) => {
       subcategory,
       brand,
       image,
+      images,
       price,
       isAvailable,
       isVeg,
@@ -115,6 +140,17 @@ const updateProduct = async (req, res) => {
     if (subcategory !== undefined) {product.subcategory = subcategory;}
     if (brand !== undefined) {product.brand = brand;}
     if (image !== undefined) product.image = image;
+
+        if (images !== undefined) {
+      if (!Array.isArray(images)) {
+        return res.status(400).json({
+          success: false,
+          message: "Images must be an array",
+        });
+      }
+
+      product.images = images;
+    }
     if (price !== undefined) product.price = price;
     if (isAvailable !== undefined) product.isAvailable = isAvailable;
     if (isVeg !== undefined) product.isVeg = isVeg;

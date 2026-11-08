@@ -4012,6 +4012,108 @@ box-shadow: none !important;
     border-radius: 5px;
 }
 
+/* =========================================
+   MOBILE CATEGORY FILTER - SHOW 5 CATEGORIES
+========================================= */
+
+@media (max-width: 600px) {
+
+    #nearestProductCategories {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        gap: 8px !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        padding: 5px 1px 12px !important;
+
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #nearestProductCategories::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Each category takes exactly 1/5 available space */
+    #nearestProductCategories .nearest-product-category-btn {
+
+        flex: 0 0 calc((100% - 32px) / 5) !important;
+
+        width: calc((100% - 32px) / 5) !important;
+        min-width: 0 !important;
+
+        min-height: 90px !important;
+
+        padding: 5px 1px !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        align-items: center !important;
+        justify-content: flex-start !important;
+
+        gap: 5px !important;
+
+        white-space: normal !important;
+        text-align: center !important;
+
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Category image */
+    #nearestProductCategories .product-category-image {
+
+        width: 42px !important;
+        height: 42px !important;
+
+        min-width: 42px !important;
+        flex-shrink: 0 !important;
+
+        border-radius: 50% !important;
+        overflow: hidden !important;
+    }
+
+    #nearestProductCategories .product-category-image img {
+
+        width: 100% !important;
+        height: 100% !important;
+
+        object-fit: cover !important;
+        display: block !important;
+    }
+
+    /* Category name */
+    #nearestProductCategories .product-category-name {
+
+        display: block !important;
+
+        width: 100% !important;
+        min-width: 0 !important;
+
+        padding: 0 !important;
+        margin-top: 2px !important;
+
+        font-size: 9px !important;
+        line-height: 1.3 !important;
+
+        font-weight: 600 !important;
+        color: #ffffff !important;
+
+        text-align: center !important;
+
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+        word-break: normal !important;
+    }
+}
 
     </style>
 </head>
@@ -4086,7 +4188,7 @@ box-shadow: none !important;
 
             <button
     class="header-btn"
-    onclick="window.location.href='customer-cart.html'"
+    onclick="openCartWindow()"
     style="position:relative;"
 >
     🛒
@@ -4423,7 +4525,7 @@ box-shadow: none !important;
          id="groceryCareSection"
          style="display:none;">
 
-    <h3 class="beauty-care-title">Vegetables</h3>
+    <h3 class="beauty-care-title">Farm Fresh Vegetables</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -4485,7 +4587,7 @@ box-shadow: none !important;
 <br>
 
 
-<h3 class="beauty-care-title">Grains & Flours</h3>
+<h3 class="beauty-care-title">Premium Grains & Staples</h3>
 
 
     <div class="beauty-care-slider">
@@ -4564,7 +4666,7 @@ box-shadow: none !important;
     </div>
      <br>
 
-    <h3 class="beauty-care-title">Pulses(Dal)</h3>
+    <h3 class="beauty-care-title">Premium Pulses Collection</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -4654,7 +4756,7 @@ box-shadow: none !important;
     
     <br>
 
-    <h3 class="beauty-care-title">Oils</h3>
+    <h3 class="beauty-care-title">Premium & Pure Natural Oils</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -4721,7 +4823,7 @@ box-shadow: none !important;
     <br>
 
 
-     <h3 class="beauty-care-title">Spices & Condiments</h3>
+     <h3 class="beauty-care-title">Authentic Indian Spice Collection</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -4834,7 +4936,7 @@ box-shadow: none !important;
     <br>
 
     <!-- Beverages & Sweeteners -->
-    <h3 class="beauty-care-title">Beverages & Sweeteners</h3>
+    <h3 class="beauty-care-title">Beverages & Natural Sweetness</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -4897,7 +4999,7 @@ box-shadow: none !important;
 </div>
     <br>
 
-     <h3 class="beauty-care-title">Dry Fruits</h3>
+     <h3 class="beauty-care-title">Premium Dry Fruits Collection</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -4976,7 +5078,7 @@ box-shadow: none !important;
 </div>
     <br>
 
-     <h3 class="beauty-care-title">Dairy & Refrigerated</h3>
+     <h3 class="beauty-care-title">Farm Fresh Dairy Products</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -5056,7 +5158,7 @@ box-shadow: none !important;
     </div>
     <br>
 
-    <h3 class="beauty-care-title">Snacks</h3>
+    <h3 class="beauty-care-title">Crispy & Crunchy Snacks</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -5152,7 +5254,7 @@ box-shadow: none !important;
 </div>
 <br>
 
-<h3 class="beauty-care-title">Drinks & Juices</h3>
+<h3 class="beauty-care-title">Refreshing Drinks & Juices</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -5314,7 +5416,7 @@ box-shadow: none !important;
 </div>
 <br>
 
-<h3 class="beauty-care-title">Chocolates</h3>
+<h3 class="beauty-care-title">The Grand Chocolate Gallery</h3>
 
     <div class="beauty-care-slider">
         <div class="beauty-care-item"
@@ -5419,7 +5521,7 @@ box-shadow: none !important;
 </div>
 <br>
 
-<h3 class="beauty-care-title">Bakery & Biscuits</h3>
+<h3 class="beauty-care-title">Bakery & Biscuits Collection</h3>
 
     <div class="beauty-care-slider">
 
@@ -11218,20 +11320,23 @@ document.addEventListener('DOMContentLoaded', function () {
     updateStickyBarColor();
 });
 
+
 function openNearestCategoryPage() {
-    const activeButton = document.querySelector(
-        "#yourNearestSection .nearest-category-btn.active"
-    );
 
-    const category = activeButton
-        ? activeButton.dataset.category
-        : "Groceries";
+    // Directly get the currently selected category
+    const category = String(
+        selectedNearestCategory || "Groceries"
+    ).trim();
 
+    // Category wise pages
     const pages = {
         "Groceries": "grocery.html",
         "Grocery": "grocery.html",
+
         "Restaurant": "customer-restaurants.html",
+
         "Electronics": "electronics.html",
+
         "Beauty": "beauty.html",
         "Beauty & Personal Care": "beauty.html"
     };
@@ -11240,7 +11345,51 @@ function openNearestCategoryPage() {
 
     if (page) {
         window.location.href = page;
+    } else {
+        console.error("Category page not found:", category);
     }
+}
+
+/* =========================================
+   OPEN CART IN PREMIUM BOTTOM WINDOW
+========================================= */
+
+function openCartWindow() {
+
+    const overlay = document.getElementById("shopWindowOverlay");
+    const frame = document.getElementById("shopWindowFrame");
+
+    if (!overlay || !frame) {
+        window.location.href = "customer-cart.html";
+        return;
+    }
+
+    // Browser Back support
+    if (!shopWindowHistoryOpen) {
+
+        history.pushState(
+            {
+                ...(history.state || {}),
+                nearestShopWindow: true
+            },
+            "",
+            location.href
+        );
+
+        shopWindowHistoryOpen = true;
+    }
+
+    // Cart page iframe mein open karein
+    try {
+        frame.contentWindow.location.replace("customer-cart.html");
+    } catch (error) {
+        frame.src = "customer-cart.html";
+    }
+
+    overlay.classList.add("active");
+    overlay.setAttribute("aria-hidden", "false");
+
+    document.body.classList.add("shop-window-open");
 }
 
 </script>

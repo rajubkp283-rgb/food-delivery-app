@@ -181,6 +181,20 @@ const addToCart = async (req, res) => {
 
       // Existing Cart type check karein
       const existingCartType = await getExistingCartType(cart);
+      console.log("========== CART DEBUG ==========");
+
+console.log("New Shop Name:", shop.name);
+console.log("New Shop Category:", shop.category);
+console.log("New Cart Type:", newCartType);
+console.log("Existing Cart Type:", existingCartType);
+
+console.log("Existing Cart Items:", cart.items.map(item => ({
+    shopName: item.shopName,
+    shopCategory: item.shopCategory,
+    shopId: item.shopId?.toString()
+})));
+
+console.log("================================");
 
       if (existingCartType === "MIXED") {
         return res.status(400).json({

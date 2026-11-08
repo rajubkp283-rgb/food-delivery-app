@@ -842,147 +842,177 @@ const token = localStorage.getItem("authToken");
 }
 
 
-        async function loadCart() {
+        
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[ch]));
+}
 
-            try {
+// Shop-wise product grouping
+function getShopGroups(items) {
+    const groups = new Map();
 
-                const data =
-                    await apiRequest(
-                        "/api/cart"
-                    );
+    items.forEach(item => {
+        const id =
+            item.shopId?._id ||
+            item.shopId ||
+            item.restaurantId?._id ||
+            item.restaurantId ||
+            "unknown-shop";
 
+        const name =
+            item.shopName ||
+            item.shopId?.name ||
+            item.restaurantId?.name ||
+            "Shop";
 
-                cartData =
-                    data.cart;
+        const category =
+            item.shopCategory ||
+            item.shopId?.category ||
+            item.restaurantId?.category ||
+            "Restaurant";
 
+        if (!groups.has(String(id))) {
+            groups.set(String(id), {
+                id: String(id),
+                name,
+                category,
+                items: []
+            });
+        }
 
-                const items =
-                    cartData?.items || [];
+        groups.get(String(id)).items.push(item);
+    });
 
+    return [...groups.values()];
+}
 
-                if (items.length === 0) {
+async function loadCart() {
 
-                    document.getElementById(
-                        "orderSummary"
-                    ).innerHTML = `
-                        <div class="error">
-                            Your cart is empty.
-                        </div>
-                    `;
+    try {
 
-                    document.getElementById(
-                        "placeOrderBtn"
-                    ).disabled = true;
+        const data = await apiRequest("/api/cart");
 
-                    return;
+        cartData = data.cart || {};
 
-                }
+        const items = cartData.items || [];
 
+        const summary =
+            document.getElementById("orderSummary");
 
-                const subtotal =
-                    Number(
-                        cartData.subtotal || 0
-                    );
+        if (!items.length) {
 
+            summary.innerHTML = `
+                <div class="error">
+                    Your cart is empty.
+                </div>
+            `;
 
-                const deliveryFee =
-                    subtotal > 0
-                    ? 30
-                    : 0;
+            document.getElementById("placeOrderBtn").disabled = true;
 
+            return;
+        }
 
-                const total =
-                    subtotal +
-                    deliveryFee;
+        const groups = getShopGroups(items);
 
+        const subtotal = Number(cartData.subtotal || 0);
 
-                document.getElementById(
-                    "orderSummary"
-                ).innerHTML = `
+        // Delivery fee only once
+        const deliveryFee = subtotal > 0 ? 30 : 0;
 
-                    ${items.map(
-                        item => `
+        const total = subtotal + deliveryFee;
 
-                        <div
-                            class="summary-row"
-                        >
+        summary.innerHTML = `
+
+            ${groups.map(group => `
+
+                <div style="padding:10px 0 5px">
+
+                    <div style="
+                        font-size:13px;
+                        font-weight:800;
+                        color:#fff;
+                        padding-bottom:7px;
+                    ">
+
+                        ${group.category.toLowerCase() === "groceries"
+                            ? "🛒"
+                            : "🍽️"
+                        }
+
+                        ${escapeHtml(group.name)}
+
+                    </div>
+
+                    ${group.items.map(item => `
+
+                        <div class="summary-row">
 
                             <span>
-                                ${item.name}
-                                × ${item.quantity}
+                                ${escapeHtml(item.name)}
+                                × ${Number(item.quantity || 0)}
                             </span>
 
                             <b>
-                                ₹${item.total}
+                                ₹${Number(item.total || 0)}
                             </b>
 
                         </div>
 
-                    `
-                    ).join("")}
+                    `).join("")}
 
+                </div>
 
-                    <div class="summary-row">
+            `).join("")}
 
-                        <span>
-                            Subtotal
-                        </span>
+            <div class="summary-row">
+                <span>Number of Shops</span>
+                <b>${groups.length}</b>
+            </div>
 
-                        <b>
-                            ₹${subtotal}
-                        </b>
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <b>₹${subtotal}</b>
+            </div>
 
-                    </div>
+            <div class="summary-row">
+                <span>Delivery Fee (one time)</span>
+                <b>₹${deliveryFee}</b>
+            </div>
 
+            <div class="summary-row total">
 
-                    <div class="summary-row">
+                <span>Total</span>
 
-                        <span>
-                            Delivery Fee
-                        </span>
+                <span>
+                    ₹${total}
+                </span>
 
-                        <b>
-                            ₹${deliveryFee}
-                        </b>
+            </div>
 
-                    </div>
+        `;
 
+        document.getElementById("placeOrderBtn").disabled = false;
 
-                    <div
-                        class="summary-row total"
-                    >
+    } catch (error) {
 
-                        <span>
-                            Total
-                        </span>
+        console.error("Checkout Cart Error:", error);
 
-                        <span>
-                            ₹${total}
-                        </span>
+        document.getElementById("orderSummary").innerHTML = `
+            <div class="error">
+                ${escapeHtml(error.message)}
+            </div>
+        `;
 
-                    </div>
+        document.getElementById("placeOrderBtn").disabled = true;
+    }
+}
 
-                `;
-
-
-            } catch (error) {
-
-                console.error(
-                    "Checkout Cart Error:",
-                    error
-                );
-
-                document.getElementById(
-                    "orderSummary"
-                ).innerHTML = `
-                    <div class="error">
-                        ${error.message}
-                    </div>
-                `;
-
-            }
-
-        }
 
 
 
@@ -1334,26 +1364,45 @@ async function loadSavedAddress() {
                     }
 
 
-                    alert(
-                        "🎉 Order placed successfully!"
-                    );
+                  
 
 
-                    if (
-                        data.order &&
-                        data.order._id
-                    ) {
+                    
+const createdOrders =
+    Array.isArray(data.orders) && data.orders.length
+        ? data.orders
+        : (data.order ? [data.order] : []);
 
-                        window.location.href =
-                            "customer-order.html?id=" +
-                            data.order._id;
+if (!createdOrders.length || !createdOrders[0]._id) {
 
-                    } else {
+    throw new Error(
+        "Order placed, but order details could not be loaded. Please check My Orders."
+    );
 
-                        window.location.href =
-                            "customer-restaurants.html";
+}
 
-                    }
+const orderIds = createdOrders
+    .map(order => order._id)
+    .filter(Boolean);
+
+// Save all created order IDs
+localStorage.setItem(
+    "lastPlacedOrderIds",
+    JSON.stringify(orderIds)
+);
+
+alert(
+    `🎉 ${createdOrders.length > 1
+        ? createdOrders.length + " orders"
+        : "Order"
+    } placed successfully!`
+);
+
+// Open first order
+window.location.href =
+    "customer-order.html?id=" +
+    encodeURIComponent(orderIds[0]);
+
 
 
                 } catch (error) {

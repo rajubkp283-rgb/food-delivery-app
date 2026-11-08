@@ -1,16 +1,115 @@
+
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const Restaurant = require("../models/Restaurant");
+
+// Shop category ko Cart type mein convert karein
+const getCartType = (category) => {
+  return String(category || "").trim().toLowerCase() === "groceries"
+    ? "Groceries"
+    : "Restaurant";
+};
+
+// Purane Cart Items mein shopId nahi hai to Product se shop details nikalein
+const attachShopDetailsToLegacyItems = async (cart) => {
+  const missingItems = cart.items.filter((item) => !item.shopId);
+
+  if (missingItems.length === 0) {
+    return { changed: false, unresolved: false };
+  }
+
+  const productIds = missingItems.map((item) => item.productId);
+
+  const products = await Product.find({
+    _id: { $in: productIds },
+  }).select("_id restaurantId");
+
+  const productMap = new Map(
+    products.map((product) => [product._id.toString(), product])
+  );
+
+  const shopIds = [
+    ...new Set(
+      products
+        .filter((product) => product.restaurantId)
+        .map((product) => product.restaurantId.toString())
+    ),
+  ];
+
+  const shops = await Restaurant.find({
+    _id: { $in: shopIds },
+  }).select("_id name category");
+
+  const shopMap = new Map(
+    shops.map((shop) => [shop._id.toString(), shop])
+  );
+
+  let changed = false;
+  let unresolved = false;
+
+  for (const item of missingItems) {
+    const product = productMap.get(item.productId.toString());
+
+    const shop = product?.restaurantId
+      ? shopMap.get(product.restaurantId.toString())
+      : null;
+
+    if (!product || !shop) {
+      unresolved = true;
+      continue;
+    }
+
+    item.shopId = shop._id;
+    item.shopName = shop.name;
+    item.shopCategory = shop.category;
+
+    changed = true;
+  }
+
+  return { changed, unresolved };
+};
+
+// Cart ke existing items se Cart type verify karein
+const getExistingCartType = async (cart) => {
+  if (!cart || cart.items.length === 0) {
+    return null;
+  }
+
+  const types = [
+    ...new Set(
+      cart.items.map((item) => getCartType(item.shopCategory))
+    ),
+  ];
+
+  if (types.length > 1) {
+    return "MIXED";
+  }
+
+  if (types.length === 1) {
+    return types[0];
+  }
+
+  // Purane Cart ke liye fallback
+  if (cart.restaurantId) {
+    const oldShop = await Restaurant.findById(cart.restaurantId)
+      .select("category");
+
+    if (oldShop) {
+      return getCartType(oldShop.category);
+    }
+  }
+
+  return null;
+};
 
 // Add Product To Cart
 const addToCart = async (req, res) => {
   try {
     const customerId = req.user._id;
 
-    const {
-      productId,
-      quantity = 1,
-    } = req.body;
+    const { productId, quantity = 1 } = req.body;
+
+    const qty = Number(quantity);
 
     if (!productId) {
       return res.status(400).json({
@@ -19,14 +118,14 @@ const addToCart = async (req, res) => {
       });
     }
 
-    if (quantity < 1) {
+    if (!Number.isInteger(qty) || qty < 1) {
       return res.status(400).json({
         success: false,
         message: "Quantity must be at least 1",
       });
     }
 
-    // Find product
+    // Product find karein
     const product = await Product.findOne({
       _id: productId,
       isAvailable: true,
@@ -39,73 +138,133 @@ const addToCart = async (req, res) => {
       });
     }
 
-    // Check restaurant
-    const restaurant = await Restaurant.findOne({
+    // Product ki shop verify karein
+    const shop = await Restaurant.findOne({
       _id: product.restaurantId,
       isApproved: true,
       isBanned: false,
     });
 
-    if (!restaurant) {
+    if (!shop) {
       return res.status(404).json({
         success: false,
-        message: "Restaurant is not available",
+        message: "Shop is not available",
       });
     }
 
-    // Find customer's cart
-    let cart = await Cart.findOne({
-      customerId,
-    });
+    const newCartType = getCartType(shop.category);
 
-    // Create cart if it doesn't exist
+    // Customer ka Cart find karein
+    let cart = await Cart.findOne({ customerId });
+
+    // Cart nahi hai to naya banayein
     if (!cart) {
       cart = new Cart({
         customerId,
-        restaurantId: product.restaurantId,
+        cartType: newCartType,
+        restaurantId:
+          newCartType === "Restaurant" ? shop._id : null,
         items: [],
         subtotal: 0,
       });
+    } else {
+      // Purane items mein shop details attach karein
+      const migration = await attachShopDetailsToLegacyItems(cart);
+
+      if (migration.unresolved) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Your old cart contains products whose shop could not be verified. Please remove those products or clear your cart first.",
+        });
+      }
+
+      // Existing Cart type check karein
+      const existingCartType = await getExistingCartType(cart);
+
+      if (existingCartType === "MIXED") {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Your cart contains mixed shop categories. Please clear your cart first.",
+        });
+      }
+
+      if (
+        existingCartType &&
+        existingCartType !== newCartType
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            newCartType === "Groceries"
+              ? "Your cart contains Restaurant items. Please clear your cart before adding Grocery products."
+              : "Your cart contains Grocery items. Please clear your cart before adding Restaurant products.",
+        });
+      }
+
+      // Restaurant Cart mein doosra Restaurant allowed nahi hai
+      // Restaurant Cart mein doosra Restaurant allowed nahi hai
+      if (newCartType === "Restaurant" && cart.items.length > 0) {
+        const hasDifferentRestaurant = cart.items.some(
+          (item) =>
+            !item.shopId ||
+            item.shopId.toString() !== shop._id.toString()
+        );
+      
+        if (hasDifferentRestaurant) {
+          return res.status(400).json({
+            success: false,
+            message:
+              "Your cart contains items from another restaurant. Please clear your cart first.",
+          });
+        }
+      }
+
+      cart.cartType = newCartType;
+
+      cart.restaurantId =
+        newCartType === "Restaurant" ? shop._id : null;
     }
 
-    // If cart belongs to another restaurant
-    if (
-      cart.restaurantId &&
-      cart.restaurantId.toString() !== product.restaurantId.toString()
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Your cart contains items from another restaurant. Please clear your cart first.",
-      });
-    }
-
-    cart.restaurantId = product.restaurantId;
-
-    // Check if product already exists
+    // Check karein Product pehle se Cart mein hai ya nahi
     const existingItem = cart.items.find(
       (item) =>
-        item.productId.toString() === productId.toString()
+        item.productId.toString() === product._id.toString()
     );
 
     if (existingItem) {
-      existingItem.quantity += Number(quantity);
+      existingItem.quantity =
+        Number(existingItem.quantity) + qty;
+
+      existingItem.price = product.price;
+
       existingItem.total =
-        existingItem.price * existingItem.quantity;
+        product.price * existingItem.quantity;
+
+      existingItem.shopId = shop._id;
+      existingItem.shopName = shop.name;
+      existingItem.shopCategory = shop.category;
     } else {
       cart.items.push({
         productId: product._id,
+
+        shopId: shop._id,
+        shopName: shop.name,
+        shopCategory: shop.category,
+
         name: product.name,
         price: product.price,
-        quantity: Number(quantity),
+        quantity: qty,
         image: product.image,
-        total: product.price * Number(quantity),
+        total: product.price * qty,
       });
     }
 
-    // Calculate subtotal
+    // Subtotal calculate karein
     cart.subtotal = cart.items.reduce(
-      (sum, item) => sum + item.total,
+      (sum, item) =>
+        sum + Number(item.price) * Number(item.quantity),
       0
     );
 
@@ -132,23 +291,32 @@ const getCart = async (req, res) => {
   try {
     const customerId = req.user._id;
 
-    const cart = await Cart.findOne({
-  customerId,
-}).populate(
-  "restaurantId",
-  "name category"
-);
+    const cart = await Cart.findOne({ customerId });
 
     if (!cart) {
       return res.json({
         success: true,
         message: "Cart is empty",
         cart: {
+          cartType: null,
           items: [],
           subtotal: 0,
         },
       });
     }
+
+    // Purane items ki shop details update karein
+    const migration = await attachShopDetailsToLegacyItems(cart);
+
+    if (migration.changed) {
+      await cart.save();
+    }
+
+    // Har item ki shop populate karein
+    await cart.populate("items.shopId", "name category");
+
+    // Legacy restaurantId bhi populate rakhein
+    await cart.populate("restaurantId", "name category");
 
     res.json({
       success: true,
@@ -165,24 +333,21 @@ const getCart = async (req, res) => {
   }
 };
 
-
 // Update Cart Item Quantity
 const updateCartItem = async (req, res) => {
   try {
     const customerId = req.user._id;
     const { productId } = req.params;
-    const { quantity } = req.body;
+    const quantity = Number(req.body.quantity);
 
-    if (quantity === undefined || Number(quantity) < 1) {
+    if (!Number.isInteger(quantity) || quantity < 1) {
       return res.status(400).json({
         success: false,
         message: "Quantity must be at least 1",
       });
     }
 
-    const cart = await Cart.findOne({
-      customerId,
-    });
+    const cart = await Cart.findOne({ customerId });
 
     if (!cart) {
       return res.status(404).json({
@@ -203,12 +368,13 @@ const updateCartItem = async (req, res) => {
       });
     }
 
-    item.quantity = Number(quantity);
-    item.total = item.price * item.quantity;
+    item.quantity = quantity;
+    item.total = Number(item.price) * quantity;
 
-    // Recalculate subtotal
     cart.subtotal = cart.items.reduce(
-      (sum, item) => sum + item.total,
+      (sum, cartItem) =>
+        sum +
+        Number(cartItem.price) * Number(cartItem.quantity),
       0
     );
 
@@ -236,9 +402,7 @@ const removeFromCart = async (req, res) => {
     const customerId = req.user._id;
     const { productId } = req.params;
 
-    const cart = await Cart.findOne({
-      customerId,
-    });
+    const cart = await Cart.findOne({ customerId });
 
     if (!cart) {
       return res.status(404).json({
@@ -264,16 +428,28 @@ const removeFromCart = async (req, res) => {
         item.productId.toString() !== productId.toString()
     );
 
-    // Recalculate subtotal
     cart.subtotal = cart.items.reduce(
-      (sum, item) => sum + item.total,
+      (sum, item) =>
+        sum + Number(item.price) * Number(item.quantity),
       0
     );
 
-    // If cart becomes empty
+    // Cart empty ho gaya to type aur shop reset karein
     if (cart.items.length === 0) {
+      cart.cartType = null;
       cart.restaurantId = null;
       cart.subtotal = 0;
+    } else {
+      const remainingType = await getExistingCartType(cart);
+
+      cart.cartType =
+        remainingType === "MIXED" ? null : remainingType;
+
+      if (cart.cartType === "Restaurant") {
+        cart.restaurantId = cart.items[0].shopId || null;
+      } else {
+        cart.restaurantId = null;
+      }
     }
 
     await cart.save();

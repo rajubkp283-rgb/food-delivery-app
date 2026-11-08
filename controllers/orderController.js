@@ -225,8 +225,11 @@ async function createOrder(req, res) {
 }
 
 
-// Create Order From Cart
+
+// Create Order From Cart - Multiple Grocery Shops Support
 const createOrderFromCart = async (req, res) => {
+  let createdOrderIds = [];
+
   try {
     const customerId = req.user._id;
 
@@ -236,52 +239,45 @@ const createOrderFromCart = async (req, res) => {
       customerNote = "",
     } = req.body;
 
+    // Validate delivery address
     if (
-    !deliveryAddress ||
-    !deliveryAddress.name ||
-    !deliveryAddress.phone ||
-    !deliveryAddress.address ||
-    !deliveryAddress.city ||
-    !deliveryAddress.pincode
-) {
+      !deliveryAddress ||
+      !deliveryAddress.name ||
+      !deliveryAddress.phone ||
+      !deliveryAddress.address ||
+      !deliveryAddress.city ||
+      !deliveryAddress.pincode
+    ) {
       return res.status(400).json({
         success: false,
         message: "Complete delivery address is required",
       });
     }
 
-    // Get customer cart
-    const cart = await Cart.findOne({
-      customerId,
-    });
+    // Validate payment method
+    if (!["COD", "ONLINE", "WALLET"].includes(paymentMethod)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid payment method",
+      });
+    }
 
-    if (!cart || cart.items.length === 0) {
+    // Get customer cart
+    const cart = await Cart.findOne({ customerId });
+
+    if (!cart || !cart.items || cart.items.length === 0) {
       return res.status(400).json({
         success: false,
         message: "Your cart is empty",
       });
     }
 
-    // Verify restaurant
-    const restaurant = await Restaurant.findOne({
-      _id: cart.restaurantId,
-      isApproved: true,
-      isBanned: false,
-    });
+    // Get all product IDs
+    const productIds = cart.items.map(item => item.productId);
 
-    if (!restaurant) {
-      return res.status(400).json({
-        success: false,
-        message: "Restaurant is not available",
-      });
-    }
-
-    // Verify products and prices from database
-    const productIds = cart.items.map((item) => item.productId);
-
+    // Fetch products from database
     const products = await Product.find({
       _id: { $in: productIds },
-      restaurantId: cart.restaurantId,
       isAvailable: true,
     });
 
@@ -292,75 +288,274 @@ const createOrderFromCart = async (req, res) => {
       });
     }
 
-    // Create order items using database prices
-    const orderItems = cart.items.map((cartItem) => {
-      const product = products.find(
-        (p) =>
-          p._id.toString() === cartItem.productId.toString()
+    // Map products by ID
+    const productMap = new Map(
+      products.map(product => [
+        product._id.toString(),
+        product
+      ])
+    );
+
+    // Prepare shop-wise cart groups
+    const shopGroups = new Map();
+
+    for (const cartItem of cart.items) {
+      const product = productMap.get(
+        cartItem.productId.toString()
       );
 
-      const quantity = Number(cartItem.quantity);
-      const price = product.price;
+      if (!product) {
+        throw new Error("Product not found");
+      }
 
-      return {
+      // Product's actual shop ID
+      const shopId = product.restaurantId.toString();
+
+      // Check saved shop ID if available
+      if (
+        cartItem.shopId &&
+        cartItem.shopId.toString() !== shopId
+      ) {
+        throw new Error(
+          "Product shop information does not match"
+        );
+      }
+
+      const quantity = Number(cartItem.quantity);
+
+      if (
+        !Number.isInteger(quantity) ||
+        quantity < 1
+      ) {
+        throw new Error("Invalid product quantity");
+      }
+
+      if (!shopGroups.has(shopId)) {
+        shopGroups.set(shopId, {
+          shopId: product.restaurantId,
+          items: [],
+        });
+      }
+
+      const price = Number(product.price);
+
+      shopGroups.get(shopId).items.push({
         productId: product._id,
         name: product.name,
         quantity,
         price,
         total: price * quantity,
-      };
-    });
+      });
+    }
 
-    const subtotal = orderItems.reduce(
-      (sum, item) => sum + item.total,
-      0
+    // Get all shops
+    const shopIds = Array.from(shopGroups.values()).map(
+      group => group.shopId
     );
 
-    const deliveryFee = 30;
-     const totalAmount = subtotal + deliveryFee;
-
-    // Create order
-    const order = await Order.create({
-      customerId,
-      restaurantId: cart.restaurantId,
-      items: orderItems,
-      subtotal,
-      deliveryFee,
-      totalAmount,
-      deliveryAddress,
-      paymentMethod,
-      paymentStatus: "PENDING",
-      orderStatus: "PLACED",
-      customerNote,
+    const shops = await Restaurant.find({
+      _id: { $in: shopIds },
+      isApproved: true,
+      isBanned: false,
     });
 
-    // Clear cart after successful order
+    if (shops.length !== shopGroups.size) {
+      return res.status(400).json({
+        success: false,
+        message: "One or more shops are not available",
+      });
+    }
+
+    const shopMap = new Map(
+      shops.map(shop => [
+        shop._id.toString(),
+        shop
+      ])
+    );
+
+    // Determine cart type
+    const cartTypes = new Set();
+
+    for (const shop of shops) {
+      const category = String(shop.category || "")
+        .trim()
+        .toLowerCase();
+
+      cartTypes.add(
+        category === "groceries"
+          ? "Groceries"
+          : "Restaurant"
+      );
+    }
+
+    // Grocery and Restaurant cannot be mixed
+    if (cartTypes.size > 1) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Grocery and Restaurant products cannot be ordered together.",
+      });
+    }
+
+    const cartType = Array.from(cartTypes)[0];
+
+    // Restaurant cart can contain only one restaurant
+    if (
+      cartType === "Restaurant" &&
+      shopGroups.size > 1
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Restaurant products from different restaurants cannot be ordered together.",
+      });
+    }
+
+    // Calculate shop-wise subtotals
+    let overallSubtotal = 0;
+
+    const orderGroups = [];
+
+    for (const [shopId, group] of shopGroups) {
+      const subtotal = group.items.reduce(
+        (sum, item) => sum + item.total,
+        0
+      );
+
+      overallSubtotal += subtotal;
+
+      orderGroups.push({
+        restaurantId: group.shopId,
+        shopName: shopMap.get(shopId).name,
+        items: group.items,
+        subtotal,
+      });
+    }
+
+    // One delivery fee for the complete checkout
+    const totalDeliveryFee = 30;
+
+    // Create separate Order for every shop
+    const createdOrders = [];
+
+    try {
+      for (let i = 0; i < orderGroups.length; i++) {
+        const group = orderGroups[i];
+
+        // Charge delivery fee only in first Order
+        const deliveryFee = i === 0
+          ? totalDeliveryFee
+          : 0;
+
+        const totalAmount =
+          group.subtotal + deliveryFee;
+
+        const order = await Order.create({
+          customerId,
+
+          restaurantId: group.restaurantId,
+
+          deliveryBoyId: null,
+
+          items: group.items,
+
+          subtotal: group.subtotal,
+
+          deliveryFee,
+
+          totalAmount,
+
+          deliveryAddress: {
+            name: deliveryAddress.name,
+            phone: deliveryAddress.phone,
+            address: deliveryAddress.address,
+            city: deliveryAddress.city,
+            pincode: deliveryAddress.pincode,
+            latitude:
+              deliveryAddress.latitude !== undefined &&
+              deliveryAddress.latitude !== null
+                ? Number(deliveryAddress.latitude)
+                : null,
+            longitude:
+              deliveryAddress.longitude !== undefined &&
+              deliveryAddress.longitude !== null
+                ? Number(deliveryAddress.longitude)
+                : null,
+          },
+
+          paymentMethod,
+
+          paymentStatus: "PENDING",
+
+          orderStatus: "PLACED",
+
+          customerNote,
+        });
+
+        createdOrders.push(order);
+        createdOrderIds.push(order._id);
+      }
+    } catch (orderError) {
+      // Remove already-created orders if a later order fails
+      if (createdOrderIds.length > 0) {
+        await Order.deleteMany({
+          _id: { $in: createdOrderIds },
+          customerId,
+        });
+      }
+
+      throw orderError;
+    }
+
+    // Clear cart only after all orders are created
     await Cart.findOneAndUpdate(
       { customerId },
       {
         $set: {
           restaurantId: null,
+          cartType: null,
           items: [],
           subtotal: 0,
         },
       }
     );
 
-    res.status(201).json({
-      success: true,
-      message: "Order created successfully",
-      order,
-    });
-  } catch (error) {
-    console.error("CREATE ORDER FROM CART ERROR:", error);
+    const totalAmount =
+      overallSubtotal + totalDeliveryFee;
 
-    res.status(500).json({
+    return res.status(201).json({
+      success: true,
+      message: "Order placed successfully",
+
+      order: createdOrders[0],
+
+      orders: createdOrders,
+
+      orderIds: createdOrders.map(order => order._id),
+
+      cartType,
+
+      subtotal: overallSubtotal,
+
+      deliveryFee: totalDeliveryFee,
+
+      totalAmount,
+    });
+
+  } catch (error) {
+    console.error(
+      "CREATE ORDER FROM CART ERROR:",
+      error
+    );
+
+    return res.status(500).json({
       success: false,
       message: "Failed to create order",
       error: error.message,
     });
   }
 };
+
 
 // Get Customer Orders
 const getMyOrders = async (req, res) => {

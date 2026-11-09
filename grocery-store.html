@@ -1052,6 +1052,7 @@ button:focus-visible {
 
 </div>
 
+<script src="./public-cache.js"></script>
 
 <script>
 
@@ -1075,6 +1076,8 @@ let allProducts = [];
 let currentCategory = "All";
 
 
+/* LOAD GROCERY PRODUCTS WITH PUBLIC CACHE */
+
 async function loadProducts() {
 
     const productsContainer =
@@ -1089,47 +1092,51 @@ async function loadProducts() {
         return;
     }
 
+    const cacheKey =
+        "areaxpress_grocery_products_v1_" + storeId;
+
     try {
 
-        productsContainer.innerHTML = `
-            <div class="loading">
-                Loading products...
-            </div>
-        `;
+        await PublicCache.load({
 
-        
-        const response = await fetch(
-            `${API_BASE_URL}/api/products/restaurant/${encodeURIComponent(storeId)}`
-        );
+            key: cacheKey,
 
-        const result = await response.json();
+            url: `${API_BASE_URL}/api/products/restaurant/${encodeURIComponent(storeId)}`,
 
-        if (!response.ok) {
-            throw new Error(
-                result.message ||
-                "Failed to load products"
-            );
-        }
+            ttl: 5 * 60 * 1000,
 
-        allProducts = result.products || [];
+            render: function (result) {
 
-        renderProducts();
+                allProducts = Array.isArray(result.products)
+                    ? result.products
+                    : [];
+
+                renderProducts();
+
+            },
+
+            onError: function (error) {
+
+                console.error("Load Grocery Products Error:", error);
+
+                productsContainer.innerHTML = `
+                    <div class="products-empty">
+                        Failed to load products.
+                        <br><br>
+                        Please try again.
+                    </div>
+                `;
+
+            }
+
+        });
 
     } catch (error) {
 
-        console.error(
-            "Load Grocery Products Error:",
-            error
-        );
+        console.error("Grocery Products Cache Error:", error);
 
-        productsContainer.innerHTML = `
-            <div class="products-empty">
-                Failed to load products.
-                <br><br>
-                Please try again.
-            </div>
-        `;
     }
+
 }
 
 
@@ -1409,200 +1416,202 @@ function renderProducts() {
 
     /* LOAD STORE */
 
-    async function loadStore() {
+    /* LOAD STORE WITH PUBLIC CACHE */
 
-        const storeProfile =
-            document.getElementById(
-                "storeProfile"
-            );
+async function loadStore() {
 
-        if (!storeId) {
+    const storeProfile =
+        document.getElementById("storeProfile");
 
-            storeProfile.innerHTML = `
-                <div class="error">
-                    Grocery store ID is missing.
-                </div>
-            `;
+    if (!storeId) {
 
-            return;
-        }
+        storeProfile.innerHTML = `
+            <div class="error">
+                Grocery store ID is missing.
+            </div>
+        `;
 
+        return;
+    }
 
-        try {
+    const cacheKey =
+        "areaxpress_grocery_store_v1_" + storeId;
 
-           const response = await fetch(
-           `${API_BASE_URL}/api/restaurants/${encodeURIComponent(storeId)}`
-            )
-           const result = await response.json();
+    try {
 
-           if (!response.ok) {
-               throw new Error(
-                   result.message || "Failed to load store"
-               );
-           }
+        await PublicCache.load({
 
-          const store = result.restaurant;
+            key: cacheKey,
 
+            url: `${API_BASE_URL}/api/restaurants/${encodeURIComponent(storeId)}`,
 
-            if (!store) {
+            ttl: 5 * 60 * 1000,
 
-                storeProfile.innerHTML = `
-                    <div class="error">
-                        Grocery store not found.
-                    </div>
-                `;
+            render: function (result) {
 
-                return;
-            }
+                const store = result.restaurant;
 
+                if (!store) {
 
-            /* HEADER */
+                    storeProfile.innerHTML = `
+                        <div class="error">
+                            Grocery store not found.
+                        </div>
+                    `;
 
-            const headerTitle = document.getElementById("headerTitle");
+                    return;
+                }
 
-             if (headerTitle) {
-                 headerTitle.textContent = store.name || "Grocery Store";
-             }
+                /* HEADER */
 
+                const headerTitle =
+                    document.getElementById("headerTitle");
 
-            /* IMAGE */
+                if (headerTitle) {
+                    headerTitle.textContent =
+                        store.name || "Grocery Store";
+                }
 
-            const image =
-                store.image &&
-                store.image.trim()
-                    ? store.image
-                    : "images/groceries.jpg";
+                /* IMAGE */
 
+                const image =
+                    store.image && store.image.trim()
+                        ? store.image
+                        : "images/groceries.jpg";
 
-            /* LOCATION */
+                /* LOCATION */
 
-            const location =
-                [
+                const location = [
                     store.address,
                     store.city
                 ]
                 .filter(Boolean)
-                .join(", ") ||
-                "Location not available";
+                .join(", ") || "Location not available";
 
+                /* STATUS */
 
-            /* STATUS */
-
-            const status =
-                store.isOpen
+                const status = store.isOpen
                     ? `
                         <span class="status open">
                             ● Open
                         </span>
-                      `
+                    `
                     : `
                         <span class="status closed">
                             ● Closed
                         </span>
-                      `;
+                    `;
 
+                /* STORE PROFILE */
 
-           
-/* PROFILE - RESTAURANT STYLE GROCERY CARD */
+                storeProfile.innerHTML = `
+                    <div class="store-profile">
 
-storeProfile.innerHTML = `
-    <div class="store-profile">
+                        <div class="store-top">
 
-        <div class="store-top">
+                            <div class="store-image">
+                                <img
+                                    src="${escapeHtml(image)}"
+                                    alt="${escapeHtml(store.name || "Grocery Store")}"
+                                    loading="eager"
+                                    onerror="this.onerror=null;this.src='images/groceries.jpg'"
+                                >
+                            </div>
 
-            <div class="store-image">
-                <img
-                    src="${escapeHtml(image)}"
-                    alt="${escapeHtml(store.name || "Grocery Store")}"
-                    loading="eager"
-                    onerror="this.onerror=null;this.src='images/groceries.jpg'"
-                >
-            </div>
+                            <a
+                                class="store-call-btn"
+                                href="${store.phone ? `tel:${escapeHtml(String(store.phone).replace(/[^\d+]/g, ""))}` : 'javascript:void(0)'}"
+                                aria-label="Call grocery store"
+                                title="Call Store"
+                                ${store.phone ? "" : 'onclick="event.preventDefault();alert(\'Store phone number available nahi hai.\')"'}
+                            >☎</a>
 
-            <a
-                class="store-call-btn"
-                href="${store.phone ? `tel:${escapeHtml(String(store.phone).replace(/[^\d+]/g, ""))}` : 'javascript:void(0)'}"
-                aria-label="Call grocery store"
-                title="Call Store"
-                ${store.phone ? "" : 'onclick="event.preventDefault();alert(\'Store phone number available nahi hai.\')"'}
-            >☎</a>
+                            <div class="store-info">
 
-            <div class="store-info">
+                                <div class="store-name">
+                                    ${escapeHtml(store.name || "Grocery Store")}
+                                </div>
 
-                <div class="store-name">
-                    ${escapeHtml(store.name || "Grocery Store")}
-                </div>
+                                <div class="store-owner">
+                                    👤 Owner: ${escapeHtml(store.ownerName || "Not available")}
+                                </div>
 
-                <div class="store-owner">
-                    👤 Owner: ${escapeHtml(store.ownerName || "Not available")}
-                </div>
+                                <div class="store-location">
+                                    📍 ${escapeHtml(location)}
+                                </div>
 
-                <div class="store-location">
-                    📍 ${escapeHtml(location)}
-                </div>
+                                <div class="status-row">
+                                    ${status}
+                                    <span class="category-badge">
+                                        🛒 Groceries
+                                    </span>
+                                </div>
 
-                <div class="status-row">
-                    ${status}
-                    <span class="category-badge">🛒 Groceries</span>
-                </div>
+                            </div>
 
-            </div>
-        </div>
+                        </div>
 
-        <div class="store-details">
+                        <div class="store-details">
 
-            <div class="detail-box">
-                <div class="detail-label">Rating</div>
-                <div class="detail-value">
-                    ⭐ ${escapeHtml(store.rating || "New")}
-                </div>
-            </div>
+                            <div class="detail-box">
+                                <div class="detail-label">Rating</div>
+                                <div class="detail-value">
+                                    ⭐ ${escapeHtml(store.rating || "New")}
+                                </div>
+                            </div>
 
-            <div class="detail-box">
-                <div class="detail-label">Delivery</div>
-                <div class="detail-value">
-                    ${escapeHtml(store.deliveryTime || 30)} min
-                </div>
-            </div>
+                            <div class="detail-box">
+                                <div class="detail-label">Delivery</div>
+                                <div class="detail-value">
+                                    ${escapeHtml(store.deliveryTime || 30)} min
+                                </div>
+                            </div>
 
-            <div class="detail-box">
-                <div class="detail-label">Delivery Fee</div>
-                <div class="detail-value">
-                    ₹${escapeHtml(store.deliveryFee ?? 30)}
-                </div>
-            </div>
+                            <div class="detail-box">
+                                <div class="detail-label">Delivery Fee</div>
+                                <div class="detail-value">
+                                    ₹${escapeHtml(store.deliveryFee ?? 30)}
+                                </div>
+                            </div>
 
-        </div>
+                        </div>
 
-        ${
-            store.description
-                ? `<div class="store-description">
-                       ${escapeHtml(store.description)}
-                   </div>`
-                : ""
-        }
+                        ${
+                            store.description
+                                ? `<div class="store-description">
+                                       ${escapeHtml(store.description)}
+                                   </div>`
+                                : ""
+                        }
 
-    </div>
-`;
+                    </div>
+                `;
 
-        } catch (error) {
+            },
 
-            console.error(
-                "Load Grocery Store Error:",
-                error
-            );
+            onError: function (error) {
 
-            storeProfile.innerHTML = `
-                <div class="error">
-                    Failed to load grocery store.
-                    <br><br>
-                    Please try again.
-                </div>
-            `;
+                console.error("Load Grocery Store Error:", error);
 
-        }
+                storeProfile.innerHTML = `
+                    <div class="error">
+                        Failed to load grocery store.
+                        <br><br>
+                        Please try again.
+                    </div>
+                `;
+
+            }
+
+        });
+
+    } catch (error) {
+
+        console.error("Grocery Store Cache Error:", error);
 
     }
+
+}
 
 
     /* ADD PRODUCT TO CART */

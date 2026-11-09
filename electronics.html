@@ -428,67 +428,108 @@ button:focus-visible {
 
 </div>
 
+<script src="./public-cache.js"></script>
 
 <script>
 
 
-async function loadCategoryStores(category) {
-    const storeList = document.getElementById("storeList");
 
-    storeList.innerHTML =
-        '<div class="loading">Loading nearby shops...</div>';
+/* LOAD CATEGORY STORES WITH PUBLIC CACHE */
+
+async function loadCategoryStores(category) {
+
+    const storeList = document.getElementById("storeList");
 
     const latitude = localStorage.getItem("userLatitude");
     const longitude = localStorage.getItem("userLongitude");
 
     if (!latitude || !longitude) {
+
         storeList.innerHTML = `
             <div class="empty">
                 Please select your delivery address first.
-            </div>`;
+            </div>
+        `;
+
         return;
     }
 
+    const params = new URLSearchParams({
+        latitude: latitude,
+        longitude: longitude,
+        category: category
+    });
+
+    const API_URL =
+        "/api/products/nearest?" + params.toString();
+
+    // Location + Category wise unique cache key
+    const cacheKey = [
+        "areaxpress_category_stores_v1",
+        Number(latitude).toFixed(5),
+        Number(longitude).toFixed(5),
+        String(category).trim().toLowerCase()
+    ].join("_");
+
     try {
-        const params = new URLSearchParams({
-            latitude: latitude,
-            longitude: longitude,
-            category: category
+
+        await PublicCache.load({
+
+            key: cacheKey,
+
+            url: API_URL,
+
+            ttl: 5 * 60 * 1000,
+
+            render: function (result) {
+
+                const stores = Array.isArray(result.restaurants)
+                    ? result.restaurants
+                    : [];
+
+                if (!stores.length) {
+
+                    storeList.innerHTML = `
+                        <div class="empty">
+                            <div class="empty-icon">🏪</div>
+                            <div class="empty-title">No nearby shops</div>
+                            <div class="empty-text">
+                                No shops found within 5 KM for this category.
+                            </div>
+                        </div>
+                    `;
+
+                    return;
+                }
+
+                // Existing shop-card design
+                renderCategoryStores(stores, category);
+
+            },
+
+            onError: function (error) {
+
+                console.error("Category shops error:", error);
+
+                storeList.innerHTML = `
+                    <div class="error">
+                        Shops load nahi ho paaye.
+                        Please try again.
+                    </div>
+                `;
+
+            }
+
         });
 
-        const response = await fetch(
-            "/api/products/nearest?" + params.toString()
-        );
-
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
-            throw new Error(result.message || "Unable to load shops");
-        }
-
-        const stores = result.restaurants || [];
-
-        if (!stores.length) {
-            storeList.innerHTML = `
-                <div class="empty">
-                    <div class="empty-icon">🏪</div>
-                    <div class="empty-title">No nearby shops</div>
-                    <div class="empty-text">
-                        No shops found within 5 KM for this category.
-                    </div>
-                </div>`;
-            return;
-        }
-
-        // Existing grocery page ka shop-card renderer yahan use hoga.
-        renderCategoryStores(stores, category);
-
     } catch (error) {
-        console.error("Category shops error:", error);
-        storeList.innerHTML = `
-            <div class="error">Shops load nahi ho paaye. Please try again.</div>`;
+
+        console.error("Category Cache Error:", error);
+
     }
+
 }
+
 
 
 

@@ -5257,10 +5257,11 @@ input,
     id="productImageUploadRow"
     style="
         display:flex;
-        flex-direction:column;
-        align-items:flex-start;
-        gap:10px;
+        flex-direction:row;
+        align-items:center;
+        gap:12px;
         width:100%;
+        min-width:0;
     "
 >
 
@@ -5273,44 +5274,49 @@ input,
     >
 
     <button
-        type="button"
-        id="chooseProductImageBtn"
-        style="
-            align-self:flex-start;
-            background:#e23744;
-            color:#fff;
-            border:none;
-            border-radius:10px;
-            padding:10px 16px;
-            font-size:12px;
-            font-weight:600;
-            cursor:pointer;
-        "
-    >
-        Choose File
+    type="button"
+    id="chooseProductImageBtn"
+    style="
+        flex:0 0 auto;
+        background:#e23744;
+        color:#fff;
+        border:none;
+        border-radius:10px;
+        padding:10px 16px;
+        font-size:12px;
+        font-weight:600;
+        cursor:pointer;
+        white-space:nowrap;
+    "
+>
+    Choose File
     </button>
 
     <div
     id="productImagesPreview"
     style="
         display:flex;
+        flex:1;
+        min-width:0;
         flex-wrap:nowrap;
-        gap:10px;
-        margin-top:8px;
-        width:100%;
-        max-height:100px;
+        align-items:center;
+        gap:8px;
+        margin-top:0;
+        width:auto;
+        max-height:90px;
         overflow-x:auto;
         overflow-y:hidden;
-        padding:5px 2px 10px;
+        padding:5px 2px;
         scroll-behavior:smooth;
         -webkit-overflow-scrolling:touch;
         scrollbar-width:thin;
         cursor:grab;
         touch-action:pan-x;
     "
-></div>
+    ></div>
 
 </div>
+<br>
 
 </div>
 
@@ -5320,7 +5326,6 @@ input,
             type="number"
             id="productPreparationTime"
             placeholder="Preparation Time (minutes)"
-            value="20"
             min="1"
             style="
                 width:100%;
@@ -5408,12 +5413,12 @@ input,
     </button>
 
     <button
-        type="button"
-        class="bottom-nav-item"
-        onclick="switchDashboardSection('products', this)"
-    >
-        <span class="bottom-nav-icon">🍔</span>
-        <span class="bottom-nav-label">Product</span>
+    type="button"
+    class="bottom-nav-item"
+    onclick="switchDashboardSection('products', this)"
+>
+    <span class="bottom-nav-icon" id="itemsCategoryNavIcon"></span>
+    <span class="bottom-nav-label">Items</span>
     </button>
 
     <!-- ORDER HISTORY -->
@@ -6200,6 +6205,21 @@ const isElectronics =
 const isRestaurant =
     !isGrocery && !isBeauty && !isElectronics;
 
+    // Dynamic Items Navigation Icon
+const itemsCategoryNavIcon =
+    document.getElementById("itemsCategoryNavIcon");
+
+if (itemsCategoryNavIcon) {
+    itemsCategoryNavIcon.textContent =
+        isGrocery
+            ? "🛒"
+            : isElectronics
+                ? "📱"
+                : isBeauty
+                    ? "💄"
+                    : "🍽️";
+}
+
    // Dynamic Add Product Form
 
 const productType = isElectronics
@@ -6229,7 +6249,7 @@ document.getElementById("productName").placeholder =
                 : "e.g. Chicken Biryani";
 
 document.getElementById("productDescriptionLabel").textContent =
-    "📝 Product Description";
+    "📝 Food Description";
 
 document.getElementById("productDescription").placeholder =
     isElectronics
@@ -6278,7 +6298,7 @@ document.getElementById("productsTitle").textContent =
             ? "💄 My Beauty Products"
             : isGrocery
                 ? "🛒 My Grocery Products"
-                : "🍔 My Food Products";
+                : "🍔 My Food ";
 
 // Add product title
 document.getElementById("addProductTitle").textContent =
@@ -6288,7 +6308,7 @@ document.getElementById("addProductTitle").textContent =
             ? "💄 Add Beauty Product"
             : isGrocery
                 ? "🛒 Add Grocery Product"
-                : "🍔 Add Food Product";
+                : "🍔 Add Food";
 
 // Orders title
 document.getElementById("ordersTitle").textContent =
@@ -6460,7 +6480,13 @@ if (profileHeaderStatus) {
 
 
 
-
+                // Grocery / Store Name
+                document.getElementById("restaurantName").textContent =
+                    restaurant.name || "-";
+                
+                // Owner Name
+                document.getElementById("ownerName").textContent =
+                    restaurant.ownerName || "-";
 
                 document.getElementById("phone").textContent =
                     restaurant.phone || "-";
@@ -6780,9 +6806,12 @@ const imageBase64 = imagesBase64[0] || "";
 
 
         // Food-only fields
+const preparationValue =
+    document.getElementById("productPreparationTime")?.value.trim();
+
 const preparationTime = isRestaurant
-    ? Number(document.getElementById("productPreparationTime").value)
-    : 20;
+    ? (preparationValue === "" ? null : Number(preparationValue))
+    : null;
 
 const isVeg = isRestaurant
     ? document.getElementById("productIsVeg").checked
@@ -6880,8 +6909,7 @@ if (requiresGrocerySubcategory && !subcategory.trim()) {
                        image: imageBase64,
                        images: imagesBase64,
                    
-                       preparationTime:
-                           preparationTime || 20,
+                       preparationTime: preparationTime,
                    
                        isVeg: isVeg
                    
@@ -6950,8 +6978,8 @@ if (preview) {
         // Reset Food Fields
 
         document.getElementById(
-            "productPreparationTime"
-        ).value = "20";
+        "productPreparationTime"
+        ).value = "";
 
         document.getElementById(
             "productIsVeg"
@@ -7321,9 +7349,8 @@ const isRestaurant = !isGrocery && !isBeauty && !isElectronics;
 
     if (preparationInput) {
 
-        preparationInput.value =
-            product.preparationTime ||
-            20;
+    preparationInput.value =
+        product.preparationTime ?? "";
 
     }
 
@@ -7914,13 +7941,12 @@ if (isElectronics) {
             );
 
 
-        const preparationTime = isRestaurant
-    ? Number(
-        preparationInput
-            ? preparationInput.value
-            : 20
-      )
-    : 20;
+        const preparationValue =
+    preparationInput?.value.trim();
+
+const preparationTime = isRestaurant
+    ? (preparationValue === "" ? null : Number(preparationValue))
+    : null;
 
 
         const availableCheckbox =
@@ -8044,21 +8070,7 @@ if (
         }
 
 
-        if (
-            isRestaurant &&
-            (
-                !preparationTime ||
-                preparationTime <= 0
-            )
-        ) {
-
-            alert(
-                "Please enter a valid preparation time."
-            );
-
-            return;
-
-        }
+        
 
      
 

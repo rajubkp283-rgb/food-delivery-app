@@ -7731,9 +7731,7 @@ categorySections.forEach(function (item) {
             "nearestShopsList"
         );
 
-    if (shopContainer) {
-        shopContainer.innerHTML = "";
-    }
+  
 
 
     /* =========================================
@@ -7747,16 +7745,11 @@ categorySections.forEach(function (item) {
     const row3 = document.getElementById("nearestProductsRow3");
 
 
-    if (row1) {row1.innerHTML = "";}
-
-    if (row2) {row2.innerHTML = "";}
-
-    if (row3) {row3.innerHTML = "";row3.scrollLeft = 0;}
+   
 
     
     // Clear previous category data immediately
-    nearestProducts = [];
-    nearestRestaurants = [];
+   
 
     const categoryContainer =
         document.getElementById("nearestProductCategories");
@@ -7771,14 +7764,15 @@ categorySections.forEach(function (item) {
     const empty =
         document.getElementById("nearestEmpty");
 
-    if (loading) {
-        loading.textContent = "Loading " + category + "...";
-        loading.style.display = "block";
+      if (loading) {
+        loading.style.display = "none";
     }
-
+    
     if (empty) {
         empty.style.display = "none";
     }
+
+    
 
 
 
@@ -7935,15 +7929,109 @@ function getNearestUserLocation() {
 }
 
 
+
 /* =========================================================
-   LOAD YOUR NEAREST PRODUCTS
+   CACHE FIRST + BACKGROUND SERVER REFRESH
 ========================================================= */
+
+function getNearestCacheKey(location, category) {
+    return [
+        "areaxpress_nearest_v1",
+        Number(location.latitude).toFixed(5),
+        Number(location.longitude).toFixed(5),
+        String(category || "").trim().toLowerCase()
+    ].join("_");
+}
+
+
+
+function renderNearestApiData(data) {
+
+    nearestProducts = Array.isArray(data.products)
+        ? data.products : [];
+
+    nearestRestaurants = Array.isArray(data.restaurants)
+        ? data.restaurants : [];
+
+    const loading = document.getElementById("nearestLoading");
+    const empty = document.getElementById("nearestEmpty");
+
+    const categoryContainer =
+        document.getElementById("nearestProductCategories");
+
+    if (loading) loading.style.display = "none";
+
+    if (nearestProducts.length > 0) {
+
+        renderNearestProductCategories(nearestProducts);
+
+        // Pehle products render karo
+        renderYourNearestProducts(nearestProducts);
+
+        // Sirf tab default subcategory select karo
+        // jab user ne abhi tak koi subcategory select na ki ho.
+        if (
+            String(selectedNearestProductCategory || "All")
+                .trim()
+                .toLowerCase() === "all"
+        ) {
+
+            const category = String(selectedNearestCategory || "")
+                .trim()
+                .toLowerCase();
+
+            if (category === "groceries") {
+                filterNearestProductsByCategory("Leafy Greens");
+
+            } else if (category === "restaurant") {
+                filterNearestProductsByCategory("Pizza");
+
+            } else if (category === "electronics") {
+                filterNearestProductsByCategory("Samsung");
+
+            } else if (category === "beauty & personal care") {
+                filterNearestProductsByCategory("Skincare");
+
+            } else {
+                filterNearestProductsByCategory("All");
+            }
+
+        } else {
+
+            // User ki selected subcategory ko preserve karo
+            filterNearestProductsByCategory(
+                selectedNearestProductCategory
+            );
+        }
+
+        if (empty) {
+            empty.style.display = "none";
+            empty.textContent = "";
+        }
+
+    } else {
+
+        if (categoryContainer) {
+            categoryContainer.innerHTML = "";
+        }
+
+        renderYourNearestProducts([]);
+
+        if (empty) {
+            empty.style.display = "block";
+            empty.textContent = "No products found within 5 KM.";
+        }
+    }
+
+    renderYourNearestShops(nearestRestaurants);
+}
+
+
 
 async function loadYourNearestProducts() {
 
     const requestId = ++nearestLoadRequestId;
 
-    // Cancel the previous category request
     if (nearestRequestController) {
         nearestRequestController.abort();
     }
@@ -7953,269 +8041,132 @@ async function loadYourNearestProducts() {
     const requestSignal = nearestRequestController.signal;
     const requestedCategory = selectedNearestCategory;
 
-    const loading =
-        document.getElementById(
-            "nearestLoading"
-        );
-
-    const empty =
-        document.getElementById(
-            "nearestEmpty"
-        );
-
-    const row1 =
-        document.getElementById(
-            "nearestProductsRow1"
-        );
-
-    const row2 =
-        document.getElementById(
-            "nearestProductsRow2"
-        );
-
-
-    if (!row1 || !row2) {
-
-        console.warn(
-            "Your Nearest product containers not found."
-        );
-
-        return;
-
-    }
-
-
-    /* Clear old products */
-
-    row1.innerHTML = "";
-
-    row2.innerHTML = "";
-
-    const shopContainer =
-    document.getElementById(
-        "nearestShopsList"
-    );
-
-if (shopContainer) {
-    shopContainer.innerHTML = `
-        <div class="nearest-loading"
-             style="color:#c5d2e8; padding:20px; text-align:center;">
-            Loading nearby shops...
-        </div>
-    `;
-}
-
-    if (loading) {
-
-        loading.style.display =
-            "block";
-
-        loading.textContent =
-            "Loading nearby products...";
-
-    }
-
-
-    if (empty) {
-
-        empty.style.display =
-            "none";
-
-    }
-
-
-    /* Get user location */
+    const loading = document.getElementById("nearestLoading");
+    const empty = document.getElementById("nearestEmpty");
 
     const location = getNearestUserLocation();
 
+    // Location available nahi hai
+    if (!location) {
 
-    
-        if (!location) {
-            if (loading) {
-                loading.style.display = "none";
-            }
-        
-            if (empty) {
-                empty.style.display = "block";
-                empty.textContent =
-                    "Please select a delivery address with location.";
-            }
-        
-            const shopContainer = document.getElementById("nearestShopsList");
-        
-            if (shopContainer) {
-                shopContainer.innerHTML = `
-                    <div class="nearest-empty">
-                        Please select a delivery address with location.
-                    </div>
-                `;
-            }
-        
-            return;
+        nearestProducts = [];
+        nearestRestaurants = [];
+
+        renderNearestApiData({
+            products: [],
+            restaurants: []
+        });
+
+        if (empty) {
+            empty.style.display = "block";
+            empty.textContent =
+                "Please select a delivery address with location.";
         }
 
+        return;
+    }
 
+    const cacheKey = getNearestCacheKey(
+        location,
+        requestedCategory
+    );
 
+    // Loading state
+    if (loading) {
+        loading.style.display = "block";
+    }
+
+    if (empty) {
+        empty.style.display = "none";
+    }
+
+    // API URL
+    const API_BASE_URL =
+        "https://food-delivery-app-yrag.onrender.com";
+
+    const url =
+        API_BASE_URL +
+        "/api/products/nearest" +
+        "?latitude=" +
+        encodeURIComponent(location.latitude) +
+        "&longitude=" +
+        encodeURIComponent(location.longitude) +
+        "&category=" +
+        encodeURIComponent(requestedCategory);
+
+    // Cache First + Background Refresh
     try {
-const API_BASE_URL = "https://food-delivery-app-yrag.onrender.com";
 
-const url =
-API_BASE_URL +
-"/api/products/nearest" +
-"?latitude=" +
-encodeURIComponent(location.latitude) +
-"&longitude=" +
-encodeURIComponent(location.longitude) +
-"&category=" +
-encodeURIComponent(selectedNearestCategory);
+        await PublicCache.load({
 
-console.log("YOUR NEAREST API:", url);
+            key: cacheKey,
 
-const response = await fetch(url, {
-signal: requestSignal
-});
+            url: url,
 
-const data = await response.json();
+            ttl: 5 * 60 * 1000,
 
+            fetchOptions: {
+                signal: requestSignal
+            },
 
-            /* Ignore outdated category responses */
-           if (
-             requestId !== nearestLoadRequestId ||
-             requestedCategory !== selectedNearestCategory
-            ) {
-           return;
-            }
+            // Cache aur fresh data dono yahan render honge
+            render: function (data, meta) {
 
-        console.log(
-            "YOUR NEAREST RESPONSE:",
-            data
-        );
-
-
-        if (
-            !response.ok ||
-            !data.success
-        ) {
-
-            throw new Error(
-                data.message ||
-                "Failed to load nearby products"
-            );
-
-        }
-
-
-        nearestProducts =
-            Array.isArray(
-                data.products
-            )
-                ? data.products
-                : [];
-
-
-        nearestRestaurants =
-            Array.isArray(
-                data.restaurants
-            )
-                ? data.restaurants
-                : [];
-
-
-        /* Hide loading */
-
-        if (loading) {
-
-            loading.style.display =
-                "none";
-
-        }
-
-
-        /* No products */
-
-        if (
-            nearestProducts.length === 0
-        ) {
-
-            if (empty) {
-
-                empty.style.display =
-                    "block";
-
-                empty.textContent =
-                    "No products found within 5 KM.";
-
-            }
-
-            const categoryContainer = document.getElementById(
-              "nearestProductCategories"
-                );
-                
-                if (categoryContainer) {
-                    categoryContainer.innerHTML = "";
+                // Purani request ka result ignore karo
+                if (
+                    requestId !== nearestLoadRequestId ||
+                    requestedCategory !== selectedNearestCategory
+                ) {
+                    return;
                 }
-                
-                renderYourNearestProducts([]);
-                
-                renderYourNearestShops(nearestRestaurants);
 
-            return;
+                if (
+                    !data ||
+                    !Array.isArray(data.products) ||
+                    !Array.isArray(data.restaurants)
+                ) {
+                    console.warn(
+                        "Invalid nearest products data:",
+                        data
+                    );
 
-        }
+                    return;
+                }
 
+                renderNearestApiData(data);
+            },
 
-        /* Render products */
+            // Sirf tab error dikhao jab cache bhi available na ho
+            onError: function (error) {
 
-        renderNearestProductCategories(nearestProducts);
+                if (
+                    requestId !== nearestLoadRequestId ||
+                    requestedCategory !== selectedNearestCategory
+                ) {
+                    return;
+                }
 
-        
-/* Render products */
+                console.error(
+                    "NEAREST PRODUCTS ERROR:",
+                    error
+                );
 
-// 1. Upar ke main category filter ko render karein
-renderNearestProductCategories(nearestProducts);
+                if (loading) {
+                    loading.style.display = "none";
+                }
 
-// 2. Main product rows mein products dikhayein
-renderYourNearestProducts(nearestProducts);
+                if (empty) {
+                    empty.style.display = "block";
+                    empty.textContent =
+                        "Nearby products will appear when available.";
+                }
+            }
 
-// 3. Nearby shops dikhayein
-renderYourNearestShops(nearestRestaurants);
-
-// 4. Default subcategory select karein
-const currentMainCategory = String(selectedNearestCategory || "")
-    .trim()
-    .toLowerCase();
-
-if (currentMainCategory === "groceries") {
-    filterNearestProductsByCategory("Leafy Greens");
-
-} else if (currentMainCategory === "restaurant") {
-    filterNearestProductsByCategory("Pizza");
-
-} else if (currentMainCategory === "electronics") {
-    filterNearestProductsByCategory("Samsung");
-
-} else if (currentMainCategory === "beauty & personal care") {
-    filterNearestProductsByCategory("Skincare");
-}
-
-// Grocery ke subcategory products ko default mein dikhayein
-if (
-    String(selectedNearestCategory || "")
-        .trim()
-        .toLowerCase() === "groceries"
-) {
-    filterNearestProductsByCategory("Leafy Greens");
-}
-
-
-        renderYourNearestShops(
-           nearestRestaurants
-        );
-
+        });
 
     } catch (error) {
 
-         if (
+        if (
             error.name === "AbortError" ||
             requestId !== nearestLoadRequestId ||
             requestedCategory !== selectedNearestCategory
@@ -8224,33 +8175,22 @@ if (
         }
 
         console.error(
-            "YOUR NEAREST ERROR:",
+            "PUBLIC CACHE ERROR:",
             error
         );
 
-
         if (loading) {
-
-            loading.style.display =
-                "none";
-
+            loading.style.display = "none";
         }
-
 
         if (empty) {
-
-            empty.style.display =
-                "block";
-
+            empty.style.display = "block";
             empty.textContent =
-                error.message ||
-                "Unable to load nearby products.";
-
+                "Nearby products will appear when available.";
         }
-
     }
-
 }
+
 
 
 /* =========================================================
@@ -11393,6 +11333,8 @@ function openCartWindow() {
 }
 
 </script>
+
+<script src="./public-cache.js"></script>
 
 
 

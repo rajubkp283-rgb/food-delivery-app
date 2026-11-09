@@ -578,435 +578,196 @@ button:focus-visible {
 
 </div>
 
-
+<script src="./public-cache.js"></script>
 
 <script>
 
 
 /* LOAD RESTAURANTS */
 
+/* LOAD RESTAURANTS WITH PUBLIC CACHE */
+
 async function loadRestaurants() {
 
+    const box = document.getElementById("restaurantList");
 
-    const box =
-        document.getElementById(
-            "restaurantList"
-        );
-
+    const API_URL = "/api/restaurants?category=Restaurant";
 
     try {
 
+        await PublicCache.load({
 
-        const response =
-            await fetch(
-                "/api/restaurants?category=Restaurant"
-            );
+            key: "areaxpress_restaurants_v1",
 
+            url: API_URL,
 
-        const data =
-            await response.json();
+            ttl: 5 * 60 * 1000,
 
+            render: function (data) {
 
-        console.log(
-            "Restaurant Stores:",
-            data
-        );
+                console.log("Restaurant Stores:", data);
 
+                const restaurants = Array.isArray(data.restaurants)
+                    ? data.restaurants
+                    : [];
 
-        if (
-            !response.ok ||
-            !data.success
-        ) {
+                /* EMPTY */
 
-            throw new Error(
-                data.message ||
-                "Failed to load restaurants"
-            );
+                if (restaurants.length === 0) {
 
-        }
+                    box.innerHTML = `
+                        <div class="empty">
+                            <div class="empty-icon">🍽️</div>
 
+                            <div class="empty-title">
+                                No Restaurants
+                            </div>
 
-        const restaurants =
-            data.restaurants || [];
+                            <div class="empty-text">
+                                No approved restaurant
+                                is available right now.
+                            </div>
+                        </div>
+                    `;
 
+                    return;
+                }
 
-        /* EMPTY */
+                /* CARDS */
 
-        if (
-            restaurants.length === 0
-        ) {
-
-
-            box.innerHTML = `
-
-                <div class="empty">
-
-
-                    <div class="empty-icon">
-                        🍽️
-                    </div>
-
-
-                    <div class="empty-title">
-                        No Restaurants
-                    </div>
-
-
-                    <div class="empty-text">
-
-                        No approved restaurant
-                        is available right now.
-
-                    </div>
-
-
-                </div>
-
-            `;
-
-
-            return;
-
-        }
-
-
-
-        /* CARDS */
-
-        box.innerHTML =
-
-            restaurants
-
-            .map(
-                restaurant => {
-
+                box.innerHTML = restaurants.map(restaurant => {
 
                     const image =
+                        restaurant.image && restaurant.image.trim()
+                            ? restaurant.image
+                            : "images/restaurant.jpg";
 
-                        restaurant.image &&
-                        restaurant.image.trim()
-
-                            ?
-
-                        restaurant.image
-
-                            :
-
-                        "images/restaurant.jpg";
-
-
-
-                    const location =
-
-                        [
-                            restaurant.address,
-                            restaurant.city
-                        ]
-
-                        .filter(Boolean)
-
-                        .join(", ")
-
-                        ||
-
+                    const location = [
+                        restaurant.address,
+                        restaurant.city
+                    ].filter(Boolean).join(", ") ||
                         "Location not available";
 
-
-
-                    const status =
-
-                        restaurant.isOpen
-
-                            ?
-
-                        `
-                            <span
-                                class="status open"
-                            >
+                    const status = restaurant.isOpen
+                        ? `
+                            <span class="status open">
                                 ● Open
                             </span>
                         `
-
-                            :
-
-                        `
-                            <span
-                                class="status closed"
-                            >
+                        : `
+                            <span class="status closed">
                                 ● Closed
                             </span>
                         `;
 
-
-
                     return `
+                        <div class="restaurant-card">
 
-                        <div
-                            class="restaurant-card"
-                        >
+                            <div class="restaurant-top">
 
-
-                            <!-- TOP -->
-
-                            <div
-                                class="restaurant-top"
-                            >
-
-
-                                <!-- IMAGE -->
-
-                                <div
-                                    class="restaurant-image"
-                                >
-
+                                <div class="restaurant-image">
                                     <img
                                         src="${escapeHtml(image)}"
-                                        alt="${escapeHtml(
-                                            restaurant.name ||
-                                            "Restaurant"
-                                        )}"
-                                        onerror="
-                                            this.src=
-                                            'images/restaurant.jpg'
-                                        "
+                                        alt="${escapeHtml(restaurant.name || "Restaurant")}"
+                                        onerror="this.onerror=null;this.src='images/restaurant.jpg'"
                                     >
-
                                 </div>
 
+                                <div class="restaurant-info">
 
-
-                                <!-- INFO -->
-
-                                <div
-                                    class="restaurant-info"
-                                >
-
-
-                                    <div
-                                        class="restaurant-name"
-                                    >
-
-                                        ${escapeHtml(
-                                            restaurant.name ||
-                                            "Restaurant"
-                                        )}
-
+                                    <div class="restaurant-name">
+                                        ${escapeHtml(restaurant.name || "Restaurant")}
                                     </div>
 
-
-                                    <div
-                                        class="restaurant-owner"
-                                    >
-
+                                    <div class="restaurant-owner">
                                         👤 Owner:
-                                        ${escapeHtml(
-                                            restaurant.ownerName ||
-                                            "Not available"
-                                        )}
-
+                                        ${escapeHtml(restaurant.ownerName || "Not available")}
                                     </div>
 
-
-                                    <div
-                                        class="restaurant-location"
-                                    >
-
-                                        📍
-                                        ${escapeHtml(
-                                            location
-                                        )}
-
+                                    <div class="restaurant-location">
+                                        📍 ${escapeHtml(location)}
                                     </div>
 
-
-                                    <div
-                                        class="status-row"
-                                    >
-
+                                    <div class="status-row">
                                         ${status}
 
-
-                                        <span
-                                            class="category-badge"
-                                        >
+                                        <span class="category-badge">
                                             🍽️ Restaurant
                                         </span>
-
                                     </div>
 
-
                                 </div>
-
 
                             </div>
 
+                            <div class="restaurant-details">
 
-
-                            <!-- DETAILS -->
-
-                            <div
-                                class="restaurant-details"
-                            >
-
-
-                                <div
-                                    class="detail-box"
-                                >
-
-                                    <div
-                                        class="detail-label"
-                                    >
-                                        Rating
+                                <div class="detail-box">
+                                    <div class="detail-label">Rating</div>
+                                    <div class="detail-value">
+                                        ⭐ ${restaurant.rating || "New"}
                                     </div>
-
-
-                                    <div
-                                        class="detail-value"
-                                    >
-
-                                        ⭐
-                                        ${restaurant.rating || "New"}
-
-                                    </div>
-
                                 </div>
 
-
-
-                                <div
-                                    class="detail-box"
-                                >
-
-                                    <div
-                                        class="detail-label"
-                                    >
-                                        Delivery
+                                <div class="detail-box">
+                                    <div class="detail-label">Delivery</div>
+                                    <div class="detail-value">
+                                        ${restaurant.deliveryTime || "30"} min
                                     </div>
-
-
-                                    <div
-                                        class="detail-value"
-                                    >
-
-                                        ${
-                                            restaurant.deliveryTime ||
-                                            "30"
-                                        }
-                                        min
-
-                                    </div>
-
                                 </div>
 
-
-
-                                <div
-                                    class="detail-box"
-                                >
-
-                                    <div
-                                        class="detail-label"
-                                    >
-                                        Delivery Fee
+                                <div class="detail-box">
+                                    <div class="detail-label">Delivery Fee</div>
+                                    <div class="detail-value">
+                                        ₹${restaurant.deliveryFee || "30"}
                                     </div>
-
-
-                                    <div
-                                        class="detail-value"
-                                    >
-
-                                        ₹
-                                        ${
-                                            restaurant.deliveryFee ||
-                                            "30"
-                                        }
-
-                                    </div>
-
                                 </div>
-
 
                             </div>
-
-
-
-                            <!-- DESCRIPTION -->
 
                             ${
                                 restaurant.description
-
-                                ?
-
-                                `
-                                    <div
-                                        class="restaurant-description"
-                                    >
-
-                                        ${escapeHtml(
-                                            restaurant.description
-                                        )}
-
+                                ? `
+                                    <div class="restaurant-description">
+                                        ${escapeHtml(restaurant.description)}
                                     </div>
                                 `
-
-                                :
-
-                                ""
+                                : ""
                             }
-
-
-
-                            <!-- BUTTON -->
 
                             <button
                                 class="view-btn"
-                                onclick="
-                                    openRestaurant(
-                                        '${restaurant._id}'
-                                    )
-                                "
+                                onclick="openRestaurant('${escapeHtml(restaurant._id)}')"
                             >
-
                                 View Restaurant
-
                             </button>
 
-
                         </div>
-
                     `;
 
-                }
-            )
+                }).join("");
 
-            .join("");
+            },
 
+            onError: function (error) {
 
-    }
+                console.error("Restaurant List Error:", error);
 
+                box.innerHTML = `
+                    <div class="error">
+                        Failed to load restaurants.
+                        <br><br>
+                        Please try again.
+                    </div>
+                `;
 
-    catch (error) {
+            }
 
+        });
 
-        console.error(
-            "Restaurant List Error:",
-            error
-        );
+    } catch (error) {
 
-
-        box.innerHTML = `
-
-            <div class="error">
-
-                Failed to load restaurants.
-
-                <br><br>
-
-                Please try again.
-
-            </div>
-
-        `;
+        console.error("Restaurant Cache Error:", error);
 
     }
 

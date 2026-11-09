@@ -161,201 +161,202 @@ button:focus-visible {
 
     </div>
 
+    <script src="./public-cache.js"></script>
 
     <script>
 
-        async function loadRestaurantMenu() {
+       async function loadRestaurantMenu() {
 
-            try {
+    const params = new URLSearchParams(window.location.search);
+    const restaurantId = params.get("restaurantId");
 
-                const params =
-                    new URLSearchParams(window.location.search);
+    const restaurantBox = document.getElementById("restaurantBox");
+    const productsList = document.getElementById("productsList");
 
-                const restaurantId =
-                    params.get("restaurantId");
+    if (!restaurantId) {
+        productsList.innerHTML = `
+            <div class="empty">
+                Restaurant ID missing.
+            </div>
+        `;
+        return;
+    }
 
-                if (!restaurantId) {
+    const cacheKey =
+        "areaxpress_restaurant_menu_v1_" + restaurantId;
 
-                    throw new Error(
-                        "Restaurant ID missing."
-                    );
+    try {
+
+        await PublicCache.load({
+            key: cacheKey,
+
+            url:
+                "/api/products/restaurant/" +
+                encodeURIComponent(restaurantId),
+
+            ttl: 5 * 60 * 1000,
+
+            render: function (data) {
+
+                const restaurant = data.restaurant;
+
+                if (!restaurant) {
+                    restaurantBox.innerHTML = `
+                        <div class="empty">
+                            Restaurant details not available.
+                        </div>
+                    `;
+                }
+                const products = Array.isArray(data.products)
+                    ? data.products
+                    : [];
+
+                // Restaurant Information
+                if (restaurant) {
+
+                    restaurantBox.innerHTML = `
+
+                        <div class="restaurant-card">
+
+                            <div class="restaurant-name">
+                                🍽️ ${escapeHtml(restaurant.name || "Restaurant")}
+                            </div>
+
+                            <div class="restaurant-info">
+                                📍 ${escapeHtml(restaurant.address || "-")}
+                            </div>
+
+                            <div class="restaurant-info">
+                                🏙️ ${escapeHtml(restaurant.city || "-")}
+                            </div>
+
+                            <div class="restaurant-info">
+                                🍴 ${escapeHtml(restaurant.category || "-")}
+                            </div>
+
+                        </div>
+
+                    `;
                 }
 
-
-                const response =
-                    await fetch(
-                        "/api/products/restaurant/" +
-                        restaurantId
-                    );
-
-
-                const data =
-                    await response.json();
-
-
-                if (
-                    !response.ok ||
-                    !data.success
-                ) {
-
-                    throw new Error(
-                        data.message ||
-                        "Failed to load menu."
-                    );
-                }
-
-
-                const restaurant =
-                    data.restaurant;
-
-                const products =
-                    data.products || [];
-
-
-                // Restaurant information
-
-                document.getElementById(
-                    "restaurantBox"
-                ).innerHTML = `
-
-                    <div class="restaurant-card">
-
-                        <div class="restaurant-name">
-                            🍽️ ${restaurant.name}
-                        </div>
-
-                        <div class="restaurant-info">
-                            📍 ${restaurant.address || "-"}
-                        </div>
-
-                        <div class="restaurant-info">
-                            🏙️ ${restaurant.city || "-"}
-                        </div>
-
-                        <div class="restaurant-info">
-                            🍴 ${restaurant.category || "-"}
-                        </div>
-
-                    </div>
-
-                `;
-
-
-                const productsList =
-                    document.getElementById(
-                        "productsList"
-                    );
-
-
+                // Food Products
                 if (products.length === 0) {
 
                     productsList.innerHTML = `
-
                         <div class="empty">
                             🍔 No food products available.
                         </div>
-
                     `;
 
                     return;
                 }
 
+                productsList.innerHTML = products.map(product => {
 
-                productsList.innerHTML =
-                    products.map(product => {
+                    return `
 
-                        return `
+                        <div class="product">
 
-                            <div class="product">
+                            ${
+                                product.image
+                                ? `
+                                    <img
+                                        src="${escapeHtml(product.image)}"
+                                        alt="${escapeHtml(product.name || "Food")}"
+                                        loading="lazy"
+                                        onerror="this.style.display='none';"
+                                    >
+                                `
+                                : ""
+                            }
 
-                                ${
-                                    product.image
-                                    ? `
-                                        <img
-                                            src="${product.image}"
-                                            onerror="
-                                                this.style.display='none';
-                                            "
-                                        >
-                                    `
-                                    : ""
-                                }
-
-                                <div class="product-name">
-                                    ${product.name}
-                                </div>
-
-                                <div class="description">
-                                    ${
-                                        product.description ||
-                                        "No description"
-                                    }
-                                </div>
-
-                                <div class="category">
-                                    <b>Category:</b>
-                                    ${product.category || "-"}
-                                </div>
-
-                                <div class="price">
-                                    ₹${product.price}
-                                </div>
-
-                                <div class="food-type">
-
-                                    ${
-                                        product.isVeg
-                                        ? "🥬 Vegetarian"
-                                        : "🍗 Non-Vegetarian"
-                                    }
-
-                                </div>
-
-                                <button
-    onclick="addToCart('${product._id}')"
-    style="
-        width:100%;
-        margin-top:12px;
-        padding:12px;
-        border:none;
-        border-radius:8px;
-        background:#e23744;
-        color:white;
-        font-weight:bold;
-        cursor:pointer;
-    "
->
-    🛒 Add to Cart
-</button>
-
+                            <div class="product-name">
+                                ${escapeHtml(product.name || "")}
                             </div>
 
-                        `;
+                            <div class="description">
+                                ${escapeHtml(product.description || "No description")}
+                            </div>
 
-                    }).join("");
+                            <div class="category">
+                                <b>Category:</b>
+                                ${escapeHtml(product.category || "-")}
+                            </div>
 
+                            <div class="price">
+                                ₹${escapeHtml(product.price ?? 0)}
+                            </div>
 
-            } catch (error) {
+                            <div class="food-type">
+                                ${
+                                    product.isVeg
+                                    ? "🥬 Vegetarian"
+                                    : "🍗 Non-Vegetarian"
+                                }
+                            </div>
 
-                console.error(
-                    "Restaurant Menu Error:",
-                    error
-                );
+                            <button
+                                onclick="addToCart('${escapeHtml(product._id)}')"
+                                style="
+                                    width:100%;
+                                    margin-top:12px;
+                                    padding:12px;
+                                    border:none;
+                                    border-radius:8px;
+                                    background:#e23744;
+                                    color:white;
+                                    font-weight:bold;
+                                    cursor:pointer;
+                                "
+                            >
+                                🛒 Add to Cart
+                            </button>
 
-                document.getElementById(
-                    "productsList"
-                ).innerHTML = `
+                        </div>
 
+                    `;
+
+                }).join("");
+
+            },
+
+            onError: function (error) {
+
+                console.error("Restaurant Menu Error:", error);
+
+                restaurantBox.innerHTML = `
                     <div class="empty">
-                        ❌ ${error.message}
+                        Failed to load restaurant.
                     </div>
-
                 `;
 
+                productsList.innerHTML = `
+                    <div class="empty">
+                        ❌ ${escapeHtml(error.message)}
+                    </div>
+                `;
             }
+        });
 
-        }
+    } catch (error) {
+        console.error("Restaurant Menu Cache Error:", error);
+    }
+}
 
+function escapeHtml(value) {
+
+    return String(value ?? "").replace(/[&<>"']/g, function (char) {
+
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+
+    });
+}
 
         async function addToCart(productId) {
 

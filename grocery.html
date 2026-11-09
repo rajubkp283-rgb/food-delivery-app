@@ -427,256 +427,181 @@ button:focus-visible {
 
 </div>
 
+<script src="./public-cache.js"></script>
+
 
 <script>
 
+
 async function loadGroceryStores() {
 
-    const storeList =
-        document.getElementById("storeList");
+    const storeList = document.getElementById("storeList");
+
+    const API_URL =
+        "https://food-delivery-app-yrag.onrender.com/api/restaurants?category=Groceries";
 
     try {
 
-        const response = await fetch(
-            "https://food-delivery-app-yrag.onrender.com/api/restaurants?category=Groceries"
-        );
+        await PublicCache.load({
 
-        const result =
-            await response.json();
+            key: "areaxpress_grocery_stores_v1",
 
-        console.log(
-            "Grocery Stores:",
-            result
-        );
+            url: API_URL,
 
+            ttl: 5 * 60 * 1000,
 
-        if (!response.ok) {
+            render: function (result) {
 
-            throw new Error(
-                result.message ||
-                "Failed to load grocery stores"
-            );
+                const stores = Array.isArray(result.restaurants)
+                    ? result.restaurants
+                    : [];
 
-        }
+                if (stores.length === 0) {
 
+                    storeList.innerHTML = `
+                        <div class="empty">
+                            <div class="empty-icon">🛒</div>
+                            <div class="empty-title">No Grocery Stores</div>
+                            <div class="empty-text">
+                                No approved grocery store is
+                                available right now.
+                            </div>
+                        </div>
+                    `;
 
-        const stores =
-            result.restaurants || [];
+                    return;
+                }
 
+                storeList.innerHTML = stores.map(store => {
 
-        if (stores.length === 0) {
+                    const image =
+                        store.image && store.image.trim()
+                            ? store.image
+                            : "images/groceries.jpg";
 
-            storeList.innerHTML = `
-
-                <div class="empty">
-
-                    <div class="empty-icon">
-                        🛒
-                    </div>
-
-                    <div class="empty-title">
-                        No Grocery Stores
-                    </div>
-
-                    <div class="empty-text">
-                        No approved grocery store is
-                        available right now.
-                    </div>
-
-                </div>
-
-            `;
-
-            return;
-        }
-
-
-        storeList.innerHTML =
-            stores
-            .map(store => {
-
-                const image =
-                    store.image &&
-                    store.image.trim()
-                        ? store.image
-                        : "images/groceries.jpg";
-
-
-                const location =
-                    [
+                    const location = [
                         store.address,
                         store.city
-                    ]
-                    .filter(Boolean)
-                    .join(", ") ||
-                    "Location not available";
+                    ].filter(Boolean).join(", ") ||
+                        "Location not available";
 
+                    const status = store.isOpen
+                        ? `<span class="status open">● Open</span>`
+                        : `<span class="status closed">● Closed</span>`;
 
-                const status =
-                    store.isOpen
-                        ? `
-                            <span class="status open">
-                                ● Open
-                            </span>
-                          `
-                        : `
-                            <span class="status closed">
-                                ● Closed
-                            </span>
-                          `;
+                    return `
+                        <div class="store-card"
+                            onclick="openStore('${escapeHtml(store._id)}')">
 
+                            <div class="store-top">
 
-                return `
-
-                    <div class="store-card"
-                     onclick="openStore('${escapeHtml(store._id)}')">
-
-                        <div class="store-top">
-
-                            <div class="store-image">
-
-                                <img
-                                    src="${escapeHtml(image)}"
-                                    alt="${escapeHtml(store.name || "Grocery Store")}"
-                                    onerror="this.src='images/groceries.jpg'"
-                                >
-
-                            </div>
-
-
-                            <div class="store-info">
-
-                                <div class="store-name">
-                                    ${escapeHtml(
-                                        store.name ||
-                                        "Grocery Store"
-                                    )}
+                                <div class="store-image">
+                                    <img
+                                        src="${escapeHtml(image)}"
+                                        alt="${escapeHtml(store.name || "Grocery Store")}"
+                                        onerror="this.src='images/groceries.jpg'"
+                                    >
                                 </div>
 
-                                <div class="store-owner">
-                                    👤 Owner:
-                                    ${escapeHtml(
-                                        store.ownerName ||
-                                        "Not available"
-                                    )}
-                                </div>
+                                <div class="store-info">
 
-                                <div class="store-location">
-                                    📍
-                                    ${escapeHtml(location)}
-                                </div>
+                                    <div class="store-name">
+                                        ${escapeHtml(store.name || "Grocery Store")}
+                                    </div>
 
+                                    <div class="store-owner">
+                                        👤 Owner:
+                                        ${escapeHtml(store.ownerName || "Not available")}
+                                    </div>
 
-                                <div class="status-row">
+                                    <div class="store-location">
+                                        📍 ${escapeHtml(location)}
+                                    </div>
 
-                                    ${status}
-
-                                    <span class="category-badge">
-                                        🛒 Groceries
-                                    </span>
+                                    <div class="status-row">
+                                        ${status}
+                                        <span class="category-badge">
+                                            🛒 Groceries
+                                        </span>
+                                    </div>
 
                                 </div>
 
                             </div>
+
+                            <div class="store-details">
+
+                                <div class="detail-box">
+                                    <div class="detail-label">Rating</div>
+                                    <div class="detail-value">
+                                        ⭐ ${store.rating || "New"}
+                                    </div>
+                                </div>
+
+                                <div class="detail-box">
+                                    <div class="detail-label">Delivery</div>
+                                    <div class="detail-value">
+                                        ${store.deliveryTime || "30"} min
+                                    </div>
+                                </div>
+
+                                <div class="detail-box">
+                                    <div class="detail-label">Delivery Fee</div>
+                                    <div class="detail-value">
+                                        ₹${store.deliveryFee || "30"}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            ${
+                                store.description
+                                ? `
+                                    <div class="store-description">
+                                        ${escapeHtml(store.description)}
+                                    </div>
+                                `
+                                : ""
+                            }
+
+                            <button
+                                class="view-store-btn"
+                                onclick="event.stopPropagation(); openStore('${escapeHtml(store._id)}')"
+                            >
+                                View Store
+                            </button>
 
                         </div>
+                    `;
 
+                }).join("");
 
-                        <div class="store-details">
+            },
 
-                            <div class="detail-box">
+            onError: function (error) {
 
-                                <div class="detail-label">
-                                    Rating
-                                </div>
+                console.error("Load Grocery Stores Error:", error);
 
-                                <div class="detail-value">
-                                    ⭐ ${store.rating || "New"}
-                                </div>
-
-                            </div>
-
-
-                            <div class="detail-box">
-
-                                <div class="detail-label">
-                                    Delivery
-                                </div>
-
-                                <div class="detail-value">
-                                    ${store.deliveryTime || "30"} min
-                                </div>
-
-                            </div>
-
-
-                            <div class="detail-box">
-
-                                <div class="detail-label">
-                                    Delivery Fee
-                                </div>
-
-                                <div class="detail-value">
-                                    ₹${store.deliveryFee || "30"}
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        ${
-                            store.description
-                            ? `
-                                <div class="store-description">
-                                    ${escapeHtml(
-                                        store.description
-                                    )}
-                                </div>
-                              `
-                            : ""
-                        }
-
-
-                        <button
-                            class="view-store-btn"
-                            onclick="event.stopPropagation(); openStore('${escapeHtml(store._id)}')"
-                        >
-                            View Store
-                        </button>
-
+                storeList.innerHTML = `
+                    <div class="error">
+                        Failed to load grocery stores.
+                        <br><br>
+                        Please try again.
                     </div>
-
                 `;
 
-            })
-            .join("");
+            }
 
+        });
 
     } catch (error) {
 
-        console.error(
-            "Load Grocery Stores Error:",
-            error
-        );
-
-        storeList.innerHTML = `
-
-            <div class="error">
-
-                Failed to load grocery stores.
-
-                <br><br>
-
-                Please try again.
-
-            </div>
-
-        `;
+        console.error("Grocery Cache Error:", error);
 
     }
 
 }
+
 
 
 /* OPEN STORE */

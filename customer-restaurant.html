@@ -1140,6 +1140,9 @@ button:focus-visible {
 
 
 
+<script src="./public-cache.js"></script>
+
+
 <script>
 
 /* RESTAURANT MENU CATEGORY STATE */
@@ -1183,311 +1186,232 @@ if (!restaurantId) {
 
 
 
-/* LOAD RESTAURANT + PRODUCTS */
+
+
+/* LOAD RESTAURANT + PRODUCTS WITH CACHE */
 
 async function loadRestaurantProducts() {
 
+    const productBox = document.getElementById("productList");
 
-    const productBox =
-        document.getElementById(
-            "productList"
-        );
+    const cacheKey =
+        "areaxpress_restaurant_menu_v1_" + restaurantId;
 
+    const apiUrl =
+        "/api/products/restaurant/" +
+        encodeURIComponent(restaurantId);
 
-    try {
+    await PublicCache.load({
 
+        key: cacheKey,
+        url: apiUrl,
 
-        const response =
-            await fetch(
-                "/api/products/restaurant/" +
-                encodeURIComponent(
-                    restaurantId
-                )
-            );
+        // Cache validity: 5 minutes
+        ttl: 5 * 60 * 1000,
 
+        // Cached data and fresh data both use same renderer
+        render: function (data) {
+            renderRestaurantProductsData(data);
+        },
 
-        const data =
-            await response.json();
+        // Error only when no cached data is available
+        onError: function (error) {
 
+            console.error("Restaurant Menu Error:", error);
 
-        console.log(
-            "Restaurant Data:",
-            data
-        );
-
-
-        if (
-            !response.ok ||
-            !data.success
-        ) {
-
-            throw new Error(
-                data.message ||
-                "Failed to load restaurant"
-            );
-
+            productBox.innerHTML = `
+                <div class="error">
+                    ${escapeHtml(error.message)}
+                </div>
+            `;
         }
 
-
-        const restaurant =
-            data.restaurant;
-
-            
-/* RESTAURANT CALL BUTTON */
-const callButton = document.getElementById("restaurantCallBtn");
-
-const phone = String(
-    restaurant?.phone || ""
-).trim();
-
-console.log("Restaurant phone from API:", phone);
-console.log("Restaurant API object:", restaurant);
-
-if (callButton) {
-    if (phone) {
-        callButton.href = "tel:" + phone.replace(/[^\d+]/g, "");
-    } else {
-        callButton.href = "javascript:void(0)";
-        callButton.onclick = function (event) {
-            event.preventDefault();
-            alert("Restaurant phone number API response mein nahi mila. Console check karein.");
-        };
-    }
+    });
 }
 
 
+/* RENDER RESTAURANT + PRODUCTS */
 
-        const products =
-            data.products || [];
+function renderRestaurantProductsData(data) {
 
+    const productBox =
+        document.getElementById("productList");
 
+    if (!data || !data.success) {
+        throw new Error("Invalid restaurant data received.");
+    }
 
-        /* RESTAURANT IMAGE */
+    console.log("Restaurant Data:", data);
 
-        const image =
-
-            restaurant &&
-            restaurant.image &&
-            restaurant.image.trim()
-
-                ?
-
-            restaurant.image
-
-                :
-
-            "images/restaurant.jpg";
+    const restaurant = data.restaurant || {};
+    const products = data.products || [];
 
 
-        document.getElementById(
-            "restaurantImage"
-        ).src = image;
+    /* RESTAURANT CALL BUTTON */
+
+    const callButton =
+        document.getElementById("restaurantCallBtn");
+
+    const phone = String(
+        restaurant.phone || ""
+    ).trim();
+
+    if (callButton) {
+
+        if (phone) {
+
+            callButton.href =
+                "tel:" + phone.replace(/[^\d+]/g, "");
+
+            callButton.onclick = null;
+
+        } else {
+
+            callButton.href = "javascript:void(0)";
+
+            callButton.onclick = function (event) {
+                event.preventDefault();
+                alert("Restaurant phone number API response mein nahi mila. Console check karein.");
+            };
+        }
+    }
 
 
+    /* RESTAURANT IMAGE */
 
-        document.getElementById(
-            "restaurantImage"
-        ).onerror = function() {
+    const image =
+        restaurant.image && restaurant.image.trim()
+            ? restaurant.image
+            : "images/restaurant.jpg";
 
-            this.src =
-                "images/restaurant.jpg";
+    document.getElementById("restaurantImage").src = image;
 
-        };
-
-
-        
-/* RESTAURANT NAME */
-const restaurantTitle = restaurant.name || "Restaurant";
-
-document.getElementById("restaurantName").textContent =
-    restaurantTitle;
-
-document.getElementById("pageRestaurantTitle").textContent =
-    restaurantTitle;
+    document.getElementById("restaurantImage").onerror = function () {
+        this.src = "images/restaurant.jpg";
+    };
 
 
+    /* RESTAURANT NAME */
 
-        /* LOCATION */
+    const restaurantTitle =
+        restaurant.name || "Restaurant";
 
-        const location = [
+    document.getElementById("restaurantName").textContent =
+        restaurantTitle;
 
-            restaurant.address,
+    document.getElementById("pageRestaurantTitle").textContent =
+        restaurantTitle;
 
-            restaurant.city
 
-        ]
+    /* LOCATION */
 
+    const location = [
+        restaurant.address,
+        restaurant.city
+    ]
         .filter(Boolean)
-
         .join(", ");
 
-
-        document.getElementById(
-            "restaurantLocation"
-        ).textContent =
-
-            location ||
-            "Location not available";
+    document.getElementById("restaurantLocation").textContent =
+        location || "Location not available";
 
 
+    /* STATUS + CATEGORY */
 
-        /* STATUS + CATEGORY */
+    document.getElementById("statusRow").innerHTML =
 
-        document.getElementById(
-            "statusRow"
-        ).innerHTML =
+        restaurant.isOpen
 
-            restaurant.isOpen
-
-                ?
-
-            `
+            ? `
                 <span class="status open">
                     ● Open
                 </span>
 
                 <span class="category">
                     🍽️ ${escapeHtml(
-                        restaurant.category ||
-                        "Restaurant"
+                        restaurant.category || "Restaurant"
                     )}
                 </span>
             `
 
-                :
-
-            `
+            : `
                 <span class="status closed">
                     ● Closed
                 </span>
 
                 <span class="category">
                     🍽️ ${escapeHtml(
-                        restaurant.category ||
-                        "Restaurant"
+                        restaurant.category || "Restaurant"
                     )}
                 </span>
             `;
 
 
+    /* OWNER */
 
-        /* OWNER */
-
-        document.getElementById(
-            "ownerName"
-        ).textContent =
-
-            restaurant.ownerName ||
-            "Not available";
+    document.getElementById("ownerName").textContent =
+        restaurant.ownerName || "Not available";
 
 
+    /* RATING */
 
-        /* RATING */
-
-        document.getElementById(
-            "rating"
-        ).textContent =
-
-            "⭐ " +
-            (
-                restaurant.rating ||
-                "New"
-            );
+    document.getElementById("rating").textContent =
+        "⭐ " + (restaurant.rating || "New");
 
 
+    /* DELIVERY TIME */
 
-        /* DELIVERY TIME */
-
-        document.getElementById(
-            "deliveryTime"
-        ).textContent =
-
-            (
-                restaurant.deliveryTime ||
-                30
-            ) +
-            " min";
+    document.getElementById("deliveryTime").textContent =
+        (restaurant.deliveryTime || 30) + " min";
 
 
+    /* DELIVERY FEE */
 
-        /* DELIVERY FEE */
-
-        document.getElementById(
-            "deliveryFee"
-        ).textContent =
-
-            "₹" +
-            (
-                restaurant.deliveryFee ||
-                30
-            );
+    document.getElementById("deliveryFee").textContent =
+        "₹" + (restaurant.deliveryFee || 30);
 
 
+    /* DESCRIPTION */
 
-        /* DESCRIPTION */
-
-        document.getElementById(
-            "restaurantDescription"
-        ).textContent =
-
-            restaurant.description ||
-            "Fresh food and quality service for our customers.";
+    document.getElementById("restaurantDescription").textContent =
+        restaurant.description ||
+        "Fresh food and quality service for our customers.";
 
 
+    /* NO PRODUCTS */
 
-  
-/* NO PRODUCTS */
-if (products.length === 0) {
-    document.getElementById("menuCategories").innerHTML = "";
+    if (products.length === 0) {
 
-    productBox.innerHTML = `
-        <div class="empty">
-            <div class="empty-icon">🍽️</div>
-            <div class="empty-title">No Food Items</div>
-            <div class="empty-text">
-                This restaurant has no food items available right now.
-            </div>
-        </div>
-    `;
-    return;
-}
-
-/* SAVE ALL PRODUCTS */
-restaurantProducts = products;
-selectedRestaurantProductCategory = "All";
-
-/* SHOW CATEGORIES AND PRODUCTS */
-renderRestaurantCategories();
-renderRestaurantProducts();
-
-
-
-    }
-
-    catch (error) {
-
-
-        console.error(
-            "Restaurant Menu Error:",
-            error
-        );
-
+        document.getElementById("menuCategories").innerHTML = "";
 
         productBox.innerHTML = `
-
-            <div class="error">
-
-                ${escapeHtml(
-                    error.message
-                )}
-
+            <div class="empty">
+                <div class="empty-icon">🍽️</div>
+                <div class="empty-title">No Food Items</div>
+                <div class="empty-text">
+                    This restaurant has no food items available right now.
+                </div>
             </div>
-
         `;
 
+        restaurantProducts = [];
+        return;
     }
 
+
+    /* SAVE ALL PRODUCTS */
+
+    restaurantProducts = products;
+    selectedRestaurantProductCategory = "All";
+
+
+    /* SHOW CATEGORIES AND PRODUCTS */
+
+    renderRestaurantCategories();
+    renderRestaurantProducts();
+
 }
+
 
 
 

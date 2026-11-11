@@ -1705,10 +1705,7 @@ box-shadow:
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.30);
 
-    animation:
-        nearestPopupShow
-        0.25s
-        ease;
+   
 }
 
 /* Chrome / Edge / Safari */
@@ -4115,6 +4112,204 @@ box-shadow: none !important;
     }
 }
 
+
+/* =========================================
+   PRODUCT DETAILS - BOTTOM SLIDE WINDOW
+========================================= */
+
+.nearest-product-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    padding: 6vh 10px 0;
+
+    background: rgba(0, 0, 0, 0.62);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+}
+
+.nearest-product-popup.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.nearest-product-popup-box {
+    width: 100%;
+    max-width: 480px;
+
+    height: 90vh;
+    height: 90dvh;
+    max-height: 900px;
+
+    overflow-y: auto;
+    position: relative;
+
+    background: #ffffff;
+
+    border-radius: 22px 22px 0 0;
+
+    transform: translateY(105%);
+    opacity: 0;
+
+    transition:
+        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.3s ease;
+}
+
+.nearest-product-popup.active .nearest-product-popup-box {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+@media (max-width: 480px) {
+    .nearest-product-popup {
+        padding: 5vh 0 0;
+    }
+
+    .nearest-product-popup-box {
+        width: 100%;
+        height: 92vh;
+        height: 92dvh;
+        max-height: none;
+
+        border-radius: 22px 22px 0 0;
+    }
+}
+
+
+
+/* =========================================
+   FINAL PRODUCT POPUP - BOTTOM SLIDE FIX
+   ========================================= */
+
+.nearest-product-popup {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 999999 !important;
+
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+
+    padding: 6vh 10px 0 !important;
+
+    background: rgba(0, 0, 0, 0.65) !important;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+}
+
+.nearest-product-popup.active {
+    display: flex !important;
+    align-items: flex-end !important;
+
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.nearest-product-popup-box {
+    position: relative !important;
+
+    width: 100% !important;
+    max-width: 480px !important;
+
+    height: 90vh !important;
+    height: 90dvh !important;
+
+    max-height: 900px !important;
+    overflow-y: auto !important;
+
+    background: #ffffff !important;
+    border-radius: 22px 22px 0 0 !important;
+
+    transform: translateY(105%) !important;
+    opacity: 0;
+
+    transition:
+        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.3s ease;
+}
+
+.nearest-product-popup.active .nearest-product-popup-box {
+    transform: translateY(0) !important;
+    opacity: 1;
+}
+
+@media (max-width: 480px) {
+    .nearest-product-popup {
+        padding: 5vh 0 0 !important;
+    }
+
+    .nearest-product-popup-box {
+        width: 100% !important;
+        height: 92vh !important;
+        height: 92dvh !important;
+        max-height: none !important;
+
+        border-radius: 22px 22px 0 0 !important;
+    }
+}
+
+
+/* Popup swipe-down support */
+.nearest-product-popup-box {
+    touch-action: pan-y !important;
+    overscroll-behavior-y: contain !important;
+}
+
+/* Old close button completely hidden */
+.nearest-popup-close {
+    display: none !important;
+}
+
+/* FINAL: Completely hide product popup close button */
+#nearestProductDetailsPopup .nearest-popup-close {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+
+/* Product popup drag handle */
+.nearest-popup-drag-handle {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 22px 22px 0 0;
+    touch-action: none;
+    cursor: grab;
+    flex-shrink: 0;
+}
+
+.nearest-popup-drag-handle span {
+    width: 42px;
+    height: 5px;
+    border-radius: 10px;
+    background: #b8b8b8;
+}
     </style>
 </head>
 
@@ -9549,6 +9744,85 @@ document.addEventListener(
     }
 );
 
+/* =========================================
+   PRODUCT POPUP - DRAG HANDLE TO CLOSE
+========================================= */
+
+(function () {
+    const popup = document.getElementById("nearestProductDetailsPopup");
+    if (!popup) return;
+
+    const popupBox = popup.querySelector(".nearest-product-popup-box");
+    const handle = popup.querySelector(".nearest-popup-drag-handle");
+
+    if (!popupBox || !handle) return;
+
+    let startY = 0;
+    let currentY = 0;
+    let dragging = false;
+
+    handle.addEventListener("touchstart", function (e) {
+        if (!popup.classList.contains("active")) return;
+
+        startY = e.touches[0].clientY;
+        currentY = startY;
+        dragging = true;
+
+        popupBox.style.setProperty("transition", "none", "important");
+    }, { passive: true });
+
+    handle.addEventListener("touchmove", function (e) {
+        if (!dragging || !popup.classList.contains("active")) return;
+
+        currentY = e.touches[0].clientY;
+
+        let distance = Math.max(0, currentY - startY);
+
+        popupBox.style.setProperty(
+            "transform",
+            "translateY(" + distance + "px)",
+            "important"
+        );
+
+        e.preventDefault();
+    }, { passive: false });
+
+    function finishDrag() {
+        if (!dragging) return;
+
+        dragging = false;
+
+        const distance = currentY - startY;
+
+        if (distance >= 100) {
+            popupBox.style.removeProperty("transform");
+            popupBox.style.removeProperty("transition");
+
+            closeNearestProductDetails();
+        } else {
+            popupBox.style.setProperty(
+                "transition",
+                "transform 0.25s ease",
+                "important"
+            );
+
+            popupBox.style.setProperty(
+                "transform",
+                "translateY(0)",
+                "important"
+            );
+
+            setTimeout(function () {
+                popupBox.style.removeProperty("transform");
+                popupBox.style.removeProperty("transition");
+            }, 270);
+        }
+    }
+
+    handle.addEventListener("touchend", finishDrag, { passive: true });
+    handle.addEventListener("touchcancel", finishDrag, { passive: true });
+
+})();
 
 /* =========================================================
    CALL SHOP
@@ -11513,15 +11787,7 @@ function openCartWindow() {
 
     <div class="nearest-product-popup-box">
 
-        <!-- Close Button -->
-        <button
-            type="button"
-            class="nearest-popup-close"
-            onclick="closeNearestProductDetails()"
-            aria-label="Close"
-        >
-            ×
-        </button>
+        
 
 
         <!-- Product Image -->
@@ -11759,39 +12025,14 @@ function openCartWindow() {
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.30);
 
-    animation:
-        nearestPopupShow
-        0.25s
-        ease;
+   
 
 }
 
 
-/* Popup Animation */
 
-@keyframes nearestPopupShow {
 
-    from {
 
-        opacity: 0;
-
-        transform:
-            translateY(30px)
-            scale(0.96);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0)
-            scale(1);
-
-    }
-
-}
 
 
 /* Close Button */

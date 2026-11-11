@@ -913,6 +913,69 @@ body {
 }
 
 
+/* Horizontal Ordered Product Images */
+
+.order-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 10px 2px 12px;
+    margin: 8px 0;
+    touch-action: pan-x;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+}
+
+.order-items::-webkit-scrollbar {
+    display: none;
+}
+
+.order-item-image {
+    width: 76px;
+    height: 76px;
+
+    flex: 0 0 76px;
+
+    background: #fff;
+    border-radius: 11px;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.order-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.order-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 2px 12px;
+    margin: 8px 0;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+}
+
 </style>
 </head>
 
@@ -1053,6 +1116,21 @@ async function loadOrders() {
 
         allOrders = Array.isArray(data.orders) ? data.orders : [];
 
+        console.log("MY ORDERS API RESPONSE:", data.orders);
+
+        if (data.orders && data.orders.length > 0) {
+            console.log("FIRST ORDER ITEMS:", data.orders[0].items);
+        }
+
+        console.log(
+    "FIRST ORDER PRODUCT IMAGE DATA:",
+    data.orders[0].items?.map(item => ({
+        image: item.image,
+        productImage: item.productImage,
+        productId: item.productId
+    }))
+);
+
         renderFilteredOrders();
 
     } catch (error) {
@@ -1093,8 +1171,9 @@ dateOrderCount.innerHTML = `
     displayOrders(filteredOrders);
 }
 
-// Sirf selected date ke orders dikhaye
+
 function displayOrders(orders) {
+
     const container = document.getElementById("ordersContainer");
 
     if (allOrders.length === 0) {
@@ -1103,14 +1182,6 @@ function displayOrders(orders) {
                 <div style="font-size:40px;">📦</div>
                 <h3>No Orders Yet</h3>
                 <p>You have not placed any order yet.</p>
-
-                <button
-                    class="btn view-btn"
-                    style="max-width:220px;"
-                    onclick="window.location.href='customer-restaurants.html'"
-                >
-                    🍔 Order Food
-                </button>
             </div>
         `;
         return;
@@ -1121,33 +1192,57 @@ function displayOrders(orders) {
             <div class="empty">
                 <div style="font-size:40px;">🗓️</div>
                 <h3>No Orders on This Date</h3>
-                <p>Is date par koi order nahi mila. Dusri date select karein.</p>
+                <p>Is date par koi order nahi mila.</p>
             </div>
         `;
         return;
     }
 
-    // Latest order sabse upar
     const sortedOrders = [...orders].sort((a, b) =>
-        new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        new Date(b.createdAt || 0) -
+        new Date(a.createdAt || 0)
     );
 
     container.innerHTML = sortedOrders.map(order => {
-        const restaurantName = order.restaurantId?.name || "Restaurant";
 
         const orderDate = order.createdAt
             ? new Date(order.createdAt).toLocaleString("en-IN")
             : "N/A";
 
-        let statusClass = "";
+        const items = Array.isArray(order.items)
+            ? order.items
+            : [];
 
-        if (order.orderStatus === "DELIVERED") {
-            statusClass = "delivered";
-        }
+        const imagesHTML = items.map(item => {
 
-        if (order.orderStatus === "CANCELLED") {
-            statusClass = "cancelled";
-        }
+            const product =
+                item.productId &&
+                typeof item.productId === "object"
+                    ? item.productId
+                    : {};
+
+            const image =
+                item.image ||
+                item.productImage ||
+                product.image ||
+                (Array.isArray(product.images)
+                    ? product.images[0]
+                    : "");
+
+            if (!image) return "";
+
+            return `
+                <div class="order-item-image">
+                    <img
+                        src="${escapeHtml(image)}"
+                        alt="Ordered product"
+                        loading="lazy"
+                        onerror="this.style.display='none';"
+                    >
+                </div>
+            `;
+
+        }).join("");
 
         const canTrack = ![
             "DELIVERED",
@@ -1156,48 +1251,9 @@ function displayOrders(orders) {
 
         return `
             <div class="order-card">
-                <div class="order-top">
-                    <div class="restaurant">
-                        🏪 ${escapeHtml(restaurantName)}
-                    </div>
 
-                    <span class="status ${statusClass}">
-                        ${escapeHtml(order.orderStatus || "UNKNOWN")}
-                    </span>
-                </div>
-
-                <div class="order-id">
-                    Order ID: ${escapeHtml(String(order._id))}
-                </div>
-
-                <div class="order-info-grid">
-                    <div class="order-info-box">
-                        <span class="order-info-label">Payment</span>
-                        <span class="order-info-value">
-                            ${escapeHtml(order.paymentMethod || "N/A")}
-                        </span>
-                    </div>
-
-                    <div class="order-info-box">
-                        <span class="order-info-label">Payment Status</span>
-                        <span class="order-info-value">
-                            ${escapeHtml(order.paymentStatus || "N/A")}
-                        </span>
-                    </div>
-
-                    <div class="order-info-box">
-                        <span class="order-info-label">Total Amount</span>
-                        <span class="order-info-value">
-                            ₹${Number(order.totalAmount || 0).toFixed(2)}
-                        </span>
-                    </div>
-
-                    <div class="order-info-box">
-                        <span class="order-info-label">Order Status</span>
-                        <span class="order-info-value">
-                            ${escapeHtml(order.orderStatus || "UNKNOWN")}
-                        </span>
-                    </div>
+                <div class="order-items">
+                    ${imagesHTML}
                 </div>
 
                 <div class="order-date">
@@ -1205,6 +1261,7 @@ function displayOrders(orders) {
                 </div>
 
                 <div class="buttons">
+
                     <button
                         class="btn view-btn"
                         onclick="viewOrder('${order._id}')"
@@ -1214,21 +1271,25 @@ function displayOrders(orders) {
 
                     ${
                         canTrack
-                            ? `
-                                <button
-                                    class="btn track-btn"
-                                    onclick="trackOrder('${order._id}')"
-                                >
-                                    📍 Track Order
-                                </button>
-                            `
-                            : ""
+                        ? `
+                            <button
+                                class="btn track-btn"
+                                onclick="trackOrder('${order._id}')"
+                            >
+                                📍 Track Order
+                            </button>
+                        `
+                        : ""
                     }
+
                 </div>
+
             </div>
         `;
+
     }).join("");
 }
+
 
 function resetOrderDateFilter() {
     orderDateFilter.value = getLocalDateKey(new Date());

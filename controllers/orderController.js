@@ -77,6 +77,19 @@ async function createOrder(req, res) {
 
 
         // Calculate totals
+
+        const orderProducts = await Product.find({
+    _id: {
+        $in: items.map(item => item.productId)
+    }
+});
+
+const orderProductMap = new Map(
+    orderProducts.map(product => [
+        product._id.toString(),
+        product
+    ])
+);
         let subtotal = 0;
 
         const formattedItems =
@@ -107,11 +120,26 @@ async function createOrder(req, res) {
                 subtotal += total;
 
                 return {
-                    productId: item.productId,
-                    name: item.name,
-                    quantity,
-                    price,
-                    total
+                  productId: item.productId,
+                  name: item.name,
+              
+                  image: (() => {
+                      const product = orderProductMap.get(
+                          item.productId.toString()
+                      );
+              
+                      return product?.image ||
+                          (Array.isArray(product?.images)
+                              ? product.images[0]
+                              : "") ||
+                          item.image ||
+                          item.productImage ||
+                          "";
+                  })(),
+
+                  quantity,
+                  price,
+                  total
                 };
             });
 
@@ -340,12 +368,19 @@ const createOrderFromCart = async (req, res) => {
       const price = Number(product.price);
 
       shopGroups.get(shopId).items.push({
-        productId: product._id,
-        name: product.name,
-        quantity,
-        price,
-        total: price * quantity,
-      });
+    productId: product._id,
+    name: product.name,
+
+    image:
+        product.image ||
+        (Array.isArray(product.images)
+            ? product.images[0]
+            : ""),
+
+    quantity,
+    price,
+    total: price * quantity,
+});
     }
 
     // Get all shops
@@ -557,32 +592,97 @@ const createOrderFromCart = async (req, res) => {
 };
 
 
+
+
+
 // Get Customer Orders
 const getMyOrders = async (req, res) => {
-  try {
-    const customerId = req.user._id;
+    try {
+        const customerId = req.user._id;
 
-    const orders = await Order.find({
-      customerId,
-    })
-      .populate("restaurantId", "name")
-      .sort({ createdAt: -1 });
+        const orders = await Order.find({ customerId })
+            .populate("restaurantId", "name")
+            .sort({ createdAt: -1 });
 
-    res.json({
-      success: true,
-      count: orders.length,
-      orders,
-    });
-  } catch (error) {
-    console.error("GET MY ORDERS ERROR:", error);
+        // Collect Product IDs
+        const productIds = orders.flatMap(order =>
+            order.items.map(item => item.productId).filter(Boolean)
+        );
 
-    res.status(500).json({
-      success: false,
-      message: "Failed to get orders",
-      error: error.message,
-    });
-  }
+        // Fetch actual product images
+        const products = await Product.find({
+            _id: { $in: productIds }
+        })
+        .select("_id image images")
+        .lean();
+
+        // Create Product Map
+        const productMap = new Map();
+
+        products.forEach(product => {
+            productMap.set(product._id.toString(), product);
+        });
+
+        // Attach images to orders
+        const formattedOrders = orders.map(order => {
+            const orderData = order.toObject();
+
+            orderData.items = orderData.items.map(item => {
+
+                const productId = item.productId?._id
+                    ? item.productId._id.toString()
+                    : item.productId.toString();
+
+                const product = productMap.get(productId);
+
+                const productImages = Array.isArray(product?.images)
+                    ? product.images.filter(Boolean)
+                    : [];
+
+                const mainImage =
+                    item.image ||
+                    product?.image ||
+                    productImages[0] ||
+                    "";
+
+                return {
+                    ...item,
+                    image: mainImage,
+                    images: productImages.length
+                        ? productImages
+                        : (mainImage ? [mainImage] : [])
+                };
+            });
+
+            return orderData;
+        });
+
+        console.log("MY ORDERS IMAGE CHECK:", {
+            totalOrders: formattedOrders.length,
+            productsFound: products.length,
+            firstItem: formattedOrders[0]?.items[0]
+        });
+
+        return res.json({
+            success: true,
+            count: formattedOrders.length,
+            orders: formattedOrders
+        });
+
+    } catch (error) {
+        console.error("GET MY ORDERS ERROR:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get orders",
+            error: error.message
+        });
+    }
 };
+
+
+
+
 
 // Get Restaurant Orders
 const getRestaurantOrders = async (req, res) => {
@@ -934,14 +1034,23 @@ const reorderPreviousOrder = async (req, res) => {
       } else {
 
         cart.items.push({
-          productId: product._id,
-          name: product.name,
-          price: product.price,
-          quantity: Number(oldItem.quantity),
-          total:
-            product.price *
-            Number(oldItem.quantity)
-        });
+    productId: product._id,
+    name: product.name,
+
+    image:
+        product.image ||
+        (Array.isArray(product.images)
+            ? product.images[0]
+            : "") ||
+        oldItem.image ||
+        "",
+
+    price: product.price,
+    quantity: Number(oldItem.quantity),
+    total:
+        product.price *
+        Number(oldItem.quantity)
+});
 
       }
 
